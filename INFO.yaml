@@ -1,0 +1,62 @@
+---
+project: 'Common Infrastructure Realization & Validation (CIRV)'
+project_creation_date: '2019-09-17'
+project_category: 'Integration and Testing'
+lifecycle_state: 'Incubation'
+project_lead: &opnfv_cirv_ptl
+    name: 'Chen Liang'
+    email: 'chenliangyjy@chinamobile.com'
+    company: 'chinamobile.com'
+    id: 'chenliangyjy'
+    timezone: 'CST'
+primary_contact: *opnfv_cirv_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.opnfv.org/projects/CIRV'
+    key: 'CIRV'
+mailing_list:
+    type: 'groups.io'
+    url: 'opnfv-tech-discuss@lists.opnfv.org'
+    tag: '[CIRV]'
+realtime_discussion:
+    type: irc
+    server: 'freenode.net'
+    channel: '#opnfv-cirv'
+meetings:
+    - type: 'Zoom'
+      # yamllint disable rule:line-length
+      agenda: 'https://wiki.lfnetworking.org/pages/viewpage.action?pageId=25364128'
+      url: https://zoom.us/j/694881078
+      repeats: 'weekly'
+      time: 'Wed 1300-1400 UTC'
+repositories:
+    - 'cirv'
+committers:
+    - <<: *opnfv_cirv_ptl
+    - name: 'Trevor Cooper'
+      email: 'trevor.cooper@intel.com'
+      company: 'intel.com'
+      id: 'trev'
+    - name: 'Sridhar Rao'
+      email: 'sridhar.rao@spirent.com'
+      company: 'spirent.com'
+      id: 'sridharkn'
+    - name: 'Lincoln Lavoie'
+      email: 'lylavoie@iol.unh.edu'
+      company: 'iol.unh.edu'
+      id: 'lylavoie'
+    - name: 'Fu Qiao'
+      email: 'fuqiao@chinamobile.com'
+      company: 'chinamobile.com'
+      id: 'fuqiao'
+    - name: 'Chen Liang'
+      email: 'chenliangyjy@chinamobile.com'
+      company: 'chinamobile.com'
+      id: 'chenliangyjy'
+tsc:
+    approval: 'http://ircbot.wl.linuxfoundation.org/meetings/opnfv-meeting/2019/opnfv-meeting.2019-09-17-13.01.log.html'
+    changes:
+        - type: 'rename'
+          name: 'CNTT-RI -> CIRV'
+          link: 'http://ircbot.wl.linuxfoundation.org/meetings/opnfv-meeting/2019/opnfv-meeting.2019-10-29-13.00.log.html'
+          # yamllint enable rule:line-length

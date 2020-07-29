@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+
+# Copyright 2020 Spirent Communications
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""VALID main script.
+"""
+
+import logging
+import os
+import sys
+import argparse
+import time
+import datetime
+from conf import settings
+import core.component_factory as component_factory
+from core.loader import Loader
+
+VERBOSITY_LEVELS = {
+    'debug': logging.DEBUG,
+    'info': logging.INFO,
+    'warning': logging.WARNING,
+    'error': logging.ERROR,
+    'critical': logging.CRITICAL
+}
+
+_CURR_DIR = os.path.dirname(os.path.realpath(__file__))
+_LOGGER = logging.getLogger()
+
+def parse_arguments():
+    """
+    Parse command line arguments.
+    """
+    parser = argparse.ArgumentParser(prog=__file__, formatter_class=
+                                     argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+    parser.add_argument('--list-validations', action='store_true',
+                        help='list all validations')
+    parser.add_argument('--list-swpredepv', action='store_true',
+                        help='list all Software pre-dep validations and exit')
+    parser.add_argument('--list-swpostdepv', action='store_true',
+                        help='list all Software post-dep validations and exit')
+    parser.add_argument('--list-nwlinksv', action='store_true',
+                        help='list all Link validations and exit')
+    parser.add_argument('exact_validation_name', nargs='*', help='Exact names of\
+            validations to run. E.g "valid nwlinks"\
+            runs only nwlink-validations.\
+            To run all omit positional arguments')
+    args = vars(parser.parse_args())
+
+    return args
+
+
+def configure_logging(level):
+    """Configure logging.
+    """
+    name, ext = os.path.splitext(settings.getValue('LOG_FILE_DEFAULT'))
+    rename_default = "{name}_{uid}{ex}".format(name=name,
+                                               uid=settings.getValue(
+                                                   'LOG_TIMESTAMP'),
+                                               ex=ext)
+    log_file_default = os.path.join(
+        settings.getValue('RESULTS_PATH'), rename_default)
+    _LOGGER.setLevel(logging.DEBUG)
+    stream_logger = logging.StreamHandler(sys.stdout)
+    stream_logger.setLevel(VERBOSITY_LEVELS[level])
+    stream_logger.setFormatter(logging.Formatter(
+        '[%(levelname)-5s]  %(asctime)s : (%(name)s) - %(message)s'))
+    _LOGGER.addHandler(stream_logger)
+    file_logger = logging.FileHandler(filename=log_file_default)
+    file_logger.setLevel(logging.DEBUG)
+    file_logger.setFormatter(logging.Formatter(
+        '%(asctime)s : %(message)s'))
+    _LOGGER.addHandler(file_logger)
+
+def handle_list_options(args):
+    """ Process --list cli arguments if needed
+
+    :param args: A dictionary with all CLI arguments
+    """
+    if args['list_swpredepv']:
+        print(Loader().get_swprevalidators_printable())
+        sys.exit(0)
+
+    if args['list_swpostdepv']:
+        print(Loader().get_swpostvalidators_printable())
+        sys.exit(0)
+
+    if args['list_nwlinksv']:
+        print(Loader().get_nwlinkvalidators_printable())
+        sys.exit(0)
+
+
+def main():
+    """Main function.
+    """
+    args = parse_arguments()
+
+    # define the timestamp to be used by logs and results
+    date = datetime.datetime.fromtimestamp(time.time())
+    timestamp = date.strftime('%Y-%m-%d_%H-%M-%S')
+    settings.setValue('LOG_TIMESTAMP', timestamp)
+
+
+    # configure settings
+    settings.load_from_dir(os.path.join(_CURR_DIR, 'conf'))
+
+    # if required, handle list-* operations
+    handle_list_options(args)
+
+    results_dir = "results_" + timestamp
+    results_path = os.path.join(settings.getValue('LOG_DIR'), results_dir)
+    settings.setValue('RESULTS_PATH', results_path)
+    # create results directory
+    if not os.path.exists(results_path):
+        os.makedirs(results_path)
+
+    configure_logging(settings.getValue('VERBOSITY'))
+
+    loader = Loader()
+    swprevalidators = loader.get_swprevalidators()
+    if settings.getValue('SW_PRE_VALIDATOR') not in swprevalidators:
+        _LOGGER.error('There are no swvalidators matching \'%s\' found in'
+                      ' \'%s\'. Exiting...', settings.getValue('SW_PRE_VALIDATOR'),
+                      settings.getValue('SW_PRE_VALID_DIR'))
+        sys.exit(1)
+    swv_pre_ctrl = component_factory.create_swprevalidator(
+        loader.get_swprevalidator_class())
+    # First validate hyperlinks
+    swv_pre_ctrl.validate_hyperlinks()
+    # Next validate mandatory configuration
+    swv_pre_ctrl.validate_configuration_mandatory()
+
+
+if __name__ == "__main__":
+    main()
