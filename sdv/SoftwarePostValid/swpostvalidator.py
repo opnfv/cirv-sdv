@@ -19,19 +19,19 @@ Implementors, please inherit from this class.
 
 
 class ISwPostValidator():
-    """ Model for a Sw Validator """
+    """ Model for a Sw Validator"""
     def __init__(self):
         """ Initialization of the Interface """
         self._default_swpost_validation = None
 
     @property
     def validation_swpost_defaults(self):
-        """ Default Validation values """
+        """ Default Validation values  """
         return True
 
     def validate_configuration_mandatory(self):
         """
-        Validating Mandatory Configuration
+        Validating Mandatory Configuration 
         """
         raise NotImplementedError('Please call an implementation.')
 
