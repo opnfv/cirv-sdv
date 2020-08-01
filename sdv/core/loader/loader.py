@@ -19,9 +19,12 @@ Implementors, please inherit from this class.
 
 from conf import settings
 from core.loader.loader_servant import LoaderServant
-from SoftwarePreValid.swprevalidator import ISwPreValidator
-from SoftwarePostValid.swpostvalidator import ISwPostValidator
+from SoftwarePreUrlsValid.swpreurlsvalidator import ISwPreUrlsValidator
+from SoftwarePreConfigValid.swpreconfigvalidator import ISwPreConfigValidator
+from SoftwarePostStateValid.swpoststatevalidator import ISwPostStateValidator
+from SoftwarePostSecurityValid.swpostsecurityvalidator import ISwPostSecurityValidator
 from NwLinksValid.nwlinksvalidator import INwLinksValidator
+from ResourceModelValid.resmodvalidator import IResModValidator
 
 
 # pylint: disable=too-many-public-methods
@@ -37,70 +40,134 @@ class Loader():
         created. It is up to creator to maintain object life cycle if this
         behavior is unwanted.
         """
-        self._swprevalidator_loader = LoaderServant(
-            settings.getValue('SW_PRE_VALID_DIR'),
-            settings.getValue('SW_PRE_VALIDATOR'),
-            ISwPreValidator)
-        self._swpostvalidator_loader = LoaderServant(
-            settings.getValue('SW_POST_VALID_DIR'),
-            settings.getValue('SW_POST_VALIDATOR'),
-            ISwPostValidator)
+        self._swpreurlsvalidator_loader = LoaderServant(
+            settings.getValue('SW_PRE_URLS_VALID_DIR'),
+            settings.getValue('SW_PRE_URLS_VALIDATOR'),
+            ISwPreUrlsValidator)
+        self._swpreconfigvalidator_loader = LoaderServant(
+            settings.getValue('SW_PRE_CONFIG_VALID_DIR'),
+            settings.getValue('SW_PRE_CONFIG_VALIDATOR'),
+            ISwPreConfigValidator)
+        self._swpoststatevalidator_loader = LoaderServant(
+            settings.getValue('SW_POST_STATE_VALID_DIR'),
+            settings.getValue('SW_POST_STATE_VALIDATOR'),
+            ISwPostStateValidator)
+        self._swpostsecurityvalidator_loader = LoaderServant(
+            settings.getValue('SW_POST_SECURITY_VALID_DIR'),
+            settings.getValue('SW_POST_SECURITY_VALIDATOR'),
+            ISwPostSecurityValidator)
         self._nwlinksvalidator_loader = LoaderServant(
             settings.getValue('NW_LINKS_VALID_DIR'),
             settings.getValue('NW_LINKS_VALIDATOR'),
             INwLinksValidator)
+        self._resmodvalidator_loader = LoaderServant(
+            settings.getValue('RES_MOD_VALID_DIR'),
+            settings.getValue('RES_MOD_VALIDATOR'),
+            IResModValidator)
 
-    def get_swprevalidator(self):
+    def get_swpreurlsvalidator(self):
         """ Returns a new instance configured Software Validator
-        :return: ISwPreValidator implementation if available, None otherwise
+        :return: ISwPreUrlsValidator implementation if available, None otherwise
         """
-        return self._swprevalidator_loader.get_class()()
+        return self._swpreurlsvalidator_loader.get_class()()
 
-    def get_swprevalidator_class(self):
+    def get_swpreurlsvalidator_class(self):
         """Returns type of currently configured Software Validator.
 
-        :return: Type of ISwPreValidator implementation if available.
+        :return: Type of ISwPreUrlsValidator implementation if available.
             None otherwise.
         """
-        return self._swprevalidator_loader.get_class()
+        return self._swpreurlsvalidator_loader.get_class()
 
-    def get_swprevalidators(self):
+    def get_swpreurlsvalidators(self):
         """
         Get Prevalidators
         """
-        return self._swprevalidator_loader.get_classes()
+        return self._swpreurlsvalidator_loader.get_classes()
 
-    def get_swprevalidators_printable(self):
+    def get_swpreurlsvalidators_printable(self):
         """
         Get Prevalidators for printing
         """
-        return self._swprevalidator_loader.get_classes_printable()
+        return self._swpreurlsvalidator_loader.get_classes_printable()
 
-    def get_swpostvalidator(self):
+    def get_swpreconfigvalidator(self):
         """ Returns a new instance configured Software Validator
-        :return: ISwPostValidator implementation if available, None otherwise
+        :return: ISwPreConfigValidator implementation if available, None otherwise
         """
-        return self._swpostvalidator_loader.get_class()()
+        return self._swpreconfigvalidator_loader.get_class()()
 
-    def get_swpostvalidator_class(self):
+    def get_swpreconfigvalidator_class(self):
         """Returns type of currently configured Software Validator.
 
-        :return: Type of ISwPostValidator implementation if available.
+        :return: Type of ISwPreConfigValidator implementation if available.
             None otherwise.
         """
-        return self._swpostvalidator_loader.get_class()
+        return self._swpreconfigvalidator_loader.get_class()
 
-    def get_swpostvalidators(self):
+    def get_swpreconfigvalidators(self):
+        """
+        Get Prevalidators
+        """
+        return self._swpreconfigvalidator_loader.get_classes()
+
+    def get_swpreconfigvalidators_printable(self):
+        """
+        Get Prevalidators for printing
+        """
+        return self._swpreconfigvalidator_loader.get_classes_printable()
+
+    def get_swpoststatevalidator(self):
+        """ Returns a new instance configured Software Validator
+        :return: ISwPostStateValidator implementation if available, None otherwise
+        """
+        return self._swpoststatevalidator_loader.get_class()()
+
+    def get_swpoststatevalidator_class(self):
+        """Returns type of currently configured Software Validator.
+
+        :return: Type of ISwPostStateValidator implementation if available.
+            None otherwise.
+        """
+        return self._swpoststatevalidator_loader.get_class()
+
+    def get_swpoststatevalidators(self):
         """
         Get Postvalidators
         """
-        return self._swpostvalidator_loader.get_classes()
+        return self._swpoststatevalidator_loader.get_classes()
 
-    def get_swpostvalidators_printable(self):
+    def get_swpoststatevalidators_printable(self):
         """
         Get Postvalidators for printing
         """
-        return self._swpostvalidator_loader.get_classes_printable()
+        return self._swpoststatevalidator_loader.get_classes_printable()
+
+    def get_swpostsecurityvalidator(self):
+        """ Returns a new instance configured Software Validator
+        :return: ISwPostSecurityValidator implementation if available, None otherwise
+        """
+        return self._swpostsecurityvalidator_loader.get_class()()
+
+    def get_swpostsecurityvalidator_class(self):
+        """Returns type of currently configured Software Validator.
+
+        :return: Type of ISwPostSecurityValidator implementation if available.
+            None otherwise.
+        """
+        return self._swpostsecurityvalidator_loader.get_class()
+
+    def get_swpostsecurityvalidators(self):
+        """
+        Get Postvalidators
+        """
+        return self._swpostsecurityvalidator_loader.get_classes()
+
+    def get_swpostsecurityvalidators_printable(self):
+        """
+        Get Postvalidators for printing
+        """
+        return self._swpostsecurityvalidator_loader.get_classes_printable()
 
     def get_nwlinksvalidator(self):
         """ Returns a new instance configured Nw-Links Validator
@@ -116,14 +183,40 @@ class Loader():
         """
         return self._nwlinksvalidator_loader.get_class()
 
-    def get_nwlinkvalidators(self):
+    def get_nwlinksvalidators(self):
         """
         Get Linkvalidators
         """
         return self._nwlinksvalidator_loader.get_classes()
 
-    def get_nwlinkvalidators_printable(self):
+    def get_nwlinksvalidators_printable(self):
         """
         Get Linkvalidators for printing
         """
         return self._nwlinksvalidator_loader.get_classes_printable()
+
+    def get_resmodvalidator(self):
+        """ Returns a new instance configured Nw-Links Validator
+        :return: IResModValidator implementation if available, None otherwise
+        """
+        return self._resmodvalidator_loader.get_class()()
+
+    def get_resmodvalidator_class(self):
+        """Returns type of currently configured Nw-Links Validator.
+
+        :return: Type of ResModValidator implementation if available.
+            None otherwise.
+        """
+        return self._resmodvalidator_loader.get_class()
+
+    def get_resmodvalidators(self):
+        """
+        Get ResoureModelValidators
+        """
+        return self._resmodvalidator_loader.get_classes()
+
+    def get_resmodvalidators_printable(self):
+        """
+        Get ResoureModelValidators for printing
+        """
+        return self._resmodvalidator_loader.get_classes_printable()

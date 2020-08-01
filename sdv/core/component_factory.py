@@ -17,16 +17,31 @@ Create Components.
 """
 
 
-def create_swprevalidator(swprevalidator_class):
-    """ Create Pre-Validators"""
-    return swprevalidator_class()
+def create_swpreurlsvalidator(swpreurlsvalidator_class):
+    """ Create Pre-Links Validators"""
+    return swpreurlsvalidator_class()
 
 
-def create_swpostvalidator(swpostvalidator_class):
-    """ Create Post-Validators"""
-    return swpostvalidator_class()
+def create_swpoststatevalidator(swpoststatevalidator_class):
+    """ Create Post-State Validators"""
+    return swpoststatevalidator_class()
 
 
-def create_linkvalidator(linkprevalidator_class):
-    """ Create Link-Validators"""
-    return linkprevalidator_class()
+def create_nwlinksvalidator(nwlinksvalidator_class):
+    """ Create NW Link-Validators"""
+    return nwlinksvalidator_class()
+
+
+def create_swpreconfigvalidator(swpreconfigvalidator_class):
+    """ Create Pre-Config Validators"""
+    return swpreconfigvalidator_class()
+
+
+def create_swpostsecurityvalidator(swpostsecurityvalidator_class):
+    """ Create Post-Security Validators"""
+    return swpostsecurityvalidator_class()
+
+
+def create_resmodvalidator(resmodvalidator_class):
+    """ Create Resource-Model Validators"""
+    return resmodvalidator_class()

@@ -12,8 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Sw Validator interface and helpers.
+"""
+Abstract class for Software Prevalidations.
+Implementors, please inherit from this class.
 """
 
-# flake8: noqa
-from SoftwarePreValid.swprevalidator import *
+
+class ISwPreUrlsValidator():
+    """ Model for a Sw Validator """
+    def __init__(self):
+        """ Initialization of the Interface """
+        self._default_swpre_validation = None
+
+    @property
+    def validation_swpreurls_defaults(self):
+        """ Default Validation values """
+        return True
+
+    def validate(self):
+        """ Validate Hyperlinks"""
+        raise NotImplementedError('Please call an implementation.')

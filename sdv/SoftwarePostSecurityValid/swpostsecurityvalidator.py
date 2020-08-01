@@ -13,30 +13,24 @@
 # limitations under the License.
 
 """
-Abstract class for Software Prevalidations.
+Abstract class for Software Postvalidations.
 Implementors, please inherit from this class.
 """
 
 
-class ISwPreValidator():
+class ISwPostSecurityValidator():
     """ Model for a Sw Validator """
     def __init__(self):
         """ Initialization of the Interface """
-        self._default_swpre_validation = None
+        self._default_swpostsecurity_validation = None
 
     @property
-    def validation_swpre_defaults(self):
+    def validation_swpostsecurity_defaults(self):
         """ Default Validation values """
         return True
 
-    def validate_hyperlinks(self):
-        """ Validate Hyperlinks"""
-        raise NotImplementedError('Please call an implementation.')
-
-    def validate_configuration_mandatory(self):
-        """ Validate Mandatory Configurations """
-        raise NotImplementedError('Please call an implementation.')
-
-    def validate_configuration_optional(self):
-        """ Validate Optional Configurations """
+    def validate(self):
+        """
+        Validating Mandatory Configuration
+        """
         raise NotImplementedError('Please call an implementation.')

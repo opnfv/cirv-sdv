@@ -16,4 +16,4 @@
 """
 
 # flake8: noqa
-from SoftwarePostValid.swpostvalidator import *
+from SoftwarePostSecurityValid.swpostsecurityvalidator import *

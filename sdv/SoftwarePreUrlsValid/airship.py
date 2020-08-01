@@ -23,7 +23,7 @@ import git
 import urllib3
 import yaml
 from conf import settings
-from SoftwarePreValid import swprevalidator
+from SoftwarePreUrlsValid import swpreurlsvalidator
 
 
 def check_link(link):
@@ -55,7 +55,7 @@ def check_link(link):
     return True
 
 
-class Airship(swprevalidator.ISwPreValidator):
+class Airship(swpreurlsvalidator.ISwPreUrlsvalidator):
     """
     Ariship Sw Validation
     """
@@ -101,7 +101,7 @@ class Airship(swprevalidator.ISwPreValidator):
             return True
         return False
 
-    def validate_hyperlinks(self):
+    def validate(self):
         """
         Hyperlink Validation
         """
@@ -155,113 +155,4 @@ class Airship(swprevalidator.ISwPreValidator):
                             print(link)
                             self.locations.append(link.strip())
 
-    # pylint: disable=too-many-nested-blocks, too-many-boolean-expressions
-    def validate_configuration_mandatory(self):
-        """
-        Configuration checking of mandatory parameters
-        """
-        if not self.manifest_exists_locally():
-            self.clone_repo()
-        # We will perform validation one-by-one:
-        # The Operating System Flavor
-        os_done = False
-        os_filename = os.path.join(self.tmdirpath,
-                                   'global',
-                                   'software',
-                                   'charts',
-                                   'ucp',
-                                   'drydock',
-                                   'maas.yaml')
-        with open(os_filename, 'r') as osref:
-            osfiles = yaml.load_all(osref, Loader=yaml.FullLoader)
-            for osf in osfiles:
-                if ('data' in osf and
-                        'values' in osf['data'] and
-                        'conf' in osf['data']['values'] and
-                        'maas' in osf['data']['values']['conf'] and
-                        'images' in osf['data']['values']['conf']['maas'] and
-                        ('default_os' in
-                         osf['data']['values']['conf']['maas']['images'])):
-                    if (settings.getValue('OPERATING_SYSTEM') in
-                            osf['data']['values']['conf']['maas']['images'][
-                                'default_os']):
-                        print('Operating System is VALID')
-                        os_done = True
-        if not os_done:
-            print("Operating System is INVALID")
 
-        filesdir = os.path.join(self.dirpath,
-                                'site',
-                                self.site_name,
-                                'profiles',
-                                'host')
-        hostprofile = None
-        os_ver_done = False
-        if os.path.isdir(filesdir):
-            for filename in os.listdir(filesdir):
-                filename = os.path.join(filesdir, filename)
-                with open(filename, 'r') as fileref:
-                    hostprofile = yaml.load(fileref, Loader=yaml.FullLoader)
-                if 'data' in hostprofile:
-                    if 'platform' in hostprofile['data']:
-                        if 'image' in hostprofile['data']['platform']:
-                            if (hostprofile['data']['platform']['image'] in
-                                    settings.getValue('OS_VERSION_NAME')):
-                                print('Operating System Version is VALID')
-                                os_ver_done = True
-                                break
-        if not os_ver_done:
-            print("Operating System Version is INVALID")
-        # Virtualization - Hugepages and CPU Isolation
-        hugepages_size_done = False
-        hugepages_count_done = False
-        filesdir = os.path.join(self.dirpath,
-                                'type',
-                                'cntt',
-                                'profiles',
-                                'hardware')
-        if os.path.isdir(filesdir):
-            for filename in os.listdir(filesdir):
-                filename = os.path.join(filesdir, filename)
-                with open(filename, 'r') as fileref:
-                    hwprofile = yaml.load(fileref, Loader=yaml.FullLoader)
-                if ('data' in hwprofile and
-                        'hugepages' in hwprofile['data'] and
-                        'dpdk' in hwprofile['data']['hugepages']):
-                    if ('size' in hwprofile['data']['hugepages']['dpdk'] and
-                            (settings.getValue('HUGEPAGES_SIZE') in
-                             hwprofile['data']['hugepages']['dpdk']['size'])):
-                        print('Hugepages Size is VALID')
-                    else:
-                        print('Hugepages Size is INVALID')
-                        hugepages_size_done = True
-                    if ('count' in hwprofile['data']['hugepages']['dpdk'] and
-                            (settings.getValue('HUGEPAGES_COUNT') ==
-                             hwprofile['data']['hugepages']['dpdk']['count'])):
-                        print('Hugepages COUNT is VALID')
-                    else:
-                        print('Hugepages COUNT is INVALID')
-                        hugepages_count_done = True
-                if hugepages_size_done and hugepages_count_done:
-                    break
-
-        # Virtual Switch - Switch and Configuration
-        # Openstack-Version
-        filename = os.path.join(self.tmdirpath,
-                                'global',
-                                'software',
-                                'config',
-                                'versions.yaml')
-        if os.path.exists(filename):
-            if settings.getValue('OPENSTACK_VERSION') in open(filename).read():
-                print('Openstack Version is valid')
-            else:
-                print('Openstack version if INVALID')
-        # Openstack Services
-        # Bootstrap
-
-    def validate_configuration_optional(self):
-        """
-        Validate Optional COnfigurations
-        """
-        return False

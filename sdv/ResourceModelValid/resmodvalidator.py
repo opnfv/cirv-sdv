@@ -18,17 +18,17 @@ Implementors, please inherit from this class.
 """
 
 
-class INwLinksValidator():
+class IResModValidator():
     """ Model for a Links Validator """
     def __init__(self):
         """ Initialization of the Interface """
-        self._default_nwlinks_validation = None
+        self._default_resmod_validation = None
 
     @property
-    def validation_nwlinks_defaults(self):
+    def validation_resmod_defaults(self):
         """ Default Validation values """
         return True
 
     def validate(self):
-        """ Validating Compute Node Links"""
+        """ Validating Resource Modelling"""
         raise NotImplementedError('Please call an implementation.')

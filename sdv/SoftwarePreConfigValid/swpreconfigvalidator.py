@@ -13,22 +13,22 @@
 # limitations under the License.
 
 """
-Abstract class for N/W Lnks Prevalidations.
+Abstract class for Software Prevalidations.
 Implementors, please inherit from this class.
 """
 
 
-class INwLinksValidator():
-    """ Model for a Links Validator """
+class ISwPreConfigValidator():
+    """ Model for a Sw Validator """
     def __init__(self):
         """ Initialization of the Interface """
-        self._default_nwlinks_validation = None
+        self._default_swpreconfig_validation = None
 
     @property
-    def validation_nwlinks_defaults(self):
+    def validation_swpreconfig_defaults(self):
         """ Default Validation values """
         return True
 
     def validate(self):
-        """ Validating Compute Node Links"""
+        """ Validate Mandatory Configurations """
         raise NotImplementedError('Please call an implementation.')
