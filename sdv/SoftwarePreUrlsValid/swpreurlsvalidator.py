@@ -18,25 +18,17 @@ Implementors, please inherit from this class.
 """
 
 
-class ISwPreValidator():
+class ISwPreUrlsValidator():
     """ Model for a Sw Validator """
     def __init__(self):
         """ Initialization of the Interface """
         self._default_swpre_validation = None
 
     @property
-    def validation_swpre_defaults(self):
+    def validation_swpreurls_defaults(self):
         """ Default Validation values """
         return True
 
-    def validate_hyperlinks(self):
+    def validate(self):
         """ Validate Hyperlinks"""
-        raise NotImplementedError('Please call an implementation.')
-
-    def validate_configuration_mandatory(self):
-        """ Validate Mandatory Configurations """
-        raise NotImplementedError('Please call an implementation.')
-
-    def validate_configuration_optional(self):
-        """ Validate Optional Configurations """
         raise NotImplementedError('Please call an implementation.')

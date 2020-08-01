@@ -42,21 +42,46 @@ def parse_arguments():
     """
     Parse command line arguments.
     """
+    class _SplitValidationTypesAction(argparse.Action):
+        """
+        Parse and split '--test-params' arguments.
+
+        This expects either a single list validation types
+        e.g: --validation-type 'configuration, state'
+        """
+        def __call__(self, parser, namespace, values, option_string=None):
+            values = values.strip()
+            input_list = values.split(',')
+            print(input_list)
+            parameter_list = []
+            for vtype in input_list:
+                vtype = vtype.strip()
+                if vtype:
+                    vtype = vtype.lower()
+                    parameter_list.append(str(vtype))
+            # results = {'_PARAMS_LIST':parameter_list}
+            setattr(namespace, self.dest, parameter_list)
+
     parser = argparse.ArgumentParser(prog=__file__, formatter_class=
                                      argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--version', action='version', version='%(prog)s 0.1')
     parser.add_argument('--list-validations', action='store_true',
                         help='list all validations')
-    parser.add_argument('--list-swpredepv', action='store_true',
-                        help='list all Software pre-dep validations and exit')
-    parser.add_argument('--list-swpostdepv', action='store_true',
-                        help='list all Software post-dep validations and exit')
-    parser.add_argument('--list-nwlinksv', action='store_true',
-                        help='list all Link validations and exit')
-    parser.add_argument('exact_validation_name', nargs='*', help='Exact names of\
-            validations to run. E.g "valid nwlinks"\
-            runs only nwlink-validations.\
-            To run all omit positional arguments')
+    parser.add_argument('--list-vurls', action='store_true',
+                        help='list all Software pre-dep Hyperlinks validations and exit')
+    parser.add_argument('--list-vconfig', action='store_true',
+                        help='list all Software pre-dep Configuration validations and exit')
+    parser.add_argument('--list-vstate', action='store_true',
+                        help='list all Software post-dep State validations and exit')
+    parser.add_argument('--list-vsecurity', action='store_true',
+                        help='list all Software post-dep Security validations and exit')
+    parser.add_argument('--list-vnwlinks', action='store_true',
+                        help='list all Network-Links validations and exit')
+    parser.add_argument('--list-vresmod', action='store_true',
+                        help='list all Resource-Model validations and exit')
+    parser.add_argument('--validation', action=_SplitValidationTypesAction,
+                        help='The type of Validation to perform - resmod, nwlinks,\
+                        urls, configuration, state, security')
     args = vars(parser.parse_args())
 
     return args
@@ -89,23 +114,71 @@ def handle_list_options(args):
 
     :param args: A dictionary with all CLI arguments
     """
-    if args['list_swpredepv']:
-        print(Loader().get_swprevalidators_printable())
+    if args['list_vurls']:
+        print(Loader().get_swpreurlsvalidators_printable())
         sys.exit(0)
 
-    if args['list_swpostdepv']:
-        print(Loader().get_swpostvalidators_printable())
+    if args['list_vconfig']:
+        print(Loader().get_swpreconfigvalidators_printable())
         sys.exit(0)
 
-    if args['list_nwlinksv']:
-        print(Loader().get_nwlinkvalidators_printable())
+    if args['list_vstate']:
+        print(Loader().get_swpoststatevalidators_printable())
         sys.exit(0)
+
+    if args['list_vsecurity']:
+        print(Loader().get_swpostsecurityvalidators_printable())
+        sys.exit(0)
+
+    if args['list_vnwlinks']:
+        print(Loader().get_nwlinksvalidators_printable())
+        sys.exit(0)
+
+
+# Sflo: questions/3041986/apt-command-line-interface-like-yes-no-input
+def sanity_check(question, default="yes"):
+    """Ask a yes/no question via raw_input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+        It must be "yes" (the default), "no" or None (meaning
+        an answer is required of the user).
+
+    The "answer" return value is True for "yes" or False for "no".
+    """
+    valid = {"yes": True, "y": True, "ye": True,
+             "no": False, "n": False}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' "
+                             "(or 'y' or 'n').\n")
 
 
 def main():
     """Main function.
     """
     args = parse_arguments()
+
+    if not sanity_check("Have you configured the testcases ?"):
+        print("Please configure testcases and rerun")
+        sys.exit(1)
+
+    print(args)
 
     # define the timestamp to be used by logs and results
     date = datetime.datetime.fromtimestamp(time.time())
@@ -129,18 +202,74 @@ def main():
     configure_logging(settings.getValue('VERBOSITY'))
 
     loader = Loader()
-    swprevalidators = loader.get_swprevalidators()
-    if settings.getValue('SW_PRE_VALIDATOR') not in swprevalidators:
-        _LOGGER.error('There are no swvalidators matching \'%s\' found in'
-                      ' \'%s\'. Exiting...', settings.getValue('SW_PRE_VALIDATOR'),
-                      settings.getValue('SW_PRE_VALID_DIR'))
-        sys.exit(1)
-    swv_pre_ctrl = component_factory.create_swprevalidator(
-        loader.get_swprevalidator_class())
-    # First validate hyperlinks
-    swv_pre_ctrl.validate_hyperlinks()
-    # Next validate mandatory configuration
-    swv_pre_ctrl.validate_configuration_mandatory()
+    validations = settings.getValue('VALIDATIONS')
+
+    # Get the Validation Types.
+    if args['validation']:
+        validations = args.validation_type
+
+    validator_objs = []
+    for validation in validations:
+        if 'urls' in validation:
+            validators = loader.get_swpreurlsvalidators()
+            if settings.getValue('SW_PRE_URLS_VALIDATOR') not in validators:
+                _LOGGER.error('There are no urls validators matching \'%s\' found in'
+                              ' \'%s\'. Exiting...', settings.getValue('SW_PRE_URLS_VALIDATOR'),
+                              settings.getValue('SW_PRE_URLS_VALID_DIR'))
+                sys.exit(1)
+            validator_ctrl = component_factory.create_swpreurlsvalidator(
+                loader.get_swpreurlsvalidator_class())
+            validator_objs.append(validator_ctrl)
+        if 'configuration' in validation:
+            validators = loader.get_swpreconfigvalidators()
+            if settings.getValue('SW_PRE_CONFIG_VALIDATOR') not in validators:
+                _LOGGER.error('There are no configvalidators matching \'%s\' found in'
+                              ' \'%s\'. Exiting...', settings.getValue('SW_PRE_CONFIG_VALIDATOR'),
+                              settings.getValue('SW_PRE_CONFIG_VALID_DIR'))
+                sys.exit(1)
+            validator_ctrl = component_factory.create_swpreconfigvalidator(
+                loader.get_swpreconfigvalidator_class())
+            validator_objs.append(validator_ctrl)
+        if 'state' in validation:
+            validators = loader.get_swpoststatevalidators()
+            if settings.getValue('SW_POST_STATE_VALIDATOR') not in validators:
+                _LOGGER.error('There are no statevalidators matching \'%s\' found in'
+                              ' \'%s\'. Exiting...', settings.getValue('SW_POST_STATE_VALIDATOR'),
+                              settings.getValue('SW_POST_STATE_VALID_DIR'))
+                sys.exit(1)
+            validator_ctrl = component_factory.create_swpoststatevalidator(
+                loader.get_swpoststatevalidator_class())
+            validator_objs.append(validator_ctrl)
+        if 'security' in validation:
+            validators = loader.get_swpostsecurityvalidators()
+            if settings.getValue('SW_POST_SECURITY_VALIDATOR') not in validators:
+                _LOGGER.error('There are no securityvalidators matching \'%s\' found in'
+                              ' \'%s\'. Exiting...', settings.getValue('SW_POST_SECURITY_VALIDATOR'),
+                              settings.getValue('SW_POST_SECURITY_VALID_DIR'))
+                sys.exit(1)
+            validator_ctrl = component_factory.create_swpostsecurityvalidator(
+                loader.get_swpostsecurityvalidator_class())
+            validator_objs.append(validator_ctrl)
+        if 'nwlinks' in validation:
+            validators = loader.get_nwlinksvalidators()
+            if settings.getValue('NW_LINKS_VALIDATOR') not in validators:
+                _LOGGER.error('There are no nwlinksvalidators matching \'%s\' found in'
+                              ' \'%s\'. Exiting...', settings.getValue('NW_LINKS_VALIDATOR'),
+                              settings.getValue('NW_LINKS_VALID_DIR'))
+                sys.exit(1)
+            validator_ctrl = component_factory.create_nwlinksvalidator(
+                loader.get_nwlinksvalidator_class())
+            validator_objs.append(validator_ctrl)
+        if 'resmod' in validation:
+            validators = loader.get_resmodvalidators()
+            if settings.getValue('RES_MOD_VALIDATOR') not in validators:
+                _LOGGER.error('There are no resmodvalidators matching \'%s\' found in'
+                              ' \'%s\'. Exiting...', settings.getValue('RES_MOD_VALIDATOR'),
+                              settings.getValue('RES_MOD_VALID_DIR'))
+                sys.exit(1)
+            validator_ctrl = component_factory.create_resmodvalidator(
+                loader.get_resmodvalidator_class())
+            validator_objs.append(validator_ctrl)
 
 
 if __name__ == "__main__":

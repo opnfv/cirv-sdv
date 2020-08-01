@@ -12,8 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Sw Validator interface and helpers.
+"""
+Abstract class for Software Postvalidations.
+Implementors, please inherit from this class.
 """
 
-# flake8: noqa
-from SoftwarePreValid.swprevalidator import *
+
+class ISwPostSecurityValidator():
+    """ Model for a Sw Validator """
+    def __init__(self):
+        """ Initialization of the Interface """
+        self._default_security_validation = None
+
+    @property
+    def validation_security_defaults(self):
+        """ Default Validation values """
+        return True
+
+    def validate(self):
+        """
+        Validating Mandatory Configuration
+        """
+        raise NotImplementedError('Please call an implementation.')
