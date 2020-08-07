@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+**/*.py[cod]
+**/*.confc
+
+# C extensions
+**/*.so
+
+
+# Installer logs
+**/pip-log.txt
+**/pip-delete-this-directory.txt
+
+
+# Log files:
+**/*.log
+
+# SublimeText
+**/*.sublime-project
+**/*.sublime-workspace
+
+**/*.md
+**/*.png
