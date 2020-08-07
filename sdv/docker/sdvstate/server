@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+
+# Copyright 2020 University Of Delhi.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+Server
+"""
+
+
+import logging
+import subprocess
+
+from tornado.web import Application
+from tornado.ioloop import IOLoop
+import tornado.concurrent
+import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+import tornado.log
+
+
+# pylint: disable=W0223
+
+class SwPostStateValidator(tornado.web.RequestHandler):
+    """
+    Post Cloud Software Deployment State Validation Tool REST Request Handler
+    """
+
+    # def set_default_headers(self):
+    #     """
+    #     """
+    #     self.set_header('Content-Type', 'application/json')
+
+
+    def get(self):
+        """
+        get request
+
+        usage:
+            option 1: passing parameters as key=value list
+                /?params='KEY1=value1,KEY2=value2'
+
+            option 2: passing parameters in conf-file
+                /?config=filename
+
+        :return: logs from test results
+        """
+        conf_params = self.get_argument('params', None)
+        if conf_params is not None:
+            conf_params = conf_params.replace(',', ';')
+        conf_file = self.get_argument('config', None)
+        pdf_file = self.get_argument('pdf', None)
+
+        cmd = ['python3', '/state/state']
+
+        if conf_params is not None:
+            cmd.extend(['--conf-params', f'{conf_params}'])
+
+        if conf_file is not None:
+            cmd.extend(['--conf-file', f'/data/{conf_file}'])
+
+        if pdf_file is not None:
+            cmd.extend(['--pdf-file', f'/data/{pdf_file}'])
+
+
+        logger = logging.getLogger(__name__)
+        command = " ".join(cmd)
+        logger.info(f'# Executing: [ {command} ]')
+
+
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        output = process.communicate()[0]
+        returncode = process.returncode
+
+        if returncode == 0:
+            results = output
+        else:
+            results = {'error': 'failed to retrieve results'}
+
+        self.finish(results)
+
+
+
+class UploadHandler(tornado.web.RequestHandler):
+    """
+    Upload File
+    """
+
+    def post(self):
+        """
+        post request
+
+        usage:
+
+            /upload
+            pass a file in `file` variable in header
+        """
+        data = self.request.files['file'][0]
+        fname = data['filename']
+
+        with open("/data/" + fname, 'wb+') as ofile:
+            ofile.write(data['body'])
+
+        self.finish("{upload : ok}")
+
+
+
+def server_main_block():
+    """
+    Main Function
+    """
+
+    app = Application([('/', SwPostStateValidator),
+                       ('/upload', UploadHandler)])
+
+    # Cli Config
+    tornado.options.define("port", default=80, help="run on the given port", type=int)
+    tornado.options.parse_command_line()
+
+
+    # Server Config
+    http_server = tornado.httpserver.HTTPServer(app)
+    http_server.listen(tornado.options.options.port)
+
+
+    # Tornado's event loop handles it from here
+    print("# Servering.... \n [Ctrl + C] to quit")
+
+
+    # Logging
+    log_file_filename = "/var/log/tornado.log"
+    handler = logging.FileHandler(log_file_filename)
+    app_log = logging.getLogger("tornado.general")
+    tornado.log.enable_pretty_logging()
+    app_log.addHandler(handler)
+
+
+    try:
+        tornado.ioloop.IOLoop.instance().start()
+    except KeyboardInterrupt:
+        tornado.ioloop.IOLoop.instance().stop()
+
+    # start
+    IOLoop.instance().start()
+
+
+if __name__ == "__main__":
+    server_main_block()
