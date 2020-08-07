@@ -1,0 +1,14 @@
+
+#####################
+## Airship
+######################
+
+# Default Airship namespace list
+# list all kubernetes namespace that have Airship components
+airship_namespace_list: 
+  - kube-system
+  - ceph
+  - ucp
+  - osh-infra
+  - tenant-ceph
+  - openstack

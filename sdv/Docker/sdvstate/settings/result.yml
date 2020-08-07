@@ -1,0 +1,3 @@
+# Note all paths must end with '/'
+results_path: /tmp/state/
+results_filename: results.json

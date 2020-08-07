@@ -1,0 +1,15 @@
+
+
+
+
+##################################
+# Program behavior configurations
+##################################
+
+# Logging
+log_filename: state-validation.log
+log_verbosity: info
+
+# Results
+results_dir: /tmp/state/
+save_results_locally: True
