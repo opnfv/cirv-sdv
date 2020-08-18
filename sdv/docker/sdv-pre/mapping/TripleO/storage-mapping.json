@@ -1,0 +1,29 @@
+{
+    "storage_profile-bootdrive":{
+        "manifest_key":""
+    },
+    "storage_profile.bd_partitions-name":{
+        "manifest_key":""
+    },
+    "storage_profile.bd_partitions-size":{
+        "manifest_key":""
+    },
+    "storage_profile.bd_partitions-bootable":{
+        "manifest_key":""
+    },
+    "storage_profile.bd_partitions.filesystem-mountpoint":{
+        "manifest_key":""
+    },
+    "storage_profile.bd_partitions.filesystem-fstype":{
+        "manifest_key":""
+    },
+    "storage_profile.bd_partitions.filesystem-mount_options":{
+        "manifest_key":""
+    },
+    "storage_profile.data_devices-name":{
+        "manifest_key":""
+    },
+    "storage_profile.journal_devices-name":{
+        "manifest_key":""
+    }
+}
