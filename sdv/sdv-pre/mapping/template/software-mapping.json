@@ -1,0 +1,20 @@
+{
+    "control-infra_sw_profiles-name":{
+        "manifest_key":""
+    },
+    "control-infra_sw_profiles-version":{
+        "manifest_key":""
+    },
+    "control-openstack_sw_profiles-name":{
+        "manifest_key":""
+    },
+    "control-openstack_sw_profiles-version":{
+        "manifest_key":""
+    },
+    "control-undercloud_sw_profiles-name":{
+        "manifest_key":""
+    },
+    "control-undercloud_sw_profiles-version":{
+        "manifest_key":""
+    }
+}

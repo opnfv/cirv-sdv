@@ -1,0 +1,921 @@
+{
+  "_comment_head1":"User should Configure all profiles. Add new, if reqd.",
+  "_comment_head2":"User should Configure the roles",
+  "_comment_head3":"All infos should be filled by the user",
+  "_comment_head4":"The servers data will be automatically generated",
+  "_comment_info1":"All Infos",
+  "management_info": {
+    "owner":"Intel",
+    "area_name": "Oregon",
+    "area_center_name": "",
+    "room_id": "",
+    "city": "Portland",
+    "resource_pool_name": "intel-pod10"
+  },
+  "ntp_info": {
+    "primary_ip":"",
+    "primary_zone":"",
+    "secondary_ip":"",
+    "secondary_zone":""
+  },
+  "syslog_info": {
+    "server_ip":"",
+    "transport":""
+  },
+  "dns_info": [
+    {
+      "name":"default",
+      "domain":"intel-pod10.opnfv.org",
+      "servers": [
+        {
+          "name": "8.8.8.8"
+        },
+        {
+          "name": "8.8.4.4"
+        }
+      ]
+    },
+    {
+      "name":"custom",
+      "domain":"intel-pod10.opnfv.org",
+      "servers": [
+        {
+          "name": "10.10.101.100"
+        }
+      ]
+    }
+  ],
+  "ldap_info": {
+    "base_url":"",
+    "url":"",
+    "auth_path":"",
+    "common_name":"",
+    "subdomain":"",
+    "domain":""
+  },
+  "proxy_info": {
+    "address":"",
+    "port":"",
+    "user":"",
+    "password":""
+  },
+  "vim_info": {
+    "vim_name": "Openstack",
+    "vim_id": "",
+    "vendor": " ",
+    "version": "",
+    "installer":"Airship",
+    "deployment_style":"OOK",
+    "container_orchestrator":"Kubernetes",
+    "storage_type":"Ceph"
+  },
+  "_comment_deployment":" Type can be OOK or NOOK, block storage method is rbd or iscsi",
+  "deployment_info": {
+    "high_availability":"Yes",
+    "introspection":"No",
+    "deployment_type":"OOK",
+    "installer_used":"Airship",
+    "workload_vnf":"Yes",
+    "workload_cnf":"No",
+    "sdn_controller":"No",
+    "sdn_controller_version":"",
+    "sdn_controller_nbapps":"",
+    "vnfm":"No",
+    "vnfm_version":"",
+    "data_plane_used":"Vxlan",
+    "ironic_deploy_interface":"",
+    "external_storage_cluster":"No",
+    "bl_str_connect_method":"",
+    "cpu_allocation_ratio":"1.0"
+  },
+  "jumphost_info": {
+    "ip":"10.10.100.20",
+    "name":"pod10-jump"
+  },
+  "rack_info": [
+    {
+      "rack_id":"1",
+      "rack_details": {
+        "rack_name":"pod10-rack",
+        "rack_description":"OPNFV LFN Intel Pod10",
+        "rack_az":"default"
+      }
+    }  
+  ],
+  "storage_cluster_info": {
+      "name":"",
+      "cluster_type":"",
+      "cluster_id":"",
+      "auth_type":"",
+      "username":"",
+      "password":"",
+      "certificate_location":"",
+      "client_key":"",
+      "mon_host_ips": [
+        {
+          "ips":""
+        }  
+      ],
+      "public_cidr":"10.10.103.0/24",
+      "cluster_cidr":"10.10.103.0/24",
+      "pools": [
+        {
+          "key":"",
+          "value":""
+        }
+      ]
+  },
+  "_comment_info2": "End of Information - Except Software-INFO",
+  "bios_profile": [
+    {
+      "profile_name":"3",
+      "bios_version": "SE5C610.86B.01.01.0018.072020161249",
+      "bios_mode":"bios",
+      "bootstrap_proto":"pxe",
+      "hyperthreading_enabled":"Yes",
+      "_comment":"C4_C6_MLC-STR_MLC-SPA_DCU_DCA_RAS_TURBO",
+      "bios_setting":"C4"
+    }
+  ],
+  "processor_profiles": [
+    {
+      "profile_name":"default",
+      "profile_info":
+        {
+          "manufacturer": "Intel",
+          "generation": "v4",
+          "speed": "2.2GHz",
+          "model":"E5-2699",
+          "architecture":"x86_64",
+          "numas": [
+            {
+              "node_id": "0",
+              "cpu_set": "0-21,44,-65 "
+            },
+            {
+              "node_id": "1",
+              "cpu_set": "22-43,66-87"
+            }
+          ],
+          "cpu_cflags":"",
+          "cache_size":"32Mb"
+        }
+    }
+  ],
+  "disks_profiles": [
+    {
+      "profile_name":"default",
+      "profile_info": [
+        {
+          "alias":"bootdisk",
+          "vendor": "Seagate",
+          "address":"0:0.0.0",
+          "size": "2794GiB",
+          "model":"ST3000NM0033-9ZM",
+          "dev_type":"sata",
+          "rotation":"",
+          "bus":"scsi",
+          "logical_name": "/dev/sda"
+        },
+        {
+          "alias":"datadisk",
+          "vendor":"Intel",
+          "address":"1:0.0.0",
+          "size":"167GiB",
+          "model":"SSDSC2BW18",
+          "dev_type":"sata",
+          "rotation":"",
+          "bus":"scsi",
+          "logical_name": "/dev/sdb"
+        }
+      ]
+    }
+  ],
+  "nic_profiles": [
+    {
+      "profile_name":"default",
+      "profile_info": [
+        {
+          "alias":"ctrl_nic1",
+          "name": "eno1",
+          "address":"0000:04:00.0",
+          "dev_type":"Gigabit Ethernet",
+          "bus":"pci",
+          "sriov_capable":"No",
+          "numa_id":"0"
+        },
+        {
+          "alias":"ctrl_nic2",
+          "name": "eno2",
+          "address":"0000:04:00.3",
+          "dev_type":"Gigabit Ethernet",
+          "bus":"pci",
+          "sriov_capable":"No",
+          "numa_id":"0"
+        },
+        {
+          "alias":"data_nic1",
+          "name": "eno3",
+          "address":"0000:02:00.0",
+          "dev_type":"Gigabit Ethernet",
+          "bus":"pci",
+          "sriov_capable":"Yes",
+          "numa_id":"0"
+        },
+        {
+          "alias":"data_nic2",
+          "name":"eno4",
+          "address":"0000:02:00.3",
+          "dev_type":"Gigabit Ethernet",
+          "bus":"pci",
+          "sriov_capable":"Yes",
+          "numa_id":"0"
+        }
+      ]
+    }
+  ],
+  "hardware_profiles": [
+    {
+      "profile_name": "default",
+      "profile_info": {
+        "manufacturer": "Intel",
+        "model": "S2600WT2R",
+        "generation":"4",
+        "bios_profile":"3",
+        "processor_profile": "default",
+        "memory": "64Gb",
+        "disks_profile": "default",
+        "nics_profile":"default"
+      }
+    }
+  ],
+  "_comment_hw":" Hardware Information is complete",
+  "storage_profile": [
+    {
+      "name":"default",
+      "bootdrive":"datadisk",
+      "bd_partitions": [
+        {
+          "name":"root",
+          "size":"30Gi",
+          "bootable":"Yes",
+          "filesystem": {
+            "mountpoint":"/",
+            "fstype":"ext4",
+            "mount_options":"defaults"
+          }
+        },
+        {
+          "name":"boot",
+          "size":"1Gi",
+          "bootable":"No",
+          "filesystem": {
+            "mountpoint":"/boot",
+            "fstype":"ext4",
+            "mount_options":"defaults"
+          }
+        },
+        {
+          "name":"var_log",
+          "size":"100Gi",
+          "bootable":"No",
+          "filesystem": {
+            "mountpoint":"/var/log",
+            "fstype":"ext4",
+            "mount_options":"defaults"
+          }
+        },
+        {
+          "name":"var",
+          "size":"available",
+          "bootable":"No",
+          "filesystem": {
+            "mountpoint":"/var",
+            "fstype":"ext4",
+            "mount_options":"defaults"
+          }
+        }
+      ],
+      "data_devices": [
+        {
+          "name":"",
+          "partitions": [
+            {
+              "name":"ceph",
+              "size":"available",
+              "filesystem": {
+                 "mountpoint":"/var/lib/ceph",
+                 "fstype":"ext4",
+                 "mount_options":"defaults"
+               }
+            }  
+         ]
+        }  
+      ],
+      "journal_devices": [
+        {
+          "name":""
+        }  
+      ]
+    }
+  ],
+  "_comment_nw1": "L3 Network Info, Please include IPMI info too",
+  "networks": [
+    {
+      "name":"oob",
+      "vips": [
+        {
+          "name":"ingress_vip",
+          "ip":"10.10.100.100/32"
+        }  
+      ],
+      "tunnel_type":"",
+      "tunnel_id":"",
+      "tunnel_id_range":"",
+      "mtu":"9000",
+      "routedomain":"",
+      "cidr":"10.10.100.0/24",
+      "dns":"default",
+      "routes": [
+        {
+          "subnet":"'0.0.0.0/0",
+          "gateway":"10.10.100.1",
+          "metric":"100",
+          "routedomain":""
+        }  
+      ],
+      "allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ],
+      "v6_cidr":"",
+      "v6_allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ]
+    },
+    {
+      "name":"dmz",
+      "vips": [
+        {
+          "name":"",
+          "ip":""
+        }  
+      ],
+      "tunnel_type":"",
+      "tunnel_id":"",
+      "tunnel_id_range":"",
+      "mtu":1500,
+      "routedomain":"",
+      "cidr":"10.10.100.0/24",
+      "dns":"",
+      "routes": [
+        {
+          "subnet":"0.0.0.0/0",
+          "gateway":"10.10.100.1",
+          "metric":"100",
+          "routedomain":""
+        }  
+      ],
+      "allocation_pools": [
+        {
+          "type":"reserved",
+          "start":"10.10.100.1",
+          "end":"10.10.100.19"
+        },
+        {
+          "type":"static",
+          "start":"10.10.100.20",
+          "end":"10.10.100.39"
+        }
+      ],
+      "v6_cidr":"",
+      "v6_allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ]
+    },
+    {
+      "name":"admin",
+      "vips": [
+        {
+          "name":"maas_vip",
+          "ip":"10.10.101.100/32"
+        }  
+      ],
+      "tunnel_type":"",
+      "tunnel_id":"",
+      "tunnel_id_range":"",
+      "mtu":"",
+      "routedomain":"",
+      "cidr":"10.10.101.0/24",
+      "dns":"custom",
+      "routes": [
+        {
+          "subnet":"0.0.0.0/0",
+          "gateway":"10.10.101.1",
+          "metric":"100",
+          "routedomain":""
+        }  
+      ],
+      "allocation_pools": [
+        {
+          "type":"reserved",
+          "start":"10.10.101.1",
+          "end":"10.10.101.19"
+        },
+        {
+          "type":"static",
+          "start":"10.10.101.20",
+          "end":"10.10.101.39"
+        },
+        {
+          "type":"dhcp",
+          "start":"10.10.101.40",
+          "end":"10.10.101.79"
+        }
+      ],
+      "v6_cidr":"",
+      "v6_allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ]
+    },
+    {
+      "name":"private",
+      "vips": [
+        {
+          "name":"",
+          "ip":""
+        }  
+      ],
+      "tunnel_type":"vlan",
+      "tunnel_id":"0",
+      "tunnel_id_range":"",
+      "mtu":"1500",
+      "routedomain":"",
+      "cidr":"10.10.102.0/24",
+      "dns":"",
+      "routes": [
+        {
+          "subnet":"",
+          "gateway":"",
+          "metric":"",
+          "routedomain":""
+        }  
+      ],
+      "allocation_pools": [
+        {
+          "type":"static",
+          "start":"10.10.102.1",
+          "end":"10.10.102.19"
+        }  
+      ],
+      "v6_cidr":"",
+      "v6_allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ]
+    },
+    {
+      "name":"storage",
+      "vips": [
+        {
+          "name":"",
+          "ip":""
+        }  
+      ],
+      "tunnel_type":"vlan",
+      "tunnel_id":"0",
+      "tunnel_id_range":"",
+      "mtu":"1500",
+      "routedomain":"",
+      "cidr":"10.10.103.0/24",
+      "dns":"",
+      "routes": [
+        {
+          "subnet":"",
+          "gateway":"",
+          "metric":"",
+          "routedomain":""
+        }  
+      ],
+      "allocation_pools": [
+        {
+          "type":"static",
+          "start":"10.10.103.1",
+          "end":"10.10.103.19"
+        }  
+      ],
+      "v6_cidr":"",
+      "v6_allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ]
+    },
+    {
+      "name":"public",
+      "vips": [
+        {
+          "name":"",
+          "ip":""
+        }  
+      ],
+      "tunnel_type":"vlan",
+      "tunnel_id":"1103",
+      "tunnel_id_range":"",
+      "mtu":"1500",
+      "routedomain":"",
+      "cidr":"10.10.105.0/24",
+      "dns":"",
+      "routes": [
+        {
+          "subnet":"",
+          "gateway":"",
+          "metric":"",
+          "routedomain":""
+        }  
+      ],
+      "allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ],
+      "v6_cidr":"",
+      "v6_allocation_pools": [
+        {
+          "type":"",
+          "start":"",
+          "end":""
+        }  
+      ]
+    }
+  ],
+  "physical_networks": [
+    {
+      "name":"external",
+      "cidr":"",
+      "type":"flat"
+    },
+    {
+      "name":"sriovnet1",
+      "cidr":"",
+      "type":"vlan"
+    }
+  ],
+  "_comment_nw2":" type: trunk (airship), bond, interface, bridge",
+  "network_link": [
+    {
+      "name":"",
+      "type":"",
+      "bonding_mode":"",
+      "mtu":"",
+      "linkspeed":"auto",
+      "trunking_mode":"",
+      "trunking_default_nw":"",
+      "metadata": [
+        {
+          "key":"",
+          "value":""
+        }
+      ],
+      "members":[
+        {
+          "name":"",
+          "type":""
+        }
+      ],
+      "vid":"",
+      "vf_count":""
+    }  
+  ],
+  "_comment_nw4": "The interface_name could be links, i/f, bond, bridges",
+  "_comment_nw5": "These profiles are mapped to roles",
+  "interface_mapping_profiles": [
+    {
+      "profile_name":"default",
+      "profile_data": [
+        {
+          "interface_name":"dmz",
+          "interface_type":"link",
+          "networks": [
+            {
+              "name":"dmz"
+            }  
+          ],
+          "use_dhcp":"Yes"
+        },
+        {
+          "interface_name":"admin",
+          "interface_type":"link",
+          "networks": [
+            {
+              "name":"admin"
+            }  
+          ],
+          "use_dhcp":"No"
+        },
+        {
+          "interface_name":"data1",
+          "interface_type":"link",
+          "networks": [
+            {
+              "name":"private"
+            },
+            {
+              "name":"management"
+            }
+          ],
+          "use_dhcp":""
+        },
+        {
+          "interface_name":"data2",
+          "interface_type":"link",
+          "networks": [
+            {
+              "name":"storage"
+            },
+            {
+              "name":"public"
+            }
+          ],
+          "use_dhcp":""
+        },
+        {
+          "interface_name":"eno4.1103",
+          "interface_type":"vlan",
+          "networks": [
+            {
+              "name":"external"
+            }
+          ],
+          "use_dhcp":"No"
+        },
+        {
+          "interface_name":"eno4",
+          "interface_type":"sriov",
+          "networks": [
+            {
+              "name":"sriovnet1"
+            }
+          ],
+          "use_dhcp":"No"
+        }
+      ]
+    }
+  ],
+  "platform_profiles": [
+    {
+      "profile_name":"data",
+      "os":"Ubuntu Xenial",
+      "rt_kvm":"No",
+      "kernel_version":"linux-image-4.15.0-46-generic",
+      "kernel_parameters":"",
+      "isolated_cpus":"0-87",
+      "vnf_cores":"4-43,48-87",
+      "os_reserved_cores": "0-3,44-47",
+      "hugepages": [
+        {
+          "hugepage_count":"32",
+          "hugepage_size":"1G"
+        }  
+      ],
+      "iommu":"",
+      "vswitch_daemon_cores": " ",
+      "vswitch_type":"",
+      "vswitch_uio_driver":"",
+      "vswitch_mem_channels":"",
+      "vswitch_socket_memory":"",
+      "vswitch_pmd_cores":"",
+      "vswitch_dpdk_lcores":"",
+      "vswitch_dpdk_rxqs":"",
+      "vswitch_options":""
+    },
+    {
+      "profile_name":"control",
+      "os":"Ubuntu Xenial",
+      "rt_kvm":"No",
+      "kernel_version":"linux-image-4.15.0-46-generic",
+      "kernel_parameters":"",
+      "isolated_cpus":"0-87",
+      "vnf_cores":"4-43,48-87",
+      "os_reserved_cores": "0-3,44-47",
+      "hugepages": [
+        {
+          "hugepage_count":"32",
+          "hugepage_size":"1G"
+        }  
+      ],
+      "iommu":"",
+      "vswitch_daemon_cores": " ",
+      "vswitch_type":"",
+      "vswitch_uio_driver":"",
+      "vswitch_mem_channels":"",
+      "vswitch_socket_memory":"",
+      "vswitch_pmd_cores":"",
+      "vswitch_dpdk_lcores":"",
+      "vswitch_dpdk_rxqs":"",
+      "vswitch_options":""
+    }
+  ],
+  "undercloud_ook":{
+    "dns": {
+      "cluster_domain":"cluster.local",
+      "service_ip":"10.96.0.10"
+    },
+    "etcd":{
+      "service_ip":"10.96.232.136",
+      "container_port":"2379",
+      "haproxy_port":"2378"
+    },
+    "masters": [
+      {
+        "hostname":""
+      }  
+    ],
+    "networking":{
+      "type":"calico",
+      "interface_used":"eno3",
+      "api_service_ip":"10.96.0.1",
+      "etcd_service_ip":"10.96.0.2",
+      "pod_cidr":"10.97.0.0/16",
+      "service_cidr":"10.96.0.0/16",
+      "apiserver_port":"6443",
+      "haproxy_port":"6553",
+      "servicenode_port_range":"30000-32767"
+    },
+    "kvps":[
+      {
+        "key":"",
+        "value":""
+      }  
+    ]
+    
+  },
+  "undercloud_ooo":{
+    "host_name":"",
+    "local_ip":"",
+    "public_host":"",
+    "admin_host":"",
+    "local_interface":"",
+    "inspection_interface":"",
+    "networking":{
+      "ctrlplane_cidr":"",
+      "ctrlplane_ip_start":"",
+      "ctrlplane_ip_end":"",
+      "inspection_range":"",
+      "gateway":""
+    }
+  },
+  "_comment_sw1":"Software Begins",
+  "undercloud_sw_profiles":[
+    {
+      "profile_name":"",
+      "sw_list": [
+        {
+          "name":"",
+          "version":""
+        }  
+      ]
+    }
+  ],
+  "openstack_sw_profiles":[
+    {
+      "profile_name":"",
+      "sw_list": [
+        {
+          "name":"",
+          "version":""
+        }  
+      ]
+    }
+  ],
+  "infra_sw_profiles":[
+    {
+      "profile_name":"",
+      "sw_list": [
+        {
+          "name":"",
+          "version":""
+        }  
+      ]
+    }
+  ],
+  "software_set": [
+    {
+      "set_name":"control",
+      "undercloud_profile":"",
+      "infrasw_profile":"",
+      "openstack_profile":""
+    },
+    {
+      "set_name":"data",
+      "undercloud_profile":"",
+      "infrasw_profile":"",
+      "openstack_profile":""
+    }
+  ],
+  "_comment_role1":"User has to configure this - What profile to use for a role",
+  "_comment_role2":"Based on this server_info will be autogenerated for all servers",
+  "roles": [
+    {
+      "name":"masters",
+      "hostname_prefix":"pode10-node",
+      "hostname_suffix":"",
+      "hostname_number_start":"1",
+      "count":"3",
+      "hardware_profile":"default",
+      "interface_mapping":"default",
+      "storage_mapping":"default",
+      "platform_profile":"control",
+      "sw_set_name":"control",
+      "metadata": [
+        {
+          "on_count_condition":"",
+          "count":"",
+          "key":"genesis",
+          "value":"true"
+        }  
+      ]
+    },
+    {
+      "name":"workers",
+      "hostname_prefix":"pod10-node",
+      "hostname_suffix":"",
+      "hostname_number_start":"4",
+      "count":"2",
+      "hardware_profile":"default",
+      "interface_mapping":"default",
+      "storage_mapping":"default",
+      "platform_profile":"data",
+      "sw_set_name":"data",
+      "metadata": [
+        {
+          "key":"",
+          "value":""
+        }  
+      ]
+    }
+  ],
+  "_comment_ex1":"C:City, A:Area, R:Room, N:Unique Number",
+  "_comment_ex2":"All are 2 characters. City-Capitals, Area-Small",
+  "extrapolation_info": {
+    "ilo_password":"CID-AID-RID-NID",
+    "ilo_user":"owner",
+    "ip_increment":"3"
+  },
+  "host_aggregates": [
+    {
+      "aggregate_name":"",
+      "properties": [
+        {
+          "key":"",
+          "value":""
+        }  
+      ],
+      "servers": [
+        {
+          "identifier":"",
+          "ilo_ip":"",
+          "hostname":""
+        }  
+      ]
+    }
+  ],
+  "_comment_servers1":"This will be auto generated",
+  "_comment_servers2":"This describes the entire cloud.",
+  "servers": [
+    {
+      "role_name":"",
+      "device_name":"",
+      "az_name": " ",
+      "ha_name": " ",
+      "rack":"",
+      "ilo_info": {
+        "ip":"",
+        "user":"",
+        "password":""
+      }
+    }
+  ]
+}

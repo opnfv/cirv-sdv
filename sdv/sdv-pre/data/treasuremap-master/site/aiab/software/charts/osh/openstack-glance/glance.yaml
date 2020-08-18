@@ -1,0 +1,19 @@
+---
+schema: armada/Chart/v1
+metadata:
+  schema: metadata/Document/v1
+  name: glance-aiab
+  layeringDefinition:
+    abstract: false
+    layer: site
+    parentSelector:
+      name: glance-type
+    actions:
+      - method: merge
+        path: .
+  storagePolicy: cleartext
+
+data:
+  values:
+    storage: pvc
+...

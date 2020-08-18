@@ -1,0 +1,32 @@
+---
+schema: armada/Chart/v1
+metadata:
+  schema: metadata/Document/v1
+  name: neutron
+  labels:
+    name: neutron-type
+  layeringDefinition:
+    abstract: false
+    layer: type
+    parentSelector:
+      name: neutron-global
+    actions:
+      - method: merge
+        path: .
+  storagePolicy: cleartext
+data:
+  values:
+    pod:
+      replicas:
+        server: 9
+    conf:
+      neutron:
+        DEFAULT:
+          service_plugins: router,trunk,neutron.services.qos.qos_plugin.QoSPlugin
+      plugins:
+        ml2_conf:
+          ml2:
+            extension_drivers: port_security, qos
+          agent:
+            extensions: qos
+...
