@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Resource Modelling</title>
+	
+   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+   <meta content="utf-8" http-equiv="encoding">
+
+   <link rel="stylesheet" href="style/index.css">
+   <link rel="stylesheet" href="style/array.css">
+
+   <script src="mergeDeep.js"></script>
+   <script src="readFromHTML.js"></script>
+   <script src="actions.js"></script>
+   <script src="controller.js"></script>
+
+
+
+   <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"> 
+</head>
+
+
+
+<body>
+
+<div id="site"><form>
+
+
+	<fieldset class='resmodData'>
+		<legend class="collapse-arrow" onclick="toggleClass(this,'expand-arrow')">
+		    VNFs
+	    </legend>
+	    <div>
+
+	        <label>VNFs:</label><br>
+	        <div class="arr" name="vnf_profiles">
+
+	        	<label>VNF Name:</label>
+                <input type="text" name="profile_name" value="userplane_app"><br>
+	        	<label>VCPUs:</label>
+                <input type="text" name="vcpus" value="36"><br>
+	        	<label>NUMAs:</label>
+                <input type="text" name="numas" value="1"><br>
+	        	<label>CPUs in NUMA0:</label>
+                <input type="text" name="cpus_in_numa0" value="36"><br>
+	        	<label>CPUs in NUMA1:</label>
+                <input type="text" name="cpus_in_numa1" value="0"><br>
+	        	<label>RAM Size</label>
+                <input type="text" name="ram_size" value="64"><br>
+	        	<label>Interface Count</label>
+                <input type="text" name="interfaces" value="6"><br>
+	        	<label>SRIOV Support</label>
+                <input type="text" name="sriov_support" value="yes"><br>
+	        	<label>VIRTIO Support</label>
+                <input type="text" name="virtio_support" value="yes"><br>
+	        	<label>Availability Zone</label>
+                <input type="text" name="availability_zone" value="dataplane_zone"><br>
+	        	<label>CPU Policy</label>
+                <input type="text" name="cpu_policy" value="sw==decicated"><br>
+	        	<label>CPU Pinned</label>
+                <input type="text" name="cpu_pinned" value="yes"><br>
+	        	<label>Number of VNFs</label>
+                <input type="text" name="num_of_vnfs" value="9"><br>
+
+            </div><div class="add-button" onclick="duplicate(this)"></div>
+	    	
+	    </div>
+	</fieldset>
+
+
+	<fieldset class='resmodData'>
+		<legend class="collapse-arrow" onclick="toggleClass(this,'expand-arrow')">
+		    Compute Hardware
+		</legend>
+        <div>
+	        <label>Compute Node Hardware Info</label><br>
+	        <div name="hardware_profile">
+	        	<label> Total CPUs:</label>
+	            <input type="text" name="vcpus" value="80"><br>
+	        	
+                <label> NUMAs:</label>
+	            <input type="text" name="numas" value="2"><br>
+
+	            <label> #of Numa0 CPUS for VNFs:</label>
+	            <input type="text" name="numa0_cpus_4vnfs" value="36"><br>
+
+	            <label> #of Numa1 CPUS for VNFs:</label>
+	            <input type="text" name="numa1_cpus_4vnfs" value="36"><br>
+
+	            <label>RAM Size:</label>
+	            <input type="text" name="ram_size" value="384 "><br>
+	            <label>CPU Isolation Set</label>
+	            <input type="text" name="cpu_isol_set" value="0-44"><br>
+
+                <label>NICs:</label><br>
+	            <div class="arr" name="nics">
+	        	    <div>
+	        		    <label>NIC Name:</label>
+	        		    <input type="text" name="name" value="ens785f0"><br>
+	        		    <label>NIC Type:</label>
+	        		    <input type="text" name="type" value="sriov">
+	        		    <label>NIC Speed:</label>
+	        		    <input type="text" name="speed" value="25"><br>
+	        		    <label>NIC NUMA:</label>
+	        		    <input type="text" name="numa" value="0"><br>
+	        	    </div>
+                </div>
+	            <div class="add-button" onclick="duplicate(this)"></div>
+	        </div>
+        </div>
+	</fieldset>
+
+</form>
+
+
+<form id="validate" action="/validate" method="post">
+	<input  type="hidden" name="config">
+</form>
+<button id="save-changes" type="button" onclick="getModel()">Show Modelling</button>
+ 
+
+</div>
+</body>
+</html>

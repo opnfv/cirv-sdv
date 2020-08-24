@@ -1,0 +1,55 @@
+
+@keyframes popup {
+  0%{
+    transform: scale(0.5);
+  }
+  90%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(1.0);
+  }
+}
+
+.arr{
+  border-radius: 6px;
+  border-style: dashed;
+  border-color: #c9c9c9;
+  border-width: 2px;
+  display: inline-block;
+  padding-right: 3em;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  position: relative;
+  animation: popup 0.2s ease;
+}
+
+
+.add-button{
+  background-image: url("../assets/plus-circle-solid.svg");
+  opacity: 0.7;
+  width: 2em;
+  height: 2em;
+  display: inline-block;
+  left: 0;  
+}
+.add-button:hover{
+  opacity: 1
+}
+
+
+
+.del-button{
+  background-image: url("../assets/trash-alt-regular.svg");
+  background-repeat: no-repeat;
+  opacity: 0.7;
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  right: 0.5em;
+  bottom: 0.5em;
+}
+.del-button:hover{
+  opacity: 1
+}
+

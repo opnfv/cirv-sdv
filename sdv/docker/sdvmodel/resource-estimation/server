@@ -1,0 +1,340 @@
+#!/usr/bin/env python3
+
+# Copyright 2020 Spirent Communications, University Of Delhi.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+Server
+"""
+
+
+import logging
+import os
+import sys
+import copy
+import json
+from tornado.web import Application
+from tornado.ioloop import IOLoop
+import tornado.concurrent
+import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+import tornado.log
+import jinja2
+
+# SOF: 11124247: Massey101 and Corey Klein
+class StreamToLogger():
+    """
+    file-like stream object that redirects writes to a logger instance.
+    """
+    def __init__(self, logger, log_level=logging.INFO):
+        self.logger = logger
+        self.log_level = log_level
+        self.linebuf = ''
+
+    def write(self, buf):
+        """
+        write logs
+        """
+        temp_linebuf = self.linebuf + buf
+        self.linebuf = ''
+        for line in temp_linebuf.splitlines(True):
+            # From the io.TextIOWrapper docs:
+            #   On output, if newline is None, any '\n' characters written
+            #   are translated to the system default line separator.
+            # By default sys.stdout.write() expects '\n' newlines and then
+            # translates them so this is still cross platform.
+            if line[-1] == '\n':
+                self.logger.log(self.log_level, line.rstrip())
+            else:
+                self.linebuf += line
+
+    def flush(self):
+        """
+        flush the buffer
+        """
+        if self.linebuf != '':
+            self.logger.log(self.log_level, self.linebuf.rstrip())
+        self.linebuf = ''
+
+
+
+class Server():
+    """
+    Server
+    """
+    # pylint: disable=too-many-instance-attributes
+
+    def __init__(self, hw_profile):
+        self.vcpus = hw_profile['vcpus']
+        self.numas = hw_profile['numas']
+        self.numa_vcpu_map = []
+        self.sriov_support = False
+        self.hosted_vnfs = []
+        for count in range(int(self.numas)):
+            self.numa_vcpu_map.append(hw_profile['numa'
+                                                 +str(count)
+                                                 +'_cpus_4vnfs'])
+        self.create_numa_sriov_map(hw_profile['nics'])
+        self.zone = 'default'
+        self.cpu_isolation = hw_profile['cpu_isol_set']
+        self.available_cpu_map = self.numa_vcpu_map
+
+    def create_numa_sriov_map(self, nics):
+        """
+        Search for all sriov and nonsriov numas
+        """
+        self.sriov_numas = []
+        self.nonsriov_numas = []
+        for nic in nics:
+            if nic['type'] == 'sriov':
+                self.sriov_support = True
+                if nic['numa'] not in self.sriov_numas:
+                    self.sriov_numas.append(int(nic['numa']))
+            else:
+                if nic['numa'] not in self.sriov_numas:
+                    self.nonsriov_numas.append(int(nic['numa']))
+
+    def dump_profile(self):
+        """
+        Print Server Profile
+        """
+        print("The number of vCPUs: %s" %self.vcpus)
+        print("Number of NUMA nodes on this server: %s" %self.numas)
+        print("vCPUs available for the application in each NUMA: %s" %self.numa_vcpu_map)
+        print("SRIOV Support? %s" %self.sriov_support)
+        print("The Zone this server belongs to: %s" %self.zone)
+        print("vCPUs Isolated: %s" %self.cpu_isolation)
+        print("Numa to which SRIOV Nics belogs to: %s" %str(self.sriov_numas))
+
+class Deployment():
+    """
+    Model deployment
+    """
+    def __init__(self, rack_count, hw_profile):
+        self.server_list = []
+        self.total_servers = 0
+        self.hw_profile = hw_profile
+        self.rack_count = rack_count
+        self.server_zones = {}
+
+    def create_deployment(self, vnf_profiles):
+        """
+        Understand zones.
+        """
+        zones = []
+        for vnf in vnf_profiles:
+            if vnf['availability_zone'] not in zones:
+                zones.append(vnf['availability_zone'])
+        # print(zones)
+        for zone in zones:
+            for vnf in vnf_profiles:
+                if zone == vnf['availability_zone']:
+                    for count in range(int(vnf['num_of_vnfs'])):
+                        self.deploy(vnf, count)
+            self.server_zones[zone] = copy.deepcopy(self.server_list)
+            self.total_servers += len(self.server_list)
+            self.server_list.clear()
+
+    def deploy(self, vnf, suffix):
+        """
+        Understand deployment
+        """
+        # pylint: disable=too-many-branches
+
+        deploy = False
+        # If no servers, just do the deployment there and apped it.
+        if len(self.server_list) == 0:
+            server = Server(self.hw_profile)
+            for cnt in  range(len(server.available_cpu_map)):
+                if int(server.available_cpu_map[cnt]) >= int(vnf['vcpus']):
+                    if not ((vnf['sriov_support'] == 'yes' and cnt not in server.sriov_numas) or\
+                        (vnf['sriov_support'] == 'no' and cnt not in server.nonsriov_numas)):
+                        server.available_cpu_map[cnt] = str(
+                            int(server.available_cpu_map[cnt]) - int(vnf['vcpus']))
+                        deploy = True
+                        server.hosted_vnfs.append({'vnf':vnf['profile_name'] +\
+                                                   str(suffix), 'numa': cnt})
+                        self.server_list.append(server)
+                        return
+            if not deploy:
+                print("The existing hardware profile is not Suitable")
+                sys.exit()
+        # Servers already exist. Check if any eserver can accommodate the vnf:
+        for server in self.server_list:
+            # Check if SRIOV support is required for VNF and server supports
+            # Check if cpus are available in any of the numas
+            for cnt in  range(len(server.available_cpu_map)):
+                if int(server.available_cpu_map[cnt]) >= int(vnf['vcpus']):
+                    if not ((vnf['sriov_support'] == 'yes' and cnt not in server.sriov_numas) or\
+                        (vnf['sriov_support'] == 'no' and cnt not in server.nonsriov_numas)):
+                        server.available_cpu_map[cnt] = str(int(server.available_cpu_map[cnt])
+                                                            - int(vnf['vcpus']))
+                        deploy = True
+                        server.hosted_vnfs.append({'vnf':vnf['profile_name'] +\
+                                                   str(suffix), 'numa': cnt})
+                        return
+        # We need to create new server, do deployment there and append it the list
+        if not deploy:
+            server = Server(self.hw_profile)
+            for cnt in  range(len(server.available_cpu_map)):
+                if int(server.available_cpu_map[cnt]) >= int(vnf['vcpus']):
+                    if not ((vnf['sriov_support'] == 'yes' and cnt not in server.sriov_numas) or\
+                        (vnf['sriov_support'] == 'no' and cnt not in server.nonsriov_numas)):
+                        server.available_cpu_map[cnt] = str(
+                            int(server.available_cpu_map[cnt]) - int(vnf['vcpus']))
+                        deploy = True
+                        server.hosted_vnfs.append({'vnf':vnf['profile_name'] +\
+                                                  str(suffix), 'numa': cnt})
+                        self.server_list.append(server)
+                        return
+            if not deploy:
+                print("The existing hardware profile is not Suitable")
+                sys.exit()
+
+    def display_deployment(self):
+        """
+        Print Deployment Report
+        """
+        print("Number of servers used %d" % self.total_servers)
+        print("------------------------------------------------")
+        count = 0
+        for zone, server_list in self.server_zones.items():
+            print("SERVERS IN AVAILABILITY ZONE: %s" %(zone))
+            print("------------------------------------------------")
+            for server in server_list:
+                print("Server ID: " + str(count))
+                for vnf in server.hosted_vnfs:
+                    print("VNF: " + vnf['vnf'] + "  NUMA: " + str(vnf['numa']))
+                count = count + 1
+                print("------------------------------------------------")
+
+    def get_deployment(self):
+        """
+        Returns servers and zones
+        """
+        return self.total_servers, self.server_zones
+
+
+# pylint: disable=W0223
+
+class Estimate(tornado.web.RequestHandler):
+    """
+    Resource estimator
+    """
+    # def set_default_headers(self):
+    #     self.set_header('Content-Type', 'application/json')
+
+    def post(self):
+        """
+        Server Resource Modelling Report
+        """
+        model = {}
+        config = self.get_argument('config', None)
+        data = json.loads(config)
+
+        vnf_profiles = (data['vnf_profiles'])
+        hw_profile = (data['hardware_profile'])
+        model['vnf_profiles'] = vnf_profiles
+        print("--------- Resource Modelling Report ------------")
+        print("------------------------------------------------")
+        print("The VNFs:")
+        for profile in vnf_profiles:
+            print(profile['profile_name'])
+        print("------------------------------------------------")
+        print("The Compute-Server Profile:")
+        server = Server(hw_profile)
+        server.dump_profile()
+        model['server'] = hw_profile
+        print("------------------------------------------------")
+        deployment = Deployment(2, hw_profile)
+        deployment.create_deployment(vnf_profiles)
+        deployment.display_deployment()
+        count, placement = deployment.get_deployment()
+        model['deployment_count'] = count
+        model['deployment'] = placement
+        loader = jinja2.FileSystemLoader(searchpath="template/")
+        jenv = jinja2.Environment(loader=loader)
+        template = jenv.get_template('report.html')
+        htmlout = template.render(model=model)
+
+        self.finish(htmlout)
+
+
+class HomeHandler(tornado.web.RequestHandler):
+    """
+    Handler for '/' endpoint
+    """
+    def get(self):
+        """
+        Server Home Page
+        """
+        self.render('/website/index.html')
+
+
+
+def server_main_block():
+    """
+    Main Function
+    """
+
+    app = Application([('/validate', Estimate),
+                       ('/', HomeHandler),
+                       ('/(.*)', tornado.web.StaticFileHandler, {'path' : '/website'})])
+
+    # Cli Config
+    tornado.options.define("port", default=80, help="run on the given port", type=int)
+    tornado.options.parse_command_line()
+
+
+    # Server Config
+    http_server = tornado.httpserver.HTTPServer(app)
+    http_server.listen(tornado.options.options.port)
+
+    est_file = "/tmp/estimate.txt"
+    if os.path.exists(est_file):
+        os.remove(est_file)
+
+    # Logging
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(message)s',
+        filename=est_file,
+        filemode='a'
+    )
+
+    stdout_logger = logging.getLogger('STDOUT')
+    sys.stdout = StreamToLogger(stdout_logger, logging.INFO)
+
+    stderr_logger = logging.getLogger('STDERR')
+    sys.stderr = StreamToLogger(stderr_logger, logging.ERROR)
+
+    tornado.log.enable_pretty_logging()
+
+    # Tornado's event loop handles it from here
+    print("# Servering.... \n [Ctrl + C] to quit")
+
+    try:
+        tornado.ioloop.IOLoop.instance().start()
+    except KeyboardInterrupt:
+        tornado.ioloop.IOLoop.instance().stop()
+
+    # start
+    IOLoop.instance().start()
+
+
+if __name__ == "__main__":
+    server_main_block()

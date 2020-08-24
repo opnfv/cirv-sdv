@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Resource Modelling Report</title>
+
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  
+  <link rel="stylesheet" type="text/css" href="style/report.css">
+  <link rel="stylesheet" type="text/css" href="style/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="report">
+    
+    <h1>Resource Modelling Report</h1>
+    <br>
+    
+    <h3>The VNFs Considered for Modelling:</h3>
+        
+    <div class="holder">
+        {% for profile in model['vnf_profiles'] %}
+            <div class="vnf">
+              {{ profile['profile_name'] }}  
+              <img src="/assets/vnf.svg">
+            </div>
+        {% endfor %}
+    </div>
+    <hr>
+    
+    <h3>The Compute-Node Server Profile:</h3>
+
+        The number of vCPUs: {{  model['server']['vcpus'] }}
+    <br>Number of NUMA nodes on this server: {{ model['server']['numas']}}
+    <br>vCPUs available for the application in each NUMA: 
+    <br>SRIOV Support?: {{model['sriov_support']}} 
+    <br>vCPUs Isolated: {{ model['server']['cpu_isol_set']  }} 
+    <br>Number of Servers Used: {{ model['deployment_count'] }}
+    <br>
+
+    <hr>
+        
+    {% for zone, server_list in model['deployment'].items() %}
+        <h3>Servers in Availability zone: {{ zone }}</h3>
+        
+        {% for server in server_list %}
+            <div class="tab">Server ID: {{ loop.index }}</div>
+            <div class="holder server">
+                {%  for vnf in server.hosted_vnfs %}
+                    <div class="vnf">
+                        {{ vnf['vnf'] }} (numa:{{ vnf['numa'] }})
+                        <img src="/assets/vnf.svg">
+                    </div>
+                {% endfor %}
+            </div>
+          <br>
+        {% endfor %}
+
+    <hr>
+    {% endfor %}
+    
+  </div>
+
+<br>
+<button onclick="window.location.href='/'">Go to Home</button>
+
+
+
+
+
+
+</body>
+</html>
+
