@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+project_name: cirv-sdv
+project_version: 1.0
 
 ##################################
 # Program behavior configurations
@@ -25,3 +26,8 @@ log_verbosity: info
 # Results
 results_dir: /tmp/state/
 save_results_locally: True
+
+# Test API
+enable_testapi: True
+testapi_url: http://testresults.opnfv.org/test/api/v1
+

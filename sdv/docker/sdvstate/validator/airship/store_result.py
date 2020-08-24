@@ -1,4 +1,4 @@
-# Copyright 2015 Intel Corporation.
+# Copyright 2020 University Of Delhi.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Sw Validator interface and helpers.
 """
+store_result function to log and store result
+"""
+import logging
+from tools.result_api import result_api
 
-# flake8: noqa
-from SoftwarePostSecurityValid.swpostsecurityvalidator import *
+def store_result(result):
+    """
+    Logs and stores result
+    """
+    logger = logging.getLogger(__name__)
+    logger.info(f'[State: {result["criteria"]}] {result["case_name"]}')
+
+    result_api.store(result)

@@ -27,10 +27,12 @@ import re
 import ast
 import sys
 from datetime import datetime
+import requests
 
 from tools.conf import settings
 from tools.result_api import result_api, Local
 from core import load_pdf
+from core import display_report
 from validator import AirshipValidator
 
 
@@ -229,6 +231,19 @@ def main():
     if installer == 'airship':
         airship = AirshipValidator()
         airship.validate()
+        report = airship.get_report()
+
+
+    # Displaying Report
+    display_report(report)
+
+    if settings.getValue('enable_testapi'):
+        logger = logging.getLogger(__name__)
+        logger.info('Publishing results to TestAPI')
+        url = settings.getValue('testapi_url')
+        url += "/results/"
+        response = requests.post(url, json=report)
+        logger.info(response)
 
 
 
