@@ -13,13 +13,19 @@
 # limitations under the License.
 
 
+"""
+Pod Health Checks
+"""
+
+
 
 import logging
-from kubernetes import client, config
 
 from tools.kube_utils import kube_api
 from tools.conf import settings
-from tools.result_api import result_api, rfile
+from tools.result_api import rfile
+
+from .store_result import store_result
 
 
 
@@ -29,13 +35,25 @@ def pod_health_check():
     """
     api = kube_api()
     namespace_list = settings.getValue('airship_namespace_list')
+
+    result = {'category':  'platform',
+              'case_name': 'pod_health_check',
+              'criteria':  'pass',
+              'details': []
+             }
+
     for namespace in namespace_list:
         pod_list = api.list_namespaced_pod(namespace)
         for pod in pod_list.items:
-            result = pod_status(pod)
-            if result['state'] == 'fail':
-                result['logs'] = get_logs(pod)
-            result_api.store(result)
+            pod_stats = pod_status(pod)
+            if pod_stats['criteria'] == 'fail':
+                pod_stats['logs'] = get_logs(pod)
+                result['criteria'] = 'fail'
+            result['details'].append(pod_stats)
+
+
+    store_result(result)
+    return result
 
 
 
@@ -43,14 +61,13 @@ def pod_status(pod):
     """
     Check health of a pod and returns it's status as result
     """
-    result = {'state': 'ok',
-              'kind': 'pod',
+    result = {'criteria': 'pass',
               'name': pod.metadata.name,
               'namespace': pod.metadata.namespace,
               'node': pod.spec.node_name}
 
     if pod.status.container_statuses is None:
-        result['state'] = 'fail'
+        result['criteria'] = 'fail'
         result['pod_details'] = rfile(str(pod))
     else:
         for container in pod.status.container_statuses:
@@ -62,14 +79,14 @@ def pod_status(pod):
                 status = container.state.waiting.reason
 
             if status not in ('Running', 'Completed'):
-                result['state'] = 'fail'
+                result['criteria'] = 'fail'
                 result['pod_details'] = rfile(str(pod))
 
-    info = f'[Health: {result["state"]}] Name: {result["name"]}, '
+    info = f'[Health: {result["criteria"]}] Name: {result["name"]}, '
     info = info + f'Namespace: {result["namespace"]}, Node: {result["node"]}'
 
     logger = logging.getLogger(__name__)
-    logger.info(info)
+    logger.debug(info)
     return result
 
 
