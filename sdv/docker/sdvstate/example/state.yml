@@ -15,3 +15,6 @@ PDF_FILE: example/intel-pod10.json
 # Path to kube-config file
 KUBE_CONFIG : example/kubepod10
 
+MASTER_ROLE_NAME : masters
+WORKER_ROLE_NAME : workers
+

@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-Core package
-contains all program specific dependencies
+store_result function to log and store result
 """
+import logging
+from tools.result_api import result_api
 
-from .load_pdf import load_pdf
-from .display_report import display_report
+def store_result(result):
+    """
+    Logs and stores result
+    """
+    logger = logging.getLogger(__name__)
+    logger.info(f'[State: {result["criteria"]}] {result["case_name"]}')
+
+    result_api.store(result)
