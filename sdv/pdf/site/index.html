@@ -1,0 +1,1797 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Cloud Platform Description</title>
+   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+   <meta content="utf-8" http-equiv="encoding">
+
+   <link rel="stylesheet" href="style/multitab.css">
+   <link rel="stylesheet" href="style/array.css">
+   <script src="scripts/actions.js"></script>
+   <script src="scripts/readFromHTML.js"></script>
+   <script src="scripts/writeToHTML.js"></script>
+   <script src="scripts/mergeDeep.js"></script>
+   <script src="scripts/createfile.js"></script>
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+<body translate="no">
+<div class="form-area">
+    <div class="form-header">
+        <div class="top-header">
+            <div class="devider-row">
+                <div class="half-2">
+                    <!-- <div class="logo-area">
+                        <h1><a href="javascript:;">Cloud Platform Description</a></h1>
+                    </div>
+                    -->
+                    <div class="logo-area">
+                        <h1>Cloud Platform Description</h1>
+                    </div>
+                </div>
+                <div class="half-2">
+                    <div class="need-help">
+                        <a href="javascript:;">About PDF <i>?</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-header">
+            <div class="devider-row">
+                <div class="half-2">
+                    <div class="status">
+                        <h3> Guidelines: </h2>
+                        <ul>
+                            <li> Please add the values correctly - No validations are included in this version. </li>
+                            <li> The Deployment can be OOO, OOK, OWK or OaV. In the first three deployments, openstack services are deployed as containers. </li>
+                            <li> Block Storage method is either rbd or iscsi </li>
+                            <li> Example Power-state prefetcher setting: C4_C6_MLC-STR_MLC-SPA_DCU_DCA_RAS_TURBO </li>
+                            <li> Under Physical Network please include IPMI Network Information too. </li>
+                            <li> A network link could be a trunk, bond, interface or a bridge. </li>
+                            <li> Please click of Submit button before clicking the Dowload button. </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="half-2">
+                    <img src="assets/pdfrep.png" style="margin:auto; width:500px;height=400px;display:block" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-body">   
+        <div class="multitab-form-area">
+            <div class="tab-links-area">
+                <h1>PDF 2.0</h1>
+                <p>Platform Description Categories</p>
+                <hr>
+                <ul>
+                    <li><a data-toggle="formtab" href="#mgmtinfo" class="active">Management Information</a></li>
+                    <li><a data-toggle="formtab" href="#userInfo">User Information</a></li>
+                    <li><a data-toggle="formtab" href="#ntpInfo">NTP Information</a></li>
+                    <li><a data-toggle="formtab" href="#dnsInfo">DNS Information</a></li>
+                    <li><a data-toggle="formtab" href="#proxyInfo">Proxy Information</a></li>
+                    <li><a data-toggle="formtab" href="#ldapInfo">LDAP Information</a></li>
+                    <li><a data-toggle="formtab" href="#vimInfo">VIM Information</a></li>
+                    <li><a data-toggle="formtab" href="#vimfInfo">VIM Functional Info</a></li>
+                    <li><a data-toggle="formtab" href="#deployInfo">Deployment Information</a></li>
+                    <li><a data-toggle="formtab" href="#jumpInfo">Jump Host Information</a></li>
+                    <li><a data-toggle="formtab" href="#rackInfo">Rack Information</a></li>
+                    <li><a data-toggle="formtab" href="#stocluInfo">Storage Cluster Information</a></li>
+                    <li><a data-toggle="formtab" href="#biosProfiles">BIOS Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#procProfiles">Processor Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#disksProfiles">Disks Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#nicProfiles">NIC Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#hwProfiles">Hardware Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#storprofiles">Storage Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#virNets">Networks</a></li>
+                    <li><a data-toggle="formtab" href="#phyNets">Physical Networks</a></li>
+                    <li><a data-toggle="formtab" href="#netLinks">Network Links</a></li>
+                    <li><a data-toggle="formtab" href="#ifMap">Interface Mapping Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#pfProfiles">Platform Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#ucOok">Undercloud OOK</a></li>
+                    <li><a data-toggle="formtab" href="#ucOoo">Undercloud OOO</a></li>
+                    <li><a data-toggle="formtab" href="#usSw">Undercloud Software Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#osSw">Openstack Sofware Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#infSw">Infra Software Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#swSet">Software Sets</a></li>
+                    <li><a data-toggle="formtab" href="#roles">Roles</a></li>
+                    <li><a data-toggle="formtab" href="#extraPo">Extrapolation Info</a></li>
+                    <li><a data-toggle="formtab" href="#hostAg">Host Aggregates</a></li>
+                </ul>
+            </div>
+            <div class="tab-form-area" id="pdfform">
+                <div class="tabs-panels active" id="mgmtinfo">
+                    <div class="tab-part">
+                        <h4>Management Information</h4>
+                        <hr>
+                        <div class="devider-row" name="mgmt_profile">
+                            <div class="form-field">
+                                <label>Owner</label>
+                                <input type="text" placeholder="Contact Name" name="owner">
+                            </div>
+                            <div class="form-field">
+                                <label>Area Name</label>
+                                <input type="text" placeholder="Region  Name" name="area_name">
+                            </div>
+                            <div class="form-field">
+                                <label>Area Center Name</label>
+                                <input type="text" placeholder="Region Center" name="area_center_name">
+                            </div>
+                            <div class="form-field">
+                                <label>Room ID</label>
+                                <input type="text" placeholder="00000" name="room_id">
+                            </div>
+                            <div class="form-field">
+                                <label>City</label>
+                                <input type="text" placeholder="Bangalore" name="city">
+                            </div>
+                            <div class="form-field">
+                                <label>Resource Pool Name</label>
+                                <input type="text" placeholder="EPG" name="resource_pool_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#userInfo">Next</a>
+                    </div>
+                </div>
+                <div class="tabs-panels" id="userInfo">
+                    <div class="tab-part">
+                        <h4> User Information </h4>
+                        <hr>
+                        <div class="arr" name="user_info">
+                            <div class="form-field">
+                                <label>Username</label>
+                                <input type="text" placeholder="sridhar" name="username">
+                            </div>
+                            <div class="form-field">
+                                <label>Password</label>
+                                <input type="text" placeholder="*******" name="password">
+                            </div>
+                            <div class="form-field">
+                                <label>Public Key</label>
+                                <input type="text" rows="4" cols="60" name="pub_key">
+                            </div> 
+                            <div class="form-field">
+                                <label>Pass-Phrase</label>
+                                <input type="text" placeholder="Spirent" name="name">
+                            </div> 
+                            <div class="form-field">
+                                <label>TLS CA Cert</label>
+                                <input type="text" name="tls_ca_cert">
+                            </div> 
+                            <div class="form-field">
+                                <label>TLS Cert</label>
+                                <input type="text" name="tls_cert">
+                            </div>
+                            <div class="form-field">
+                                <label>TLS Key</label>
+                                <input type="text" name="tls_key">
+                            </div> 
+                            <div class="form-field">
+                                <label>Email</label>
+                                <input type="text" placeholder="sridhar.rao@spirent.com" name="email">
+                            </div>
+                        </div>
+                        <div class="add-button" onclick="duplicate(this)"></div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#ntpInfo">Next</a>
+                    </div>
+                </div> 
+                 <div class="tabs-panels" id="ntpInfo">
+                    <div class="tab-part">
+                        <h4> NTP Information </h4>
+                        <hr>
+                        <div class="devider-row" name="ntp_info">
+                              <div class="form-field">
+                                <label>Primary IP</label>
+                                <input type="text" placeholder="a:b:c:d" name="primary_ip">
+                              </div>
+                              <div class="form-field">
+                                <label>Primary Zone</label>
+                                <input type="text" placeholder="Zone-A" name="primary_zone">
+                              </div>
+                              <div class="form-field">
+                                <label>Secondary IP</label>
+                                <input type="text" placeholder="a:b:c:d" name="secondary_ip">
+                              </div>
+                              <div class="form-field">
+                                <label>Secondary Zone</label>
+                                <input type="text" placeholder="Zone-B" name="secondary_zone">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#dnsInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="dnsInfo">
+                    <div class="tab-part">
+                        <h4> DNS Information</h4>
+                        <hr>
+                        <div class="devider-row" name="dns_info">
+                              <div class="form-field">
+                                <label>Name</label>
+                                <input type="text" placeholder="Telco-A" name="name">
+                              </div>
+                              <div class="form-field">
+                                <label>domain</label>
+                                <input type="text" placeholder="Domain-A" name="domain">
+                              </div>
+                              <div class="form-field">
+                                <label>Servers</label>
+                              </div>
+                              <div class="arr" name="servers">
+                                  <div class="form-field">
+                                    <label>IP Address</label>
+                                    <input type="text" placeholder="a:b:c:d" name="ip">
+                                  </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#proxyInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="proxyInfo">
+                    <div class="tab-part">
+                        <h4> Proxy Information </h4>
+                        <hr>
+                        <div class="devider-row" name="proxy_info">
+                             <div class="form-field">
+                                <label>Proxy Address</label>
+                                <input type="text" placeholder="a:b:c:d" name="address">
+                              </div>
+                              <div class="form-field">
+                                <label>Port </label>
+                                <input type="text" placeholder="8081" name="port">
+                              </div>
+                              <div class="form-field">
+                                <label>Username</label>
+                                <input type="text" placeholder="Sridhar" name="user">
+                              </div>
+                              <div class="form-field">
+                                <label>Password</label>
+                                <input type="text" placeholder="******" name="password">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#ldapInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="ldapInfo">
+                    <div class="tab-part">
+                        <h4> LDAP Information </h4>
+                        <hr>
+                        <div class="devider-row" name="ldap_info">
+                             <div class="form-field">
+                                <label>Base URL</label>
+                                <input type="text" placeholder="a:b:c:d" name="base_url">
+                              </div>
+                              <div class="form-field">
+                                <label>URL</label>
+                                <input type="text" placeholder="Zone-A" name="url">
+                              </div>
+                              <div class="form-field">
+                                <label>Authentication Path</label>
+                                <input type="text" placeholder="a:b:c:d" name="auth_path">
+                              </div>
+                              <div class="form-field">
+                                <label>Common Name</label>
+                                <input type="text" placeholder="Zone-B" name="common_name">
+                              </div>
+                              <div class="form-field">
+                                <label>Sub-Domain </label>
+                                <input type="text" placeholder="a:b:c:d" name="subdomain">
+                              </div>
+                              <div class="form-field">
+                                <label>Domain</label>
+                                <input type="text" placeholder="Zone-B" name="domain">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#vimInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="vimInfo">
+                    <div class="tab-part">
+                        <h4> VIM Information </h4>
+                        <hr>
+                        <div class="devider-row" name="vim_info">
+                              <div class="form-field">
+                                <label> VIM Name </label>
+                                <input type="text" placeholder=" " name="vim_name">
+                              </div>
+                              <div class="form-field">
+                                <label>VIM ID </label>
+                                <input type="text" placeholder=" " name="vim_id">
+                              </div>
+                              <div class="form-field">
+                                <label> Vendor </label>
+                                <input type="text" placeholder=" " name="vendor">
+                              </div>
+                              <div class="form-field">
+                                <label> Version </label>
+                                <input type="text" placeholder=" " name="version">
+                              </div>
+                              <div class="form-field">
+                                <label> Installer </label>
+                                <input type="text" placeholder=" " name="installer">
+                              </div>
+                              <div class="form-field">
+                                <label> Deployment Style </label>
+                                <input type="text" placeholder=" " name="deployment_style">
+                              </div>
+                              <div class="form-field">
+                                <label> Container Orchestrator </label>
+                                <input type="text" placeholder=" " name="container_orchestrator">
+                              </div>
+                              <div class="form-field">
+                                <label> Storage Type </label>
+                                <input type="text" placeholder=" " name="storage_type">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#vimfInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="vimfInfo">
+                    <div class="tab-part">
+                        <h4> VIM Functional Information </h4>
+                        <hr>
+                        <div class="devider-row" name="vim_functional_info">
+                              <div class="form-field">
+                                <label>Scheduler Filters </label>
+                                <input type="text" placeholder=" " name="schedule_filters">
+                              </div>
+                              <div class="form-field">
+                                <label> CPU Allocation Ratio </label>
+                                <input type="text" placeholder=" " name="cpu_allocation_ratio">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#deployInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="deployInfo">
+                    <div class="tab-part">
+                        <h4> Deployment Information </h4>
+                        <hr>
+                        <div class="devider-row" name="deployment_info">
+                              <div class="form-field">
+                                <label> High Availability (Y/N) </label>
+                                <input type="text" placeholder=" " name="high_availability">
+                              </div>
+                              <div class="form-field">
+                                <label> Introspection </label>
+                                <input type="text" placeholder=" " name="introspection">
+                              </div>
+                              <div class="form-field">
+                                <label> Deployment Type</label>
+                                <input type="text" placeholder=" " name="deployment_type">
+                              </div>
+                              <div class="form-field">
+                                <label> Installer Used </label>
+                                <input type="text" placeholder=" " name="installer_used">
+                              </div>
+                              <div class="form-field">
+                                <label> Workload VNF (Y/N) </label>
+                                <input type="text" placeholder=" " name="workload_vnf">
+                              </div>
+                              <div class="form-field">
+                                <label> Workload CNF (Y/N)</label>
+                                <input type="text" placeholder=" " name="workload_cnf">
+                              </div>
+                              <div class="form-field">
+                                <label> SDN Controller (Y/N)</label>
+                                <input type="text" placeholder=" " name="sdn_controller">
+                              </div>
+                              <div class="form-field">
+                                <label> SDN Controller Version </label>
+                                <input type="text" placeholder=" " name="sdn_controller_version">
+                              </div>
+                              <div class="form-field">
+                                <label> SDN NB-APPs </label>
+                                <input type="text" placeholder=" " name="sdn_controller_nbapps">
+                              </div>
+                              <div class="form-field">
+                                <label> VNFM  (Y/N) </label>
+                                <input type="text" placeholder=" " name="vnfm">
+                              </div>
+                              <div class="form-field">
+                                <label> VNFM Version </label>
+                                <input type="text" placeholder=" " name="vnfm_version">
+                              </div>
+                              <div class="form-field">
+                                <label> Dataplane Used</label>
+                                <input type="text" placeholder=" " name="data_plane_used">
+                              </div>
+                              <div class="form-field">
+                                <label> Ironic Deployment Interface</label>
+                                <input type="text" placeholder=" " name="ironic_deploy_interface">
+                              </div>
+                              <div class="form-field">
+                                <label> External Storage Cluster (Y/N) </label>
+                                <input type="text" placeholder=" " name="external_storage_cluster">
+                              </div>
+                              <div class="form-field">
+                                <label> Block Storage Connection Method</label>
+                                <input type="text" placeholder=" " name="bl_str_connect_method">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#jumpInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="jumpInfo">
+                    <div class="tab-part">
+                        <h4> Jump Host Information </h4>
+                        <hr>
+                        <div class="devider-row" name="jumphost_info">
+                              <div class="form-field">
+                                <label> IP Address </label>
+                                <input type="text" placeholder=" " name="ip">
+                              </div>
+                              <div class="form-field">
+                                <label> Name of the Server </label>
+                                <input type="text" placeholder=" " name="name">
+                              </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#rackInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="rackInfo">
+                    <div class="tab-part">
+                        <h4> Rack Information </h4>
+                        <hr>
+                        <div class="devider-row">
+                          <div class="arr" name="rack_info" >
+                              <div class="form-field">
+                                <label> Rack ID </label>
+                                <input type="text" placeholder=" " name="rack_id">
+                              </div>
+                              <div class="form-field">
+                                <label> Rack Details </label>
+                                  <hr>
+                                  <div class="form-field">
+                                    <label> Rack Name </label>
+                                    <input type="text" placeholder=" " name=" ">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Rack Description </label>
+                                    <input type="text" placeholder=" " name=" ">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Rack Availability Zone </label>
+                                    <input type="text" placeholder=" " name=" ">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#stocluInfo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="stocluInfo">
+                    <div class="tab-part">
+                        <h4> Storage Cluster Information </h4>
+                        <hr>
+                        <div class="devider-row" name="storage_cluster_info">
+                              <div class="form-field">
+                                <label> Name  </label>
+                                <input type="text" placeholder=" " name="name">
+                              </div>
+                              <div class="form-field">
+                                <label> Cluster Type </label>
+                                <input type="text" placeholder=" " name="cluster_type">
+                              </div>
+                              <div class="form-field">
+                                <label> Cluster ID </label>
+                                <input type="text" placeholder=" " name="cluster_id">
+                              </div>
+                              <div class="form-field">
+                                <label> Authentication Type </label>
+                                <input type="text" placeholder=" " name="auth_type">
+                              </div>
+                              <div class="form-field">
+                                <label> Username </label>
+                                <input type="text" placeholder=" " name="username">
+                              </div>
+                              <div class="form-field">
+                                <label> Password </label>
+                                <input type="text" placeholder=" " name="password">
+                              </div>
+                              <div class="form-field">
+                                <label> Monitoring Host IPs </label>
+                              </div>
+                              <div class="arr" name="mon_host_ips">
+                                  <div class="form-field">
+                                    <label>IP Address</label>
+                                    <input type="text" placeholder="a:b:c:d" name="ips">
+                                  </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                              <div class="form-field">
+                                <label> Certification Location  </label>
+                                <input type="text" placeholder=" " name="certificate_location">
+                              </div>
+                              <div class="form-field">
+                                <label> Client Key  </label>
+                                <input type="text" placeholder=" " name="client_key">
+                              </div>
+                              <div class="form-field">
+                                <label> Public CIDR </label>
+                                <input type="text" placeholder=" " name="public_cidr">
+                              </div>
+                              <div class="form-field">
+                                <label> Cluster CIDR </label>
+                                <input type="text" placeholder=" " name="cluster_cidr">
+                              </div>
+                              <div class="form-field">
+                                <label> Pools </label>
+                              </div>
+                              <div class="arr" name="pools">
+                                  <div class="form-field">
+                                    <label> Key </label>
+                                    <input type="text" placeholder=" " name="key">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>Value </label>
+                                    <input type="text" placeholder=" " name="value">
+                                  </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#biosProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="biosProfiles">
+                    <div class="tab-part">
+                        <h4> BIOS Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr" name="bios_profile">
+                              <div class="form-field">
+                                <label>Profile Name  </label>
+                                <input type="text" placeholder=" " name="profile_name">
+                              </div>
+                              <div class="form-field">
+                                <label> Bios Values  </label>
+                                  <div class="form-field">
+                                    <label> Bios Version </label>
+                                    <input type="text" placeholder=" " name="bios_version">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Bios Mode </label>
+                                    <input type="text" placeholder=" " name="bios_mode">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Bootstrap Protocol </label>
+                                    <input type="text" placeholder=" " name="bootstrap_proto">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Hyperthreading Enabled (Y/N)  </label>
+                                    <input type="text" placeholder=" " name="hyperthreading_enabled">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Flags - Power-Prefetcher combo </label>
+                                    <input type="text" placeholder=" " name="bios_setting">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#procProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="procProfiles">
+                    <div class="tab-part">
+                        <h4> Processor Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr" name="processor_profiles">
+                              <div class="form-field">
+                                <label> Profile Name </label>
+                                <input type="text" placeholder=" " name="profile_name">
+                              </div>
+                              <div class="form-field">
+                                <label> Profile Info  </label>
+                                  <div class="form-field">
+                                    <label> Manufacturer </label>
+                                    <input type="text" placeholder=" " name="manufacturer">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Generation </label>
+                                    <input type="text" placeholder=" " name="generation">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Speed </label>
+                                    <input type="text" placeholder=" " name="speed">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Model </label>
+                                    <input type="text" placeholder=" " name="model">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Architecture </label>
+                                    <input type="text" placeholder=" " name="architecture">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> CPU C-Flags </label>
+                                    <input type="text" placeholder=" " name="cpu_cflags">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Cache Size </label>
+                                    <input type="text" placeholder=" " name="cache_size">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> NUMAs </label>
+                                    <div class="arr" name="numas">
+                                        <div class="form-field">
+                                          <label> NUMA Node-ID </label>
+                                          <input type="text" placeholder=" " name="node_id">
+                                        </div>
+                                        <div class="form-field">
+                                          <label> CPU SET </label>
+                                          <input type="text" placeholder=" " name="cpu_set">
+                                        </div>
+                                    </div>
+                                    <div class="add-button" onclick="duplicate(this)"></div>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#disksProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="disksProfiles">
+                    <div class="tab-part">
+                        <h4> Disk Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr" name="disk_profiles">
+                              <div class="form-field">
+                                <label> Profile Name </label>
+                                <input type="text" placeholder=" " name="profile_name">
+                              </div>
+                              <div class="form-field">
+                                <label> Profile Info  </label>
+                              </div>
+                              <div class="arr" name="profile_info">
+                                <div class="form-field">
+                                  <label> Alias </label>
+                                  <input type="text" placeholder=" " name="alias">
+                                </div>
+                                <div class="form-field">
+                                  <label> Vendor  </label>
+                                  <input type="text" placeholder=" " name="vendor">
+                                </div>
+                                <div class="form-field">
+                                  <label> Address </label>
+                                  <input type="text" placeholder=" " name="address">
+                                </div>
+                                <div class="form-field">
+                                  <label> Size  </label>
+                                  <input type="text" placeholder=" " name="size">
+                                </div>
+                                <div class="form-field">
+                                  <label> Model </label>
+                                  <input type="text" placeholder=" " name="model">
+                                </div>
+                                <div class="form-field">
+                                  <label> Device Type </label>
+                                  <input type="text" placeholder=" " name="dev_type">
+                                </div>
+                                <div class="form-field">
+                                  <label> Rotation </label>
+                                  <input type="text" placeholder=" " name="rotation">
+                                </div>
+                                <div class="form-field">
+                                  <label> Bus  </label>
+                                  <input type="text" placeholder=" " name="bus">
+                                </div>
+                                <div class="form-field">
+                                  <label> Logical Name  </label>
+                                  <input type="text" placeholder=" " name="logical_name">
+                                </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#nicProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="nicProfiles">
+                    <div class="tab-part">
+                        <h4> NIC Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr" name = "nic_profiles">
+                              <div class="form-field">
+                                <label> Profile Name </label>
+                                <input type="text" placeholder=" " name="profile_name">
+                              </div>
+                              <div class="form-field">
+                                <label> Profile Info  </label>
+                              </div>
+                              <div class="arr" name="profile_info">
+                                <div class="form-field">
+                                  <label> Alias  </label>
+                                  <input type="text" placeholder=" " name="alias">
+                                </div>
+                                <div class="form-field">
+                                  <label> Name </label>
+                                  <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                  <label> Address </label>
+                                  <input type="text" placeholder=" " name="address">
+                                </div>
+                                <div class="form-field">
+                                  <label> Device Type </label>
+                                  <input type="text" placeholder=" " name="dev_type">
+                                </div>
+                                <div class="form-field">
+                                  <label> Bus </label>
+                                  <input type="text" placeholder=" " name="bus">
+                                </div>
+                                <div class="form-field">
+                                  <label> SRIOV Capable (Y/N) </label>
+                                  <input type="text" placeholder=" " name="sriov_capable">
+                                </div>
+                                <div class="form-field">
+                                  <label> Numa ID </label>
+                                  <input type="text" placeholder=" " name="numa_id">
+                                </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#hwProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="hwProfiles">
+                    <div class="tab-part">
+                        <h4> Hardware Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr">
+                              <div class="form-field">
+                                <label> Profile Name </label>
+                                <input type="text" placeholder=" " name="name">
+                              </div>
+                              <div class="form-field">
+                                  <label> Profile Info </label>
+                                  <div class="form-field">
+                                    <label> Server Manufacturer </label>
+                                    <input type="text" placeholder=" " name="manufacturer">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Compute Server Model </label>
+                                    <input type="text" placeholder=" " name="model">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Compute Server Generation </label>
+                                    <input type="text" placeholder=" " name="generation">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>  Bios Profile</label>
+                                    <input type="text" placeholder=" " name="bios_profile">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>  Processor Profile </label>
+                                    <input type="text" placeholder=" " name="processor_profile">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Compute Server RAM size </label>
+                                    <input type="text" placeholder=" " name="memory">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Disks Profile  </label>
+                                    <input type="text" placeholder=" " name="disks_profile">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>  NIC Profile</label>
+                                    <input type="text" placeholder=" " name="nics_profile">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#storProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="storProfiles">
+                    <div class="tab-part">
+                        <h4> Storage Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr" name="storage_profile">
+                              <div class="form-field">
+                                <label> Name </label>
+                                <input type="text" placeholder=" " name="name">
+                              </div>
+                              <div class="form-field">
+                                <label> Boot Disk  </label>
+                                <input type="text" placeholder=" " name="bootdrive">
+                              </div>
+                              <div class="form-field">
+                                <label> Boot Disk Partitions </label>
+                              </div>
+                              <div class="arr" name="bd_partitions">
+                                <div class="form-field">
+                                  <label> Name </label>
+                                  <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                  <label> Size </label>
+                                  <input type="text" placeholder=" " name="size">
+                                </div>
+                                <div class="form-field">
+                                  <label> Bootable (Y/N) </label>
+                                  <input type="text" placeholder=" " name="bootable">
+                                </div>
+                                <div class="form-field" name="filesystem">
+                                    <label> Filesystem </label>
+                                    <div class="form-field">
+                                      <label> Mount Point </label>
+                                      <input type="text" placeholder=" " name="mountpoint">
+                                    </div>
+                                    <div class="form-field">
+                                      <label> Filesystem Type </label>
+                                      <input type="text" placeholder=" " name="fstype">
+                                    </div>
+                                    <div class="form-field">
+                                      <label> Mount Options </label>
+                                      <input type="text" placeholder=" " name="mount_options">
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                              <div class="form-field">
+                                <label> Data Devices </label>
+                              </div>
+                              <div class="arr" name="data_devices">
+                                <div class="form-field">
+                                  <label> Name </label>
+                                  <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                  <label> Partitions </label>
+                                </div>
+                                <div class="arr" name="partitions">
+                                    <div class="form-field">
+                                      <label> Name </label>
+                                      <input type="text" placeholder=" " name="name">
+                                    </div>
+                                    <div class="form-field">
+                                      <label> Size </label>
+                                      <input type="text" placeholder=" " name="size">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> File System </label>
+                                        <div class="form-field">
+                                          <label> Mountpoint  </label>
+                                          <input type="text" placeholder=" " name="mountpoint">
+                                        </div>
+                                        <div class="form-field">
+                                          <label> Filesystem Type </label>
+                                          <input type="text" placeholder=" " name="fstype">
+                                        </div>
+                                        <div class="form-field">
+                                          <label> Mount Options </label>
+                                          <input type="text" placeholder=" " name="mount_options">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                              <div class="form-field">
+                                <label> Jounal Devices  </label>
+                              </div>
+                              <div class="arr" name="journal_devices">
+                                <div class="form-field">
+                                  <label> Name </label>
+                                  <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                  <label> Mapped OSDs </label>
+                                  <input type="text" placeholder=" " name="mapped_osds">
+                                </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#virNets">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="virNets">
+                    <div class="tab-part">
+                        <h4> Virtual Networks </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="networks">
+                                <div class="form-field">
+                                    <label> Network Name </label>
+                                    <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Tunnel Type  </label>
+                                    <input type="text" placeholder=" " name="tunnel_type">
+                                </div>
+                                <div class="form-field">
+                                    <label> Tunnel ID </label>
+                                    <input type="text" placeholder=" " name="tunnel_id">
+                                </div>
+                                <div class="form-field">
+                                    <label> Tunnel ID Range </label>
+                                    <input type="text" placeholder=" " name="tunnel_id_range">
+                                </div>
+                                <div class="form-field">
+                                    <label> MTU </label>
+                                    <input type="text" placeholder=" " name="mtu">
+                                </div>
+                                <div class="form-field">
+                                    <label> Route Domain </label>
+                                    <input type="text" placeholder=" " name="routedomain">
+                                </div>
+                                <div class="form-field">
+                                    <label> IPV4 CIDR </label>
+                                    <input type="text" placeholder=" " name="cidr">
+                                </div>
+                                <div class="form-field">
+                                    <label> IPV6 CIDR </label>
+                                    <input type="text" placeholder=" " name="v6_cidr">
+                                </div>
+                                <div class="form-field">
+                                    <label> DNS </label>
+                                    <input type="text" placeholder=" " name="dns">
+                                </div>
+                                <div class="form-field">
+                                    <label> VIPs </label>
+                                </div>
+                                <div class="arr" name="vips">
+                                    <div class="form-field">
+                                        <label> Name </label>
+                                        <input type="text" placeholder=" " name="name">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> IP </label>
+                                        <input type="text" placeholder=" " name="ip">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                                <div class="form-field">
+                                    <label> Routes </label>
+                                </div>
+                                <div class="arr">
+                                    <div class="form-field" name="routes">
+                                        <label> Subnet  </label>
+                                        <input type="text" placeholder=" " name="subnet">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Gateway </label>
+                                        <input type="text" placeholder=" " name="gateway">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Metric </label>
+                                        <input type="text" placeholder=" " name="metric">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Route Domain </label>
+                                        <input type="text" placeholder=" " name="routedomain">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                                <div class="form-field">
+                                    <label> IPV4 Allocation Pools </label>
+                                </div>
+                                <div class="arr" name="allocation_pools">
+                                    <div class="form-field">
+                                        <label> Type </label>
+                                        <input type="text" placeholder=" " name="type">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Start </label>
+                                        <input type="text" placeholder=" " name="start">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> End </label>
+                                        <input type="text" placeholder=" " name="end">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                                <div class="form-field">
+                                    <label> IPV6 Allocation Pools </label>
+                                </div>
+                                <div class="arr" name="v6_allocation_pools">
+                                    <div class="form-field">
+                                        <label> Type </label>
+                                        <input type="text" placeholder=" " name="type">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Start </label>
+                                        <input type="text" placeholder=" " name="start">
+                                    </div>
+                                    <div class="form-field">
+                                        <label>  End </label>
+                                        <input type="text" placeholder=" " name="end">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#phyNets">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="phyNets">
+                    <div class="tab-part">
+                        <h4> Physical Networks </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="physical_networks">
+                                <div class="form-field">
+                                    <label> Network Name </label>
+                                    <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                    <label> CIDR  </label>
+                                    <input type="text" placeholder=" " name="cidr">
+                                </div>
+                                <div class="form-field">
+                                    <label> Tunnel ID </label>
+                                    <input type="text" placeholder=" " name="tpe">
+                                </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#netLinks">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="netLinks">
+                    <div class="tab-part">
+                        <h4> Network Links </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="network_link">
+                                <div class="form-field">
+                                    <label> Link Name </label>
+                                    <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Link Type  </label>
+                                    <input type="text" placeholder=" " name="type">
+                                </div>
+                                <div class="form-field">
+                                    <label> Bonding Mode </label>
+                                    <input type="text" placeholder=" " name="bonding_mode">
+                                </div>
+                                <div class="form-field">
+                                    <label> MTU </label>
+                                    <input type="text" placeholder=" " name="mtu">
+                                </div>
+                                <div class="form-field">
+                                    <label> Link Speed </label>
+                                    <input type="text" placeholder=" " name="linkspeed">
+                                </div>
+                                <div class="form-field">
+                                    <label> Trunking Mode </label>
+                                    <input type="text" placeholder=" " name="trunking_mode">
+                                </div>
+                                <div class="form-field">
+                                    <label> Trunking Default Network </label>
+                                    <input type="text" placeholder=" " name="trunking_default_nw">
+                                </div>
+                                <div class="form-field">
+                                    <label> VID </label>
+                                    <input type="text" placeholder=" " name="vid">
+                                </div>
+                                <div class="form-field">
+                                    <label> VF Count </label>
+                                    <input type="text" placeholder=" " name="vf_count">
+                                </div>
+                                <div class="form-field">
+                                    <label> Meta Data </label>
+                                </div>
+                                <div class="arr" name="metadata">
+                                    <div class="form-field">
+                                        <label> Key </label>
+                                        <input type="text" placeholder=" " name="key">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Value </label>
+                                        <input type="text" placeholder=" " name="value">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                                <div class="form-field">
+                                    <label> Members </label>
+                                </div>
+                                <div class="arr" name="members">
+                                    <div class="form-field">
+                                        <label> Name  </label>
+                                        <input type="text" placeholder=" " name="name">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Type </label>
+                                        <input type="text" placeholder=" " name="type">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                             </div>
+                             <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#ifMap">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="ifMap">
+                    <div class="tab-part">
+                        <h4> Network-Interface Mapping </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="interface_mapping_profiles">
+                                <div class="form-field">
+                                    <label> Profile Name </label>
+                                    <input type="text" placeholder=" " name="profile_name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Profile Data </label>
+                                </div>
+                                <div class="arr" name="profile_data">
+                                    <div class="form-field">
+                                        <label> Interface Name </label>
+                                        <input type="text" placeholder=" " name="interface_name">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Interface Type </label>
+                                        <input type="text" placeholder=" " name="interface_type">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Use DHCP (Y/N) </label>
+                                        <input type="text" placeholder=" " name="use_dhcp">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Networks </label>
+                                    </div>
+                                    <div class="arr" name="networks">
+                                        <div class="form-field">
+                                            <label> Network Name  </label>
+                                            <input type="text" placeholder=" " name="name">
+                                        </div>
+                                    </div>
+                                    <div class="add-button" onclick="duplicate(this)"></div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#pfProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="pfProfiles">
+                    <div class="tab-part">
+                        <h4> Platform Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="platform_profiles">
+                                <div class="form-field">
+                                    <label> Profile Name </label>
+                                    <input type="text" placeholder=" " name="profile_name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Operating System  </label>
+                                    <input type="text" placeholder=" " name="os">
+                                </div>
+                                <div class="form-field">
+                                    <label> Real-Time KVM (Y/N) </label>
+                                    <input type="text" placeholder=" " name="rt_kvm">
+                                </div>
+                                <div class="form-field">
+                                    <label> Kernel Version </label>
+                                    <input type="text" placeholder=" " name="kernel_version">
+                                </div>
+                                <div class="form-field">
+                                    <label> Kernel Parameters </label>
+                                    <input type="text" placeholder=" " name="kernel_parameters">
+                                </div>
+                                <div class="form-field">
+                                    <label> Isolated CPUs </label>
+                                    <input type="text" placeholder=" " name="isolated_cpus">
+                                </div>
+                                <div class="form-field">
+                                    <label> VNF Cores </label>
+                                    <input type="text" placeholder=" " name="vnf_cores">
+                                </div>
+                                <div class="form-field">
+                                    <label> OS reserved Cores </label>
+                                    <input type="text" placeholder=" " name="os_reserved_cores">
+                                </div>
+                                <div class="form-field">
+                                    <label> IOMMU (Y/N)  </label>
+                                    <input type="text" placeholder=" " name="iommu">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch Daemon Cores  </label>
+                                    <input type="text" placeholder=" " name="vswitch_daemon_cores">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch Type </label>
+                                    <input type="text" placeholder=" " name="vswitch_type">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch UIO Drivers  </label>
+                                    <input type="text" placeholder=" " name="vswitch_uio_driver">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch Memory Channels  </label>
+                                    <input type="text" placeholder=" " name="vswitch_mem_channels">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch Socket Memory  </label>
+                                    <input type="text" placeholder=" " name="vswitch_socket_memory">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch PMD Cores  </label>
+                                    <input type="text" placeholder=" " name="vswitch_pmd_cores">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch DPDK Lcores  </label>
+                                    <input type="text" placeholder=" " name="vswitch_dpdk_lcores">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch DPDK Rxqs  </label>
+                                    <input type="text" placeholder=" " name="vswitch_dpdk_rxqs">
+                                </div>
+                                <div class="form-field">
+                                    <label> vSwitch Options  </label>
+                                    <input type="text" placeholder=" " name="vswitch_options">
+                                </div>
+                                <div class="form-field">
+                                    <label> Hugepage Count  </label>
+                                    <input type="text" placeholder=" " name="hugepage_count">
+                                </div>
+                                <div class="form-field">
+                                    <label> Hugepages </label>
+                                </div>
+                                <div class="arr" name="hugepages">
+                                    <div class="form-field">
+                                        <label> Hugepage Count </label>
+                                        <input type="text" placeholder=" " name="hugepage_count">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Size </label>
+                                        <input type="text" placeholder=" " name="hugepage_size">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                             </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#ucOok">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="ucOok">
+                    <div class="tab-part">
+                        <h4> Undercloud: Openstack Over Kubernetes</h4>
+                        <hr>
+                        <div class="devider-row" name="undercloud_ook">
+                            <div name = "dns">
+                                <label> DNS </label>
+                                <div class="form-field">
+                                    <label> Cluster Domain  </label>
+                                    <input type="text" placeholder=" " name="cluster_domain">
+                                </div>
+                                <div class="form-field">
+                                    <label> Service IP  </label>
+                                    <input type="text" placeholder=" " name="service_ip">
+                                </div>
+                            </div>
+                            <div name = "etcd">
+                                <label> ETCD Details </label>
+                                <div class="form-field">
+                                    <label> Service IP  </label>
+                                    <input type="text" placeholder=" " name="service_ip">
+                                </div>
+                                <div class="form-field">
+                                    <label> Container Port  </label>
+                                    <input type="text" placeholder=" " name="container_port">
+                                </div>
+                                <div class="form-field">
+                                    <label> HA Proxy Port  </label>
+                                    <input type="text" placeholder=" " name="haproxy_port">
+                                </div>
+                            </div>
+                            <div>
+                                <label> Masters </label>
+                            </div>
+                            <div class="arr" name = "masters">
+                                <div class="form-field">
+                                    <label> Hostname  </label>
+                                    <input type="text" placeholder=" " name="hostname">
+                                </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                            <div name = "networking">
+                                <label> Networking </label>
+                                <div class="form-field">
+                                    <label> Type  </label>
+                                    <input type="text" placeholder=" " name="type">
+                                </div>
+                                <div class="form-field">
+                                    <label> Interface Used  </label>
+                                    <input type="text" placeholder=" " name="interface_used">
+                                </div>
+                                <div class="form-field">
+                                    <label> API Server IP  </label>
+                                    <input type="text" placeholder=" " name="api_service_ip">
+                                </div>
+                                <div class="form-field">
+                                    <label> Etcd Server IP  </label>
+                                    <input type="text" placeholder=" " name="etcd_service_ip">
+                                </div>
+                                <div class="form-field">
+                                    <label> POD CIDR  </label>
+                                    <input type="text" placeholder=" " name="pod_cidr">
+                                </div>
+                                <div class="form-field">
+                                    <label>  Service CIDR </label>
+                                    <input type="text" placeholder=" " name="service_cidr">
+                                </div>
+                                <div class="form-field">
+                                    <label> API Server Port  </label>
+                                    <input type="text" placeholder=" " name="apiserver_port">
+                                </div>
+                                <div class="form-field">
+                                    <label> HA Proxy Port  </label>
+                                    <input type="text" placeholder=" " name="haproxy_port">
+                                </div>
+                                <div class="form-field">
+                                    <label> Service Node Port Range  </label>
+                                    <input type="text" placeholder=" " name="servicenoe_port_range">
+                                </div>
+                            </div>
+                            <div>
+                                <label> Key-Value Pairs </label>
+                            </div>
+                            <div class="arr" name="kvps">
+                                <div class="form-field">
+                                    <label> Key </label>
+                                    <input type="text" placeholder=" " name="key">
+                                </div>
+                                <div class="form-field">
+                                    <label> Value </label>
+                                    <input type="text" placeholder=" " name="value">
+                                </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#ucOoo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="ucOoo">
+                    <div class="tab-part">
+                        <h4> Undercloud: Openstack Over Openstack</h4>
+                        <hr>
+                        <div class="devider-row" name="undercloud_ooo">
+                            <div class="form-field">
+                                <label> Host Name </label>
+                                <input type="text" placeholder=" " name="host_name">
+                            </div>
+                            <div class="form-field">
+                                <label> Local IP </label>
+                                <input type="text" placeholder=" " name="local_ip">
+                            </div>
+                            <div class="form-field">
+                                <label> Public Host </label>
+                                <input type="text" placeholder=" " name="public_host">
+                            </div>
+                            <div class="form-field">
+                                <label> Admin Host </label>
+                                <input type="text" placeholder=" " name="admin_host">
+                            </div>
+                            <div class="form-field">
+                                <label> Local Interface </label>
+                                <input type="text" placeholder=" " name="local_interface">
+                            </div>
+                            <div class="form-field">
+                                <label> Inspection Interface </label>
+                                <input type="text" placeholder=" " name="inspection_interface">
+                            </div>
+                            <div name="networking">
+                                <label> Networking </label>
+                                <div class="form-field">
+                                    <label> Control Plane CIDR </label>
+                                    <input type="text" placeholder=" " name="ctrlplane_cidr">
+                                </div>
+                                <div class="form-field">
+                                    <label> Control IP Start </label>
+                                    <input type="text" placeholder=" " name="ctrlplane_ip_start">
+                                </div>
+                                <div class="form-field">
+                                    <label> Control IP End </label>
+                                    <input type="text" placeholder=" " name="ctrlplane_ip_end">
+                                </div>
+                                <div class="form-field">
+                                    <label> Inspection Range </label>
+                                    <input type="text" placeholder=" " name="inspection_range">
+                                </div>
+                                <div class="form-field">
+                                    <label> Gateway </label>
+                                    <input type="text" placeholder=" " name="gateway">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#ucSw">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="ucSw">
+                    <div class="tab-part">
+                        <h4> Undercloud Software </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="undercloud_sw_profiles">
+                                <div class="form-field">
+                                    <label> Profile Name </label>
+                                    <input type="text" placeholder=" " name="profile_name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Software list</label>
+                                </div>
+                                <div class="arr", name="sw_list">
+                                    <div class="form-field">
+                                        <label> Name </label>
+                                        <input type="text" placeholder=" " name="name">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Version </label>
+                                        <input type="text" placeholder=" " name="version">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#osSw">Next</a>
+                    </div>
+                </div>
+                <div class="tabs-panels" id="osSw">
+                    <div class="tab-part">
+                        <h4> Openstack Software </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="openstack_sw_profiles">
+                                <div class="form-field">
+                                    <label> Profile Name </label>
+                                    <input type="text" placeholder=" " name="profile_name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Software list</label>
+                                </div>
+                                <div class="arr", name="sw_list">
+                                    <div class="form-field">
+                                        <label> Name </label>
+                                        <input type="text" placeholder=" " name="name">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Version </label>
+                                        <input type="text" placeholder=" " name="version">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#infSw">Next</a>
+                    </div>
+                </div>
+                <div class="tabs-panels" id="infSw">
+                    <div class="tab-part">
+                        <h4> Infrastructure Software </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="infra_sw_profiles">
+                                <div class="form-field">
+                                    <label> Profile Name </label>
+                                    <input type="text" placeholder=" " name="profile_name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Software list</label>
+                                </div>
+                                <div class="arr", name="sw_list">
+                                    <div class="form-field">
+                                        <label> Name </label>
+                                        <input type="text" placeholder=" " name="name">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Version </label>
+                                        <input type="text" placeholder=" " name="version">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#swSet">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="swSet">
+                    <div class="tab-part">
+                        <h4> Software Set </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr", name="software_set">
+                                <label> Software Set </label>
+                                <div class="form-field">
+                                    <label> Set Name </label>
+                                    <input type="text" placeholder=" " name="set_name ">
+                                </div>
+                                <div class="form-field">
+                                    <label> Undercloud Profile </label>
+                                    <input type="text" placeholder=" " name="undercloud_profile ">
+                                </div>
+                                <div class="form-field">
+                                    <label> Infra Software Profile </label>
+                                    <input type="text" placeholder=" " name="infrasw_profile ">
+                                </div>
+                                <div class="form-field">
+                                    <label> Openstack Software Profile </label>
+                                    <input type="text" placeholder=" " name="openstack_profile ">
+                                </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#roles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="roles">
+                    <div class="tab-part">
+                        <h4> Roles </h4>
+                        <hr>
+                        <div class="devider-row" name="roles">
+                            <div class="arr">
+                                <div class="form-field">
+                                    <label> Name </label>
+                                    <input type="text" placeholder=" " name="name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Hostname Prefix </label>
+                                    <input type="text" placeholder=" " name="hostname_prefix">
+                                </div>
+                                <div class="form-field">
+                                    <label> Hostname Suffix </label>
+                                    <input type="text" placeholder=" " name="hostname_suffix">
+                                </div>
+                                <div class="form-field">
+                                    <label> Hostname Number Start </label>
+                                    <input type="text" placeholder=" " name="hostname_number_start">
+                                </div>
+                                <div class="form-field">
+                                    <label> Count </label>
+                                    <input type="text" placeholder=" " name="count">
+                                </div>
+                                <div class="form-field">
+                                    <label> Hardware Profile </label>
+                                    <input type="text" placeholder=" " name="hardware_profile">
+                                </div>
+                                <div class="form-field">
+                                    <label> Interface Mapping </label>
+                                    <input type="text" placeholder=" " name="interface_mapping">
+                                </div>
+                                <div class="form-field">
+                                    <label> Storage Mapping </label>
+                                    <input type="text" placeholder=" " name="storage_mapping">
+                                </div>
+                                <div class="form-field">
+                                    <label> Platform Profile </label>
+                                    <input type="text" placeholder=" " name="platform_profile">
+                                </div>
+                                <div class="form-field">
+                                    <label> Software Set </label>
+                                    <input type="text" placeholder=" " name="sw_set_name">
+                                </div>
+                                <div>
+                                    <label> Metadata </label>
+                                </div>
+                                <div class="arr" name="metadata">
+                                    <div>
+                                        <div class="form-field">
+                                            <label> On Count Condition </label>
+                                            <input type="text" placeholder=" " name="on_count_condition">
+                                        </div>
+                                        <div class="form-field">
+                                            <label> Count </label>
+                                            <input type="text" placeholder=" " name="count">
+                                        </div>
+                                        <div class="form-field">
+                                            <label> Key </label>
+                                            <input type="text" placeholder=" " name="key">
+                                        </div>
+                                        <div class="form-field">
+                                            <label> Value </label>
+                                            <input type="text" placeholder=" " name="value">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#extraPo">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="extraPo">
+                    <div class="tab-part">
+                        <h4> Extrapolation Information </h4>
+                        <hr>
+                        <div class="devider-row" name="extrapolation_info">
+                            <div class="form-field">
+                                <label>ILO Username </label>
+                                <input type="text" placeholder=" " name="ilo_user">
+                            </div>
+                            <div class="form-field">
+                                <label> ILO Password </label>
+                                <input type="text" placeholder=" " name="ilo_password">
+                            </div>
+                            <div class="form-field">
+                                <label> IP Increment </label>
+                                <input type="text" placeholder=" " name="ip_increment ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#hostAg">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="hostAg">
+                    <div class="tab-part">
+                        <h4> Host Aggregates </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr">
+                                <div class="form-field">
+                                    <label> Aggregate Name </label>
+                                    <input type="text" placeholder=" " name="aggregate_name">
+                                </div>
+                                <div class="form-field">
+                                    <label> Properties </label>
+                                </div>
+                                <div class="arr" name="properties">
+                                    <div class="form-field">
+                                        <label> Key </label>
+                                        <input type="text" placeholder=" " name="key">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Value </label>
+                                        <input type="text" placeholder=" " name="value">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                                <div class="form-field">
+                                    <label> Servers </label>
+                                </div>
+                                <div class="arr" name="servers">
+                                    <div class="form-field">
+                                        <label> Identifier </label>
+                                        <input type="text" placeholder=" " name="identifier">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> ILO IP </label>
+                                        <input type="text" placeholder=" " name="ilo_ip">
+                                    </div>
+                                    <div class="form-field">
+                                        <label> Host Name </label>
+                                        <input type="text" placeholder=" " name="hostname">
+                                    </div>
+                                </div>
+                                <div class="add-button" onclick="duplicate(this)"></div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <button type="submit" onclick="createjson()">Submit</button>
+                    </div>
+                    <div class="next-btn">
+                        <label> Click Submit before Download. </label>
+                        <hr>
+                        <label> Download filename: sitepdf.json </label>
+                        <a id="download_link" download="sitepdf.json" href="" > Download JSON </a>
+                    </div>
+                 </div>
+                <div class="note">
+                    <p>*Please fill values correctly. No field is mandatory.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-footer">
+        <p>This is Part of OPNFV-CIRV SDV Project</p>
+    </div>
+
+</div>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+
+<script id="rendered-js">
+$('a[data-toggle="formtab"]').click(function () {
+  var targetId = $(this).attr('href');
+
+  $('.tabs-panels').removeClass('active');
+  $('a[data-toggle="formtab"]').removeClass('active');
+
+  $(targetId).addClass('active');
+  $('a[href="' + targetId + '"]').addClass('active');
+
+
+
+});
+//# sourceURL=pen.js
+</script>
+
+</body>
+</html>
