@@ -89,7 +89,10 @@
   },
   "vim_functional": {
     "scheduler_filters":"",
-    "cpu_allocation_ratio":""
+    "cpu_allocation_ratio":"",
+    "_comment_interface_plugging_is_fatal": "Determines if instances should continue or fail after virtual interface plugging timeout happens. Same as vif_plugging_is_fatal in nova.conf",
+    "interface_plugging_is_fatal": "",
+    "interface_plugging_timeout": ""
   },
   "jumphost_info": {
     "ip":"",
