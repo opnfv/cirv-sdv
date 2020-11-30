@@ -36,3 +36,9 @@ all it’s sub-directory recursively in ascending order, hence if a
 configuration item exists in more than one file, then the setting in the
 file that occurs in the last read file will have high precedence and
 overwrite previous values. .
+
+
+Managing Settings
+^^^^^^^^^^^^^^^^^
+- Get ``value`` of ``key`` using ``settings.getValue(key)``
+- Set ``key, value`` using ``settings.setValue(key, value)``

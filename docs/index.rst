@@ -16,6 +16,7 @@ OPNFV CIRV-SDV
    sdvconfig/developer/devguide
    sdvconfig/user/configguide
    sdvconfig/user/userguide
-   state/development/design/index
-   state/development/overview/settings
-   state/development/overview/result_api
+   state/user/userguide
+   state/development/index
+   state/development/result_api
+   state/development/settings
