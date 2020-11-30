@@ -1,6 +1,6 @@
-=========
-SDVConfig
-=========
+====================
+SDVConfig User Guide
+====================
 Welcome to the SDVConfig user Guide!
 
 Who should use this guide?

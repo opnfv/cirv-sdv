@@ -12,6 +12,10 @@ OPNFV CIRV-SDV
    :maxdepth: 3
 
    release/release-notes/index
-   release/userguide/results/index
-   release/configguide/index
-   development/index
+   pdf/userguide
+   sdvconfig/developer/devguide
+   sdvconfig/user/configguide
+   sdvconfig/user/userguide
+   state/development/design/index
+   state/development/overview/settings
+   state/development/overview/result_api

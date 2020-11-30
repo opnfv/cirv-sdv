@@ -2,11 +2,17 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) OPNFV, Spirent Communications, University of Delhi and others. 
 
-OPNFV Jerma Release
-====================
+OPNFV CIRV-SDV Jerma Release
+============================
 
-* Platform Definition File Templates and Tools.
-* Resource Modelling.
-* Pre-Deployment Validation
-* Post-Deployment Validation
+Platform Definition file
 
+  * Version-1 Template 
+  * GUI Tool to create PDF.
+
+Tools:
+
+  * Resource Modelling.
+  * URL Validation - Airship.
+  * Pre-Deployment Validation: Airship v1.7.
+  * Post-Deployment Validation: Airship v1.7

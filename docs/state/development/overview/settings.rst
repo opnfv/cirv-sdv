@@ -1,5 +1,5 @@
-Program Settings handler
-------------------------
+SDVState: Program Settings handler
+----------------------------------
 
 ``from tools.conf import settings``
 

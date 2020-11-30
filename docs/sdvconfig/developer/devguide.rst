@@ -1,14 +1,14 @@
-=========
-SDVConfig
-=========
+=========================
+SDVConfig Developer Guide
+=========================
 Welcome to the SDVConfig Developer Guide!
 
 Who should use this guide?
 
 If you want to extend SDVConfig by using a creating a module, adding functionality to an existing module, or expanding test coverage, this guide is for you. We’ve included detailed information for developers on how to test and document modules, as well as the prerequisites for getting your module be accepted into the main SDV repository.
 
-Table of Contents
-^^^^^^^^^^^^^^^^^
+Contents
+^^^^^^^^
 - Description of the project
 - Software architecture of the project
 - Software technologies uses
