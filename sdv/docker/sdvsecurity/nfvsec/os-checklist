@@ -1,0 +1,848 @@
+#!/usr/bin/env python3
+
+# Copyright 2021 Spirent Communications.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+NFV Security Check
+"""
+from __future__ import print_function
+
+import logging
+import os
+import sys
+import argparse
+import time
+import datetime
+import io
+import configparser
+from collections import OrderedDict
+from conf import settings
+from utils import sshclient
+from utils import k8sclient
+
+VERBOSITY_LEVELS = {
+    'debug': logging.DEBUG,
+    'info': logging.INFO,
+    'warning': logging.WARNING,
+    'error': logging.ERROR,
+    'critical': logging.CRITICAL
+}
+
+_CURR_DIR = os.path.dirname(os.path.realpath(__file__))
+_LOGGER = logging.getLogger()
+
+# pylint: disable=too-few-public-methods, no-self-use
+class PseudoFile(io.RawIOBase):
+    """
+    Handle ssh command output.
+    """
+    def __init__(self, filename):
+        self.fname = filename
+
+    def write(self, chunk):
+        """
+        Write to file
+        """
+        #if "error" in chunk:
+        #    return
+        with open(self.fname, "a+") as fref:
+            fref.write(chunk)
+
+class MultiOrderedDict(OrderedDict):
+    """
+    For Duplicate Keys
+    """
+    def __setitem__(self, key, value):
+        if isinstance(value, list) and key in self:
+            self[key].extend(value)
+        else:
+            super(MultiOrderedDict, self).__setitem__(key, value)
+
+def parse_arguments():
+    """
+    Parse command line arguments.
+    """
+    parser = argparse.ArgumentParser(prog=__file__, formatter_class=
+                                     argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+    parser.add_argument('--list-clouds', action='store_true',
+                        help='list the supported clouds ')
+    args = vars(parser.parse_args())
+    return args
+
+def configure_logging(level):
+    """Configure logging.
+    """
+    name, ext = os.path.splitext(settings.getValue('LOG_FILE_DEFAULT'))
+    rename_default = "{name}_{uid}{ex}".format(name=name,
+                                               uid=settings.getValue(
+                                                   'LOG_TIMESTAMP'),
+                                               ex=ext)
+    log_file_default = os.path.join(
+        settings.getValue('RESULTS_PATH'), rename_default)
+    _LOGGER.setLevel(logging.DEBUG)
+    stream_logger = logging.StreamHandler(sys.stdout)
+    stream_logger.setLevel(VERBOSITY_LEVELS[level])
+    stream_logger.setFormatter(logging.Formatter(
+        '[%(levelname)-5s]  %(asctime)s : (%(name)s) - %(message)s'))
+    _LOGGER.addHandler(stream_logger)
+    file_logger = logging.FileHandler(filename=log_file_default)
+    file_logger.setLevel(logging.DEBUG)
+    file_logger.setFormatter(logging.Formatter(
+        '%(asctime)s : %(message)s'))
+    _LOGGER.addHandler(file_logger)
+
+def handle_list_options(args):
+    """ Process --list cli arguments if needed
+
+    :param args: A dictionary with all CLI arguments
+    """
+    if args['list_clouds']:
+        print("WIP - Clouds")
+        sys.exit(0)
+
+def check_horizon_hardening(deployment, client):
+    '''
+    DISALLOW_IFRAME_EMBED parameter set to True
+    CSRF_COOKIE_SECURE parameter set to True
+    SESSION_COOKIE_SECURE parameter set to True
+    SESSION_COOKIE_HTTPONLY parameter set to True
+    PASSWORD_AUTOCOMPLETE set to False
+    DISABLE_PASSWORD_REVEAL set to True
+    ENFORCE_PASSWORD_CHECK set to True
+    '''
+    result = True
+    horizonkeys = OrderedDict()
+    dictkeys = ['DISALLOW_IFRAME_EMBED', 'CSRF_COOKIE_SECURE', 'SESSION_COOKIE_SECURE',
+                'SESSION_COOKIE_HTTPONLY', 'PASSWORD_AUTOCOMPLETE', 'DISABLE_PASSWORD_REVEAL',
+               'ENFORCE_PASSWORD_CHECK', 'PASSWORD_VALIDATOR', 'SECURE_PROXY_SSL_HEADER']
+    for dks in dictkeys:
+        horizonkeys[dks] = 'UNSET - NOT OK'
+
+    actualfile = settings.getValue('HORIZON_LOCAL_SETTINGS')
+    filename = "./horizon-conf.conf"
+    if 'k8s' not in deployment:
+        with PseudoFile(filename) as hor:
+            if 'legacy' in deployment:
+                cmd = 'sudo cat ' + actualfile
+            elif 'docker' in deployment:
+                cmd = 'sudo docker exec horizon cat ' + actualfile
+            client.run(cmd, stdout=hor, timeout=0)
+    else:
+        cmd = ['cat', actualfile]
+        pod = client.get_pod('openstack', 'horizon')
+        resp = client.execute(pod, cmd)
+        if resp:
+            with open(filename, "w+", encoding="utf-8") as fref:
+                fref.write(resp)
+
+    if (not os.path.isfile(filename) or
+        os.stat(filename).st_size == 0):
+        print("Could not read file from the container")
+        return False
+
+    with open(filename, "r") as fil:
+        for lin in fil:
+            if lin.startswith('DISALLOW_IFRAME_EMBED'):
+                if 'True' in lin:
+                    horizonkeys['DISALLOW_IFRAME_EMBED'] = "OK"
+                else:
+                    horizonkeys['DISALLOW_IFRAME_EMBED'] = "NOT OK"
+                    result = False
+            if lin.startswith('CSRF_COOKIE_SECURE'):
+                if 'True' in lin:
+                    horizonkeys['CSRF_COOKIE_SECURE'] = "OK"
+                else:
+                    horizonkeys['CSRF_COOKIE_SECURE'] = "NOT OK"
+                    result = False
+            if lin.startswith('SESSION_COOKIE_SECURE'):
+                if 'True' in lin:
+                    horizonkeys['SESSION_COOKIE_SECURE'] = "OK"
+                else:
+                    horizonkeys['SESSION_COOKIE_SECURE'] = "NOT OK"
+                    result = False
+            if lin.startswith('SESSION_COOKIE_HTTPONLY'):
+                if 'True' in lin:
+                    horizonkeys['SESSION_COOKIE_HTTPONLY'] = "OK"
+                else:
+                    horizonkeys['SESSION_COOKIE_HTTPONLY'] = "NOT OK"
+                    result = False
+            if lin.startswith('PASSWORD_AUTOCOMPLETE'):
+                if 'False' in lin:
+                    horizonkeys['PASSWORD_AUTOCOMPLETE'] = "OK"
+                else:
+                    horizonkeys['PASSWORD_AUTOCOMPLETE'] = "NOT OK"
+                    result = False
+            if lin.startswith('DISABLE_PASSWORD_REVEAL'):
+                if 'True' in lin:
+                    horizonkeys['DISABLE_PASSWORD_REVEAL'] = "OK"
+                else:
+                    horizonkeys['DISABLE_PASSWORD_REVEAL'] = "NOT OK"
+                    result = False
+            if lin.startswith('ENFORCE_PASSWORD_CHECK'):
+                if 'True' in lin:
+                    horizonkeys['ENFORCE_PASSWORD_CHECK'] = "OK"
+                else:
+                    horizonkeys['ENFORCE_PASSWORD_CHECK'] = "NOT OK"
+                    result = False
+            if lin.startswith('PASSWORD_VALIDATOR'):
+                if 'regex' in lin:
+                    horizonkeys['PASSWORD_VALIDATOR'] = "OK"
+                else:
+                    horizonkeys['PASSWORD_VALIDATOR'] = "NOT OK"
+                    result = False
+            if lin.startswith('SECURE_PROXY_SSL_HEADER'):
+                if 'HTTP_X_FORWARDED_PROTO' in lin and 'https' in lin:
+                    horizonkeys['SECURE_PROXY_SSL_HEADER'] = "OK"
+                else:
+                    horizonkeys['SECURE_PROXY_SSL_HEADER'] = "NOT OK"
+                    result = False
+    for key in horizonkeys:
+        print("The KEY: '" + key + "' is " + horizonkeys[key])
+    return result
+
+def check_neutron_hardening(deployment, client):
+    '''
+    Section:Parameter:Expected-Value
+    keystone_authtoken:auth_protocol:https
+    keystone_authtoken:identity_uri:https://....
+    :use_ssl:True
+    :auth_strategy:keystone
+    '''
+    config = configparser.ConfigParser()
+    result = True
+    actualfile = settings.getValue('NEUTRON_CONF_FILE')
+    filename = "./neutron-conf.conf"
+    if 'k8s' not in deployment:
+        with PseudoFile(filename) as hor:
+            if 'legacy' in deployment:
+                cmd = 'sudo cat ' + actualfile
+            elif 'docker' in deployment:
+                cmd = 'sudo docker exec neutron_api cat ' + actualfile
+            client.run(cmd, stdout=hor, timeout=0)
+    else:
+        cmd = ['cat', actualfile]
+        pod = client.get_pod('openstack', 'neutron-server')
+        resp = client.execute(pod, cmd)
+        if resp:
+            with open(filename, "w+", encoding="utf-8") as fref:
+                fref.write(resp)
+
+    if (not os.path.isfile(filename) or
+        os.stat(filename).st_size == 0):
+        print("Could not read file from the container")
+        return False
+
+    config.read(filename)
+
+    if (config.has_option('keystone_authtoken', 'auth_protocol') and
+        config.has_option('keystone_authtoken','identity_uri')):
+        if (config.get('keystone_authtoken', 'auth_protocol') != 'https' and
+            not config.get('keystone_authtoken','identity_uri').startswith('https')):
+            print('Authentication token is not secured ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','use_ssl'):
+        if not config.get('DEFAULT','use_ssl'):
+            print('SSL is not used ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','auth_strategy'):
+        if config.get('DEFAULT','auth_strategy') != 'keystone':
+            print('Authentication strategy should be keystone ... NOT OK')
+            result = False
+    return result
+
+
+def check_cinder_hardening(deployment, client):
+    '''
+    Section:Parameter:Expected-Value
+    keystone_authtoken:auth_protocol:https
+    keystone_authtoken:identity_uri:https://....
+    :nova_api_insecure:False
+    :glance_api_insecure:False
+    :nas_secure_file_permissions:auto
+    :nas_secure_file_operations:auto
+    :auth_strategy:keystone
+    :osapi_max_request_body_size:114688 OR
+    oslo_middleware:max_request_body_size:114688
+    '''
+    result = True
+    config = configparser.ConfigParser()
+    actualfile = settings.getValue('CINDER_CONF_FILE')
+    filename = "./cinder-conf.conf"
+    if 'k8s' not in deployment:
+        with PseudoFile(filename) as hor:
+            if 'legacy' in deployment:
+                cmd = 'sudo cat ' + actualfile
+            elif 'docker' in deployment:
+                cmd = 'sudo docker exec cinder_api cat ' + actualfile
+            client.run(cmd, stdout=hor, timeout=0)
+    else:
+        cmd = ['cat', actualfile]
+        pod = client.get_pod('openstack', 'cinder-api')
+        resp = client.execute(pod, cmd)
+        if resp:
+            with open(filename, "w+", encoding="utf-8") as fref:
+                fref.write(resp)
+
+    if (not os.path.isfile(filename) or
+        os.stat(filename).st_size == 0):
+        print("Could not read file from the container")
+        return False
+
+    config.read(filename)
+    if (config.has_option('keystone_authtoken','auth_protocol') and
+        config.has_option('keystone_authtoken','identity_uri')):
+        if (config.get('keystone_authtoken','auth_protocol') != 'https' and
+            config.get('keystone_authtoken','identity_uri').startswith('https')):
+            print('Authentication token is not secured ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','nova_api_insecure'):
+        if config.get('DEFAULT','nova_api_insecure'):
+            print('Cinder-Nova API is insecure ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','nas_secure_file_operations'):
+        if config.get('DEFAULT','nas_secure_file_operations') != 'auto':
+            print('NAS Secure File is False ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','nas_secure_file_permissions'):
+        if config.get('DEFAULT','nas_secure_file_permissions') != 'auto':
+            print('NAS secure file permissions ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','auth_strategy'):
+        if config.get('DEFAULT','auth_strategy') != 'keystone':
+            print('Authentication strategy should be keystone')
+            result = False
+    if  config.has_option('DEFAULT','glance_api_insecure'):
+        if config.get('DEFAULT','glance_api_insecure') != 'False' :
+            print('Cinder-Glance API is insecure ... NOT OK ')
+            result = False
+    if (config.has_option('DEFAULT','osapi_max_request_body_size') and
+        config.has_option('oslo_middleware','max_request_body_size')):
+        if (config.get('DEFAULT','osapi_max_request_body_size') != 114688 or
+            config.get('oslo_middleware','max_request_body_size') != 114688):
+            print('MAX Request Body Size is not 114688 ... NOT OK')
+            result = False
+    return result
+
+
+
+def check_nova_hardening(deployment, client):
+    result = True
+    config = configparser.ConfigParser(allow_no_value=True, interpolation=None, strict=False)
+    #config = configparser.RawConfigParser(dict_type=MultiOrderedDict, strict=False)
+    actualfile = settings.getValue('NOVA_CONF_FILE')
+    filename = "./nova-conf.conf"
+    if 'k8s' not in deployment:
+        with PseudoFile(filename) as hor:
+            if 'legacy' in deployment:
+                cmd = 'sudo cat ' + actualfile
+            elif 'docker' in deployment:
+                cmd = 'sudo docker exec nova_api cat ' + actualfile
+            client.run(cmd, stdout=hor, timeout=0)
+    else:
+        cmd = ['cat', actualfile]
+        pod = client.get_pod('openstack', 'nova-api-osapi')
+        resp = client.execute(pod, cmd)
+        if resp:
+            with open(filename, "w+", encoding="utf-8") as fref:
+                fref.write(resp)
+    if (not os.path.isfile(filename) or
+        os.stat(filename).st_size == 0):
+        print("Could not read file from the container")
+        return False
+
+    config.read([filename])
+    if config.has_option('DEFAULT','auth_strategy'):
+        if config.get('DEFAULT','auth_strategy') != 'keystone':
+            print('Authentication strategy should be keystone ... NOT OK')
+            result =  False
+    if (config.has_option('keystone_authtoken','auth_protocol') and
+        config.has_option('keystone_authtoken','identity_uri')):
+        if (config.get('keystone_authtoken','auth_protocol') != 'https' and
+            not config.get('keystone_authtoken','identity_uri').startswith('https')):
+            print('Authentication token is not secured ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','glance_api_insecure'):
+        if config.get('DEFAULT','glance_api_insecure'):
+            print('Glance-Nova API is insecure ... NOT OK')
+            result = False
+    return result
+
+def check_keystone_hardening(deployment, client):
+    '''
+    https://static.open-scap.org/ssg-guides/ssg-rhosp13-guide-stig.html
+    /etc/keystone/keystone.conf
+    Section:Parameter:Expected-Value
+    token:hash_algorithm:SHA256
+    ssl:enable:True
+    NA:max_request_body_size:default/114688/some-value
+    security_compliance:disable_user_account_days_inactive:some-value
+    security_compliance:lockout_failure_attempts:some-value
+    security_compliance:lockout_duration:some-value
+    DEFAULT:admin_token:disabled
+    *** If lockout_failure_attempts is enabled and lockout_duration is left undefined,
+    users will be locked out indefinitely until the user is explicitly re-enabled ***
+    [/etc/keystone/keystone-paste.ini]
+    filter:admin_token_auth:AdminTokenAuthMiddleware:not-exist
+    '''
+    result = True
+    #config = configparser.ConfigParser()
+    config = configparser.ConfigParser(allow_no_value=True, interpolation=None, strict=False)
+    actualfile = settings.getValue('KEYSTONE_CONF_FILE')
+    filename = "./keystone-conf.conf"
+    if 'k8s' not in deployment:
+        with PseudoFile(filename) as hor:
+            if 'legacy' in deployment:
+                cmd = 'sudo cat ' + actualfile
+            elif 'docker' in deployment:
+                cmd = 'sudo docker exec keystone cat ' + actualfile
+            client.run(cmd, stdout=hor, timeout=0)
+    else:
+        cmd = ['cat', actualfile]
+        pod = client.get_pod('openstack', 'keystone-api')
+        resp = client.execute(pod, cmd)
+        if resp:
+            with open(filename, "w+", encoding="utf-8") as fref:
+                fref.write(resp)
+    if (not os.path.isfile(filename) or
+        os.stat(filename).st_size == 0):
+        print("Could not read file from the container")
+        return False
+
+    config.read(filename)
+    if config.has_option('token','hash_algorithm'):
+        if config.get('token','hash_algorithm') != 'SHA256':
+            print('Hash Algorithm is NOT SHA256 ... NOT OK')
+            result = False
+    if config.has_option('ssl','enable'):
+        if not config.get('ssl','enable'):
+            print('SSL is not enabled ... NOT OK')
+            result = False
+    if config.has_option('DEFAULT','max_request_body_size'):
+        if not config.get('DEFAULT','max_request_body_size'):
+            print('MAX request Body Size is not specified ... NOT OK')
+            result = False
+    if (config.has_option('security_compliance','disable_user_account_days_inactive') and
+        not config.has_option('security_compliance','lockout_failure_attempts') and
+        not config.has_option('security_compliance','lockout_duration')):
+        if (not config.get('security_compliance','disable_user_account_days_inactive') and
+            not config.get('security_compliance','lockout_failure_attempts') and
+            not config.get('security_compliance','lockout_duration')):
+            print("Security Compliance configurations are not correct  ... NOT OK")
+            result = False
+    if config.has_option('DEFAULT','admin_token'):
+        if config.get('DEFAULT','admin_token') != 'disabled':
+            print("Admin Token is not disabled ... NOT OK")
+            result = False
+    return result
+
+
+
+def check_sixfourzero(deployment, client):
+    """
+    Check 644
+    """
+    result = True
+    status = -1
+    stderror = "Failed to Stat file"
+    filenames = (settings.getValue('KSP_FILES') +
+                 settings.getValue('NOP_FILES') +
+                 settings.getValue('NEP_FILES') +
+                 settings.getValue('CIP_FILES'))
+    # https://stackoverflow.com/questions/1861836/checking-file-permissions-in-linux-with-python
+    for filename in filenames:
+        if 'cinder' in filename:
+            container = 'cinder_api'
+            podn = 'cinder-api'
+        elif 'neutron' in filename:
+            container = 'neutron_api'
+            podn = 'neutron-server'
+        elif 'nova' in filename:
+            container = 'nova_api'
+            podn = 'nova-api-osapi'
+        elif 'keystone' in filename:
+            container = 'keystone'
+            podn = 'keystone-api'
+        else:
+            print("Bad File Name ")
+            return False
+        if 'legacy' in deployment:
+            cmd = "sudo stat -c '%a' " + filename
+        elif 'docker' in deployment:
+            cmd = "sudo docker exec " + container + " stat -c '%a' " + filename
+        elif 'k8s' in deployment:
+            cmd = ['stat', '-c', '"%a"', filename]
+            pod = client.get_pod('openstack', podn)
+        else:
+            print("Deployment not supported")
+            return False
+        if 'k8s' not in deployment:
+            status, stdout, stderror = client.execute(cmd)
+        else:
+            stdout = client.execute(pod, cmd)
+            if stdout:
+                status = 0
+        if status == 0:
+            if '640' not in stdout:
+                print('The File {} has wrong permission - NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderror)
+            result = False
+    return result
+
+def check_ug_keystone(deployment, client):
+    """
+    UG of Keystone
+    """
+    result = True
+    statusu = statusg = -1
+    stderroru = stderrorg = "Failed to Stat file"
+    filenames = settings.getValue('KSP_FILES')
+    for filename in filenames:
+        if 'legacy' in deployment:
+            cmdu = "sudo stat -c '%U' " + filename
+            cmdg = "sudo stat -c '%G' " + filename
+        elif 'docker' in deployment:
+            cmdu = "sudo docker exec keystone stat -c '%U' " + filename
+            cmdg = "sudo docker exec keystone stat -c '%G' " + filename
+        elif 'k8s' in deployment:
+            pod = client.get_pod('openstack', 'cinder-api')
+            cmdu = ['stat', '-c' '"%U"', filename]
+            cmdg = ['stat', '-c' '"%G"', filename]
+        else:
+            print("Deployment type not supported")
+            return False
+        if 'k8s' not in deployment:
+            statusu, stdoutu, stderroru = client.execute(cmdu)
+            statusg, stdoutg, stderrorg = client.execute(cmdg)
+        else:
+            stdoutu = client.execute(pod, cmdu)
+            stdoutg = client.execute(pod, cmdg)
+            if stdoutu:
+                statusu = 0
+            if stdoutg:
+                statusg = 0
+        if statusu == 0:
+            if ('keystone' not in stdoutu and
+                'root' not in stdoutu):
+                print('The user of File {} is not keystone  ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderroru)
+        if statusg == 0:
+            if 'keystone' not in stdoutg:
+                print(filename)
+                print('The group ownership of file {} is not keystone  ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderrorg)
+    return result
+
+
+def check_ug_root_apache(deployment, client):
+    """
+    UG of Apache
+    """
+    result = True
+    statusu = statusg = -1
+    stderroru = stderrorg = "Failed to Stat file"
+    filenames = settings.getValue('HORIZON_APACHE_FILES')
+    for filename in filenames:
+        if 'legacy' in deployment:
+            cmdu = "sudo stat -c '%U' " + filename
+            cmdg = "sudo stat -c '%G' " + filename
+        elif 'docker' in deployment:
+            cmdu = "sudo docker exec horizon stat -c '%U' " + filename
+            cmdg = "sudo docker exec horizon stat -c '%G' " + filename
+        elif 'k8s' in deployment:
+            pod = client.get_pod('openstack', 'horizon')
+            cmdu = ['stat', '-c' '"%U"', filename]
+            cmdg = ['stat', '-c' '"%G"', filename]
+        else:
+            print("Deployment type not supported")
+            return False
+        if 'k8s' not in deployment:
+            statusu, stdoutu, stderroru = client.execute(cmdu)
+            statusg, stdoutg, stderrorg = client.execute(cmdg)
+        else:
+            stdoutu = client.execute(pod, cmdu)
+            stdoutg = client.execute(pod, cmdg)
+            if stdoutu:
+                statusu = 0
+            if stdoutg:
+                statusg = 0
+
+        if statusu == 0:
+            if 'root' not in stdoutu:
+                print('The user of File {} is not root  ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderroru)
+        if statusg == 0:
+            if 'apache' not in stdoutg:
+                print(filename)
+                print('The group ownership of file {} is not Apache  ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderrorg)
+    return result
+
+
+def check_ug_root_nova(deployment, client):
+    """
+    UG of Nova
+    """
+    result = True
+    statusu = statusg = -1
+    stderroru = stderrorg = "Failed to Stat file"
+    filenames = settings.getValue('NOP_FILES')
+    for filename in filenames:
+        if 'legacy' in deployment:
+            cmdu = "sudo stat -c '%U' " + filename
+            cmdg = "sudo stat -c '%G' " + filename
+        elif 'docker' in deployment:
+            cmdu = "sudo docker exec nova_api stat -c '%U' " + filename
+            cmdg = "sudo docker exec nova_api stat -c '%G' " + filename
+        elif 'k8s' in deployment:
+            pod = client.get_pod('openstack', 'nova-api-osapi')
+            cmdu = ['stat', '-c' '"%U"', filename]
+            cmdg = ['stat', '-c' '"%G"', filename]
+        else:
+            print("Deployment type not supported")
+            return False
+        if 'k8s' not in deployment:
+            statusu, stdoutu, stderroru = client.execute(cmdu)
+            statusg, stdoutg, stderrorg = client.execute(cmdg)
+        else:
+            stdoutu = client.execute(pod, cmdu)
+            stdoutg = client.execute(pod, cmdg)
+            if stdoutu:
+                statusu = 0
+            if stdoutg:
+                statusg = 0
+
+        if statusu == 0:
+            if 'root' not in stdoutu:
+                print('The user of File {} is not root ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderroru)
+        if statusg == 0:
+            if 'nova' not in stdoutg:
+                print(filename)
+                print('The group ownership of file {} is not nova ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderrorg)
+    return result
+
+
+def check_ug_root_neutron(deployment, client):
+    """
+    UG of Neutron
+    """
+    result = True
+    statusu = statusg = -1
+    stderroru = stderrorg = "Failed to Stat file"
+    # https://stackoverflow.com/questions/927866/how-to-get-the-owner-and-group-of-a-folder-with-python-on-a-linux-machine
+    filenames = settings.getValue('NEP_FILES')
+    for filename in filenames:
+        if 'legacy' in deployment:
+            cmdu = "sudo stat -c '%U' " + filename
+            cmdg = "sudo stat -c '%G' " + filename
+        elif 'docker' in deployment:
+            cmdu = "sudo docker exec neutron_api stat -c '%U' " + filename
+            cmdg = "sudo docker exec neutron_api stat -c '%G' " + filename
+        elif 'k8s' in deployment:
+            pod = client.get_pod('openstack', 'neutron-server')
+            cmdu = ['stat', '-c' '"%U"', filename]
+            cmdg = ['stat', '-c' '"%G"', filename]
+        else:
+            print("Deployment type not supported")
+            return False
+        if 'k8s' not in deployment:
+            statusu, stdoutu, stderroru = client.execute(cmdu)
+            statusg, stdoutg, stderrorg = client.execute(cmdg)
+        else:
+            stdoutu = client.execute(pod, cmdu)
+            stdoutg = client.execute(pod, cmdg)
+            if stdoutu:
+                statusu = 0
+            if stdoutg:
+                statusg = 0
+
+        if statusu == 0:
+            if 'root' not in stdoutu:
+                print('The user of File {} is not root ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderroru)
+        if statusg == 0:
+            if ('neutron' not in stdoutg and
+                'root' not in stdoutg):
+                print(filename)
+                print('The group ownership of file {} is not neutron ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderrorg)
+    return result
+
+
+def check_ug_root_cinder(deployment, client):
+    """
+    UG of Cinder
+    """
+    result = True
+    statusu = statusg = -1
+    statusg = -1
+    stderroru = "Failed to Stat file"
+    stderrorg = "Failed to Stat file"
+    # https://stackoverflow.com/questions/927866/how-to-get-the-owner-and-group-of-a-folder-with-python-on-a-linux-machine
+    filenames = settings.getValue('CIP_FILES')
+    for filename in filenames:
+        if 'legacy' in deployment:
+            cmdu = "sudo stat -c '%U' " + filename
+            cmdg = "sudo stat -c '%G' " + filename
+        elif 'docker' in deployment:
+            cmdu = "sudo docker exec cinder_api stat -c '%U' " + filename
+            cmdu = "sudo docker exec cinder_api stat -c '%G' " + filename
+        elif 'k8s' in deployment:
+            pod = client.get_pod('openstack', 'cinder-api')
+            cmdu = ['stat', '-c' '"%U"', filename]
+            cmdg = ['stat', '-c' '"%G"', filename]
+        else:
+            print("Deployment type not supported")
+            return False
+        if 'k8s' not in deployment:
+            statusu, stdoutu, stderroru = client.execute(cmdu)
+            statusg, stdoutg, stderrorg = client.execute(cmdg)
+        else:
+            stdoutu = client.execute(pod, cmdu)
+            stdoutg = client.execute(pod, cmdg)
+            if stdoutu:
+                statusu = 0
+            if stdoutg:
+                statusg = 0
+        if statusu == 0:
+            if 'root' not in stdoutu:
+                print('The user of File {} is not root ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderroru)
+        if statusg == 0:
+            if 'cinder' not in stdoutg:
+                print(filename)
+                print('The group ownership of file {} is not cinder ... NOT OK'.format(filename))
+                result = False
+        else:
+            print(stderrorg)
+    return result
+
+def testing_k8s(k8s):
+    """
+    Testing Kubernetes
+    """
+    pod = k8s.get_pod('ceph', 'ingress')
+    if pod:
+        print(pod.metadata.name)
+        print(pod.metadata.namespace)
+        response = k8s.execute(pod, 'ls')
+        print(response)
+
+
+def main():
+    """Main function.
+    """
+    client = None
+    args = parse_arguments()
+
+    # define the timestamp to be used by logs and results
+    date = datetime.datetime.fromtimestamp(time.time())
+    timestamp = date.strftime('%Y-%m-%d_%H-%M-%S')
+    settings.setValue('LOG_TIMESTAMP', timestamp)
+
+
+    # configure settings
+    settings.load_from_dir(os.path.join(_CURR_DIR, 'conf'))
+
+    # Read default config file.
+    def_conf_file = '/conf/security.conf'
+    if os.path.exists(def_conf_file):
+        settings.load_from_file(args['conf_file'])
+
+    # Read from Environment
+    settings.load_from_env()
+    
+
+    # if required, handle list-* operations
+    handle_list_options(args)
+
+    configure_logging(settings.getValue('VERBOSITY'))
+    deployment = settings.getValue('DEPLOYMENT')
+    if ('docker' in deployment or
+        'podman' in deployment or
+        'legacy' in deployment):
+        print('Deployment is Docker')
+        if 'key' in settings.getValue('ACCESS_TYPE'):
+            client = sshclient.SSH(host = settings.getValue('HOST'),
+                                user = settings.getValue('USER'),
+                                key_filename = settings.getValue('PRIVATE_KEY_FILE'))
+    elif 'k8s' in deployment:
+        client = k8sclient.K8sClient()
+
+    # Run checks
+    if check_ug_root_cinder(deployment, client):
+        print('UG-ROOT-CINDER PASSED')
+    else:
+        print('UG-ROOT-CINDER FAILED')
+    if check_ug_root_neutron(deployment, client):
+        print('UG-ROOT-NEUTRON PASSED')
+    else:
+        print('UG-ROOT-NEUTRON FAILED')
+    if check_ug_keystone(deployment, client):
+        print('UG-KEYSTONE-KEYSTONE PASSED')
+    else:
+        print('UG-ROOT-KEYSTONE FAILED')
+    if check_ug_root_nova(deployment, client):
+        print('UG-ROOT-NOVA PASSED')
+    else:
+        print('UG-ROOT-NOVA FAILED')
+    if check_sixfourzero(deployment, client):
+        print('ALL FILE PERMISSIONS ARE STRICT')
+    else:
+        print('SOME FILE PERMISSIONS ARE NOT STRICT')
+    if check_nova_hardening(deployment, client):
+        print('NOVA HARDENING PASSED')
+    else:
+        print('NOVA HARDENING FAILED')
+    if check_cinder_hardening(deployment, client):
+        print('CINDER HARDENING PASSED')
+    else:
+        print('CINDER HARDENING FAILED')
+    if check_neutron_hardening(deployment, client):
+        print('NEUTRON HARDENING PASSED')
+    else:
+        print('NEUTRON HARDENING FAILED')
+    if check_keystone_hardening(deployment, client):
+        print('KEYSTONE HARDENING PASSED')
+    else:
+        print('KEYSTONE HARDENING FAILED')
+    if check_horizon_hardening(deployment, client):
+        print('HORIZON HARDENING PASSED')
+    else:
+        print('HORIZON HARDENING FAILED')
+
+if __name__ == "__main__":
+    main()
