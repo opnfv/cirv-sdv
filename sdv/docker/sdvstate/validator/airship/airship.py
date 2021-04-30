@@ -21,7 +21,7 @@ import logging
 from datetime import datetime as dt
 
 from tools.conf import settings
-from tools.kube_utils import load_kube_api
+from tools.kube_utils import load_kube_api, delete_kube_curl_pod
 from validator.validator import Validator
 
 from . import *
@@ -91,6 +91,8 @@ class AirshipValidator(Validator):
         self.update_report(os_reserved_cores_check())
         self.update_report(nova_scheduler_filters_check())
         self.update_report(cpu_allocation_ratio_check())
+
+        delete_kube_curl_pod()
 
         self._report['stop_date'] = dt.now().strftime('%Y-%m-%d %H:%M:%S')
 
