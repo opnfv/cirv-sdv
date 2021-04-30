@@ -18,6 +18,7 @@ Compute Related Checks
 
 import configparser
 import json
+import re
 
 from tools.kube_utils import kube_exec, get_pod_with_labels
 from tools.conf import settings
@@ -291,7 +292,14 @@ def trace_vswitch_pmd_cores():
     cmd = ['ovs-vsctl', '-t', '5', 'get', 'Open_vSwitch', '.', 'other_config']
     response = kube_exec(ovs_pod, cmd)
 
-    response.replace('=', ':')
+    # convert config str to json str
+    match = re.findall("[a-zA-Z0-9-]+=", response)
+    for key in match:
+        response = response.replace(key, '"' + key[:-1] + '":')
+    match = re.findall(":[a-zA-Z0-9-]+", response)
+    for key in match:
+        response = response.replace(key[1:], '"' + key[1:] + '"')
+
     config = json.loads(response)
 
     if 'pmd-cpu-mask' in config:
@@ -330,7 +338,14 @@ def trace_vswitch_dpdk_lcores():
     cmd = ['ovs-vsctl', '-t', '5', 'get', 'Open_vSwitch', '.', 'other_config']
     response = kube_exec(ovs_pod, cmd)
 
-    response.replace('=', ':')
+    # convert config str to json str
+    match = re.findall("[a-zA-Z0-9-]+=", response)
+    for key in match:
+        response = response.replace(key, '"' + key[:-1] + '":')
+    match = re.findall(":[a-zA-Z0-9-]+", response)
+    for key in match:
+        response = response.replace(key[1:], '"' + key[1:] + '"')
+
     config = json.loads(response)
 
     if 'dpdk-lcore-mask' in config:
