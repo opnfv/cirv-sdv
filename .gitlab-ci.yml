@@ -1,0 +1,8 @@
+# CIRV-SDV jobs
+#
+# On Merge requests, tags and merges:
+#   - Build documentation
+---
+include:
+  - project: anuket/releng
+    file: '/gitlab-templates/RTD.gitlab-ci.yml'
