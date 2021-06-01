@@ -87,10 +87,12 @@
                     <li><a data-toggle="formtab" href="#rackInfo">Rack Information</a></li>
                     <li><a data-toggle="formtab" href="#stocluInfo">Storage Cluster Information</a></li>
                     <li><a data-toggle="formtab" href="#biosProfiles">BIOS Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#bmcProfiles">BMC Profiles</a></li>
                     <li><a data-toggle="formtab" href="#procProfiles">Processor Profiles</a></li>
                     <li><a data-toggle="formtab" href="#disksProfiles">Disks Profiles</a></li>
                     <li><a data-toggle="formtab" href="#nicProfiles">NIC Profiles</a></li>
                     <li><a data-toggle="formtab" href="#hwProfiles">Hardware Profiles</a></li>
+                    <li><a data-toggle="formtab" href="#swProfiles">Switch Profiles</a></li>
                     <li><a data-toggle="formtab" href="#storprofiles">Storage Profiles</a></li>
                     <li><a data-toggle="formtab" href="#virNets">Networks</a></li>
                     <li><a data-toggle="formtab" href="#phyNets">Physical Networks</a></li>
@@ -135,8 +137,16 @@
                                 <input type="text" placeholder="Bangalore" name="city">
                             </div>
                             <div class="form-field">
+                                <label>Resource Pool ID</label>
+                                <input type="text" placeholder="EPG_ID" name="resource_pool_id">
+                            </div>
+                            <div class="form-field">
                                 <label>Resource Pool Name</label>
                                 <input type="text" placeholder="EPG" name="resource_pool_name">
+                            </div>
+                            <div class="form-field">
+                                <label>Resource Pool Type</label>
+                                <input type="text" placeholder="CLD" name="resource_pool_type">
                             </div>
                         </div>
                     </div>
@@ -149,6 +159,18 @@
                         <h4> User Information </h4>
                         <hr>
                         <div class="arr" name="user_info">
+                            <div class="form-field">
+                                <label>Access Type</label>
+                                <input type="text" placeholder="VIM" name="access_type">
+                            </div>
+                            <div class="form-field">
+                                <label>Endpoint</label>
+                                <input type="text" placeholder="Server" name="endpoint">
+                            </div>
+                            <div class="form-field">
+                                <label>Authetication Type</label>
+                                <input type="text" placeholder="passwd" name="auth_type">
+                            </div>
                             <div class="form-field">
                                 <label>Username</label>
                                 <input type="text" placeholder="sridhar" name="username">
@@ -426,12 +448,16 @@
                                 <input type="text" placeholder=" " name="ironic_deploy_interface">
                               </div>
                               <div class="form-field">
+                                <label> IP Type </label>
+                                <input type="text" placeholder="v4" name="ip_type">
+                              </div>
+                              <div class="form-field">
                                 <label> External Storage Cluster (Y/N) </label>
                                 <input type="text" placeholder=" " name="external_storage_cluster">
                               </div>
                               <div class="form-field">
                                 <label> Block Storage Connection Method</label>
-                                <input type="text" placeholder=" " name="bl_str_connect_method">
+                                <input type="text" placeholder=" " name="blk_str_connect_method">
                               </div>
                         </div>
                     </div>
@@ -473,15 +499,27 @@
                                   <hr>
                                   <div class="form-field">
                                     <label> Rack Name </label>
-                                    <input type="text" placeholder=" " name=" ">
+                                    <input type="text" placeholder=" " name="rack_name">
                                   </div>
                                   <div class="form-field">
                                     <label> Rack Description </label>
-                                    <input type="text" placeholder=" " name=" ">
+                                    <input type="text" placeholder=" " name="rack_description">
                                   </div>
                                   <div class="form-field">
                                     <label> Rack Availability Zone </label>
-                                    <input type="text" placeholder=" " name=" ">
+                                    <input type="text" placeholder=" " name="rack_az">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Rack Room </label>
+                                    <input type="text" placeholder=" " name="rack_room">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Rack Number </label>
+                                    <input type="text" placeholder=" " name="rack_number">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Rack Raw </label>
+                                    <input type="text" placeholder=" " name="rack_raw">
                                   </div>
                               </div>
                           </div>
@@ -506,6 +544,14 @@
                                 <input type="text" placeholder=" " name="cluster_type">
                               </div>
                               <div class="form-field">
+                                <label> Cluster Vendor </label>
+                                <input type="text" placeholder=" " name="vendor">
+                              </div>
+                              <div class="form-field">
+                                <label> Cluster Version </label>
+                                <input type="text" placeholder=" " name="version">
+                              </div>
+                              <div class="form-field">
                                 <label> Cluster ID </label>
                                 <input type="text" placeholder=" " name="cluster_id">
                               </div>
@@ -527,7 +573,7 @@
                               <div class="arr" name="mon_host_ips">
                                   <div class="form-field">
                                     <label>IP Address</label>
-                                    <input type="text" placeholder="a:b:c:d" name="ips">
+                                    <input type="text" placeholder="a:b:c:d" name="ip">
                                   </div>
                               </div>
                               <div class="add-button" onclick="duplicate(this)"></div>
@@ -548,6 +594,30 @@
                                 <input type="text" placeholder=" " name="cluster_cidr">
                               </div>
                               <div class="form-field">
+                                <label> Nodes </label>
+                              </div>
+                              <div class="arr" name="nodes">
+                                  <div class="form-field">
+                                    <label>Node Name</label>
+                                    <input type="text" placeholder=" " name="name">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>Node Id</label>
+                                    <input type="text" placeholder=" " name="id">
+                                  </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                              <div class="form-field">
+                                <label> Networks </label>
+                              </div>
+                              <div class="arr" name="networks">
+                                  <div class="form-field">
+                                    <label>Network Name</label>
+                                    <input type="text" placeholder=" " name="name">
+                                  </div>
+                              </div>
+                              <div class="add-button" onclick="duplicate(this)"></div>
+                              <div class="form-field">
                                 <label> Pools </label>
                               </div>
                               <div class="arr" name="pools">
@@ -561,6 +631,14 @@
                                   </div>
                               </div>
                               <div class="add-button" onclick="duplicate(this)"></div>
+                              <div class="form-field">
+                                <label> Availablity Zone Name </label>
+                                <input type="text" placeholder=" " name="az_name">
+                              </div>
+                              <div class="form-field">
+                                <label> Backup Policy </label>
+                                <input type="text" placeholder=" " name="backup_policy">
+                              </div>
                         </div>
                     </div>
                     <div class="next-btn">
@@ -572,7 +650,7 @@
                         <h4> BIOS Profiles </h4>
                         <hr>
                         <div class="devider-row">
-                            <div class="arr" name="bios_profile">
+                            <div class="arr" name="bios_profiles">
                               <div class="form-field">
                                 <label>Profile Name  </label>
                                 <input type="text" placeholder=" " name="profile_name">
@@ -592,12 +670,37 @@
                                     <input type="text" placeholder=" " name="bootstrap_proto">
                                   </div>
                                   <div class="form-field">
-                                    <label> Hyperthreading Enabled (Y/N)  </label>
+                                    <label> Hyperthreading Enabled (Yes/No)  </label>
                                     <input type="text" placeholder=" " name="hyperthreading_enabled">
                                   </div>
                                   <div class="form-field">
                                     <label> Flags - Power-Prefetcher combo </label>
                                     <input type="text" placeholder=" " name="bios_setting">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#bmcProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="bmcProfiles">
+                    <div class="tab-part">
+                        <h4> BMC Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr" name="bios_profiles">
+                              <div class="form-field">
+                                <label>Profile Name  </label>
+                                <input type="text" placeholder=" " name="profile_name">
+                              </div>
+                              <div class="form-field">
+                                <label> BMC Info  </label>
+                                  <div class="form-field">
+                                    <label> BMC Version </label>
+                                    <input type="text" placeholder=" " name="bmc_version">
                                   </div>
                               </div>
                             </div>
@@ -794,10 +897,18 @@
                                 <input type="text" placeholder=" " name="name">
                               </div>
                               <div class="form-field">
+                                <label> Profile ID </label>
+                                <input type="text" placeholder=" " name="id">
+                              </div>
+                              <div class="form-field">
                                   <label> Profile Info </label>
                                   <div class="form-field">
                                     <label> Server Manufacturer </label>
                                     <input type="text" placeholder=" " name="manufacturer">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Server SKU </label>
+                                    <input type="text" placeholder=" " name="sku">
                                   </div>
                                   <div class="form-field">
                                     <label> Compute Server Model </label>
@@ -810,6 +921,10 @@
                                   <div class="form-field">
                                     <label>  Bios Profile</label>
                                     <input type="text" placeholder=" " name="bios_profile">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>  BMC Profile</label>
+                                    <input type="text" placeholder=" " name="bmc_profile">
                                   </div>
                                   <div class="form-field">
                                     <label>  Processor Profile </label>
@@ -826,6 +941,55 @@
                                   <div class="form-field">
                                     <label>  NIC Profile</label>
                                     <input type="text" placeholder=" " name="nics_profile">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="add-button" onclick="duplicate(this)"></div>
+                        </div>
+                    </div>
+                    <div class="next-btn">
+                        <a data-toggle="formtab" href="#swProfiles">Next</a>
+                    </div>
+                </div>
+                 <div class="tabs-panels" id="swProfiles">
+                    <div class="tab-part">
+                        <h4> Switch Profiles </h4>
+                        <hr>
+                        <div class="devider-row">
+                            <div class="arr">
+                              <div class="form-field">
+                                <label> Profile Name </label>
+                                <input type="text" placeholder=" " name="name">
+                              </div>
+                              <div class="form-field">
+                                <label> Profile ID </label>
+                                <input type="text" placeholder=" " name="name">
+                              </div>
+                              <div class="form-field">
+                                  <label> Profile Info </label>
+                                  <div class="form-field">
+                                    <label> Switch Manufacturer </label>
+                                    <input type="text" placeholder=" " name="manufacturer">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Switch SKU </label>
+                                    <input type="text" placeholder=" " name="sku">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Switch Model </label>
+                                    <input type="text" placeholder=" " name="model">
+                                  </div>
+                                  <div class="form-field">
+                                    <label> Switch Generation </label>
+                                    <input type="text" placeholder=" " name="generation">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>  Bios Profile</label>
+                                    <input type="text" placeholder=" " name="bios_profile">
+                                  </div>
+                                  <div class="form-field">
+                                    <label>  BMC Profile </label>
+                                    <input type="text" placeholder=" " name="bmc_profile">
                                   </div>
                               </div>
                             </div>
@@ -1175,7 +1339,7 @@
                         <h4> Network-Interface Mapping </h4>
                         <hr>
                         <div class="devider-row">
-                            <div class="arr", name="interface_mapping_profiles">
+                            <div class="arr", name="link_nw_mapping_profiles">
                                 <div class="form-field">
                                     <label> Profile Name </label>
                                     <input type="text" placeholder=" " name="profile_name">
@@ -1186,11 +1350,11 @@
                                 <div class="arr" name="profile_data">
                                     <div class="form-field">
                                         <label> Interface Name </label>
-                                        <input type="text" placeholder=" " name="interface_name">
+                                        <input type="text" placeholder=" " name="link_name">
                                     </div>
                                     <div class="form-field">
                                         <label> Interface Type </label>
-                                        <input type="text" placeholder=" " name="interface_type">
+                                        <input type="text" placeholder=" " name="link_type">
                                     </div>
                                     <div class="form-field">
                                         <label> Use DHCP (Y/N) </label>
