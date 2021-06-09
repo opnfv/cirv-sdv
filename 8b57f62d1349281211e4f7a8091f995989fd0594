@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e298a55_739f713c",
+        "filename": "sdv/docker/sdvsecurity/nfvsec/os-checklist",
+        "patchSetId": 5
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-06-09T11:56:03Z",
+      "side": 1,
+      "message": "It seems the script has no such command-line argument defined...",
+      "range": {
+        "startLine": 783,
+        "startChar": 38,
+        "endLine": 783,
+        "endChar": 47
+      },
+      "revId": "8b57f62d1349281211e4f7a8091f995989fd0594",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
