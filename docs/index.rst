@@ -21,3 +21,5 @@ OPNFV CIRV-SDV
    state/development/index
    state/development/result_api
    state/development/settings
+   urls/userguide
+   security/userguide
