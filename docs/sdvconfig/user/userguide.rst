@@ -18,7 +18,7 @@ curl --header "Content-Type: application/json"   --request POST   --data '{"pdf_
 To run this on commandline, use the following command
 
 ```
-python extrapolation.py --pdf_fn="path/to/pdf_fn" --store-at="path/to/storage"
+python extrapolation.py --file="path/to/pdf_fn" --store_at="path/to/storage"
 ```
 
 The pdf_fn key expects absolute filepath to pdf or a raw github file url.

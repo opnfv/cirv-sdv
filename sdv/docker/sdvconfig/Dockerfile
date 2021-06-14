@@ -5,6 +5,10 @@ RUN mkdir sdvconfig
 # change the workdir to the newly created file
 WORKDIR /sdvconfig/
 
+# install git
+RUN apt update
+RUN apt install -y git
+
 # install from requirements.txt
 COPY requirements.txt /sdvconfig/requirements.txt
 RUN pip install -r requirements.txt
@@ -16,7 +20,7 @@ COPY mapping/ /sdvconfig/mapping/
 COPY validation/ /sdvconfig/validation/
 COPY server.py /sdvconfig/
 COPY cli_validation.py /sdvconfig/
-COPY testapi/ sdvconfig/testapi/
+COPY testapi/ /sdvconfig/testapi/
 COPY manifest /sdvconfig/manifest/
 
 # expose port for rest calls

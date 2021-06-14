@@ -1,1 +1,6 @@
 tornado
+requests
+pyyaml
+GitPython
+netaddr
+

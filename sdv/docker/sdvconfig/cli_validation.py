@@ -70,7 +70,7 @@ class Validate():
 
         # create a directory called /tmp
         try:
-            os.mkdir('/tmp')
+            os.makedirs('/tmp', exist_ok=True)
         except OSError:
             self.logger.exception("creation of directory failed")
             raise
@@ -87,7 +87,10 @@ class Validate():
 
             # clone the installer repo
             try:
-                Repo.clone_from(inst_dir, os.path.join('/tmp', 'inst'))
+                clone_dir = os.path.join('/tmp', 'inst')
+                if os.path.exists(clone_dir) and os.path.isdir(clone_dir):
+                    shutil.rmtree(clone_dir)
+                Repo.clone_from(inst_dir, clone_dir)
                 self.inst_dir = os.path.join('/tmp', 'inst')
                 self.downloaded = True
             except ConnectionError:
@@ -98,7 +101,10 @@ class Validate():
 
         # download the global file
         try:
-            Repo.clone_from(GLOBAL_DIR, os.path.join('/tmp', 'global'))
+            clone_dir = os.path.join('/tmp', 'global')
+            if os.path.exists(clone_dir) and os.path.isdir(clone_dir):
+                shutil.rmtree(clone_dir)
+            Repo.clone_from(GLOBAL_DIR, clone_dir)
             self.gsw = os.path.join('/tmp', 'global', 'global', 'software')
         except ConnectionError:
             self.logger.exception("failed to download the global git repo")
@@ -152,6 +158,7 @@ class Validate():
                 self.wrong,
                 self.total))
         self.result += result + string
+
 
         # iterate through the roles: have a class for each for each of the roles
         for _, value in enumerate(self.json["roles"]):
@@ -208,7 +215,7 @@ class Validate():
                     correct, wrong, total))
             self.result += result + string
 
-        self.testapi_result["timestamp"] = datetime.datetime.now()
+        self.testapi_result["timestamp"] = datetime.datetime.now().isoformat()
         self.testapi_result["correct"] = self.correct
         self.testapi_result["wrong"] = self.wrong
         self.testapi_result["total"] = self.total
@@ -246,4 +253,4 @@ if __name__ == "__main__":
     # Read arguments from the command line
     ARGS = PARSER.parse_args()
 
-    print(ARGS.inst_dir, ARGS.inst_type, ARGS.pdf, ARGS.sitename).validate()
+    Validate(ARGS.inst_dir, ARGS.inst_type, ARGS.pdf, ARGS.sitename).validate()

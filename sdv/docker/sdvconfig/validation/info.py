@@ -156,8 +156,7 @@ class InfoValidation():
             "data_plane_used",
             "ironic_deploy_interface",
             "external_storage_cluster",
-            "bl_str_connect_method",
-            "cpu_allocation_ratio"]
+            "bl_str_connect_method"]
 
         val = self.json[profile]
 
