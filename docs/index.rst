@@ -3,9 +3,12 @@
 .. (c) OPNFV, Spirent Communications, University of Delhi and others.
 
 .. _cirv-sdv:
+.. _cirv-sdv-installation:
+.. _cirv-sdv-configguide:
+.. _cirv-sdv-userguide:
 
 **************
-OPNFV CIRV-SDV
+Anuket CIRV-SDV
 **************
 .. toctree::
    :numbered:
