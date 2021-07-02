@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) OPNFV, Spirent Communicatios, University of Delhi and others.
 
-.. _cirvsdv-releasenotes:
+.. _cirv-sdv-releasenotes:
 
 ==================================================
 CIRV-SDV Release Notes
