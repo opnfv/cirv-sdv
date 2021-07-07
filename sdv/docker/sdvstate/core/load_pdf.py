@@ -18,6 +18,8 @@
 
 import json
 import yaml
+import requests
+import os
 
 from tools.conf import settings
 
@@ -25,9 +27,21 @@ def load_pdf():
     """
     Updates settings with PDF data
     """
-    filename = settings.getValue('pdf_file')
-    with open(filename) as handle:
-        data = handle.read()
+    path = settings.getValue('pdf_file')
+    data=""
+    if os.path.exists(path):
+        with open(path) as handle:
+            data = handle.read()
+    else:
+        if (path.find("github.com") != -1):
+            path = path.replace("github.com", "raw.githubusercontent.com")
+            path = path.replace("/blob", "")
+        try:
+            resp = requests.get(path)
+            if resp.status_code == requests.codes.ok:
+                data = resp.text
+        except:
+            raise Exception(f"Invalid path: {path}")
 
     try:
         pdf = json.loads(data)
@@ -35,6 +49,6 @@ def load_pdf():
         try:
             pdf = yaml.safe_load(data)
         except yaml.parser.ParserError:
-            raise Exception(f"Invalid PDF file: {filename}")
+            raise Exception(f"Invalid PDF file: {path}")
 
     settings.setValue('pdf_file', pdf)
