@@ -22,7 +22,7 @@ from datetime import datetime as dt
 
 from tools.conf import settings
 from tools.kube_utils import load_kube_api, delete_kube_curl_pod
-from validator.validator import Validator
+from internal.validator.validator import Validator
 
 from . import *
 
@@ -59,9 +59,27 @@ class AirshipValidator(Validator):
         """
 
         self._report['scenario'] = 'none'
-        self._report['case_name'] = 'ook_airship'
         self._report['start_date'] = dt.now().strftime('%Y-%m-%d %H:%M:%S')
 
+        test_suite = settings.getValue("test_suite")
+
+        if test_suite == "default":
+            self._report['case_name'] = 'ook_airship'
+            self.default_suite()
+
+        if test_suite == "k8s":
+            self._report['case_name'] = 'k8s_airship'
+            self.k8s_suite()
+
+        delete_kube_curl_pod()
+
+        self._report['stop_date'] = dt.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+    def default_suite(self):
+        """
+        Default Test Suite
+        """
 
         # PLATFORM CHECKS
         self.update_report(pod_health_check())
@@ -92,9 +110,10 @@ class AirshipValidator(Validator):
         self.update_report(nova_scheduler_filters_check())
         self.update_report(cpu_allocation_ratio_check())
 
-        delete_kube_curl_pod()
-
-        self._report['stop_date'] = dt.now().strftime('%Y-%m-%d %H:%M:%S')
+    def k8s_suite(self):
+        """
+        Kubernetes Platform Test Suite
+        """
 
 
     def update_report(self, result):

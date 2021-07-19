@@ -31,9 +31,9 @@ import requests
 
 from tools.conf import settings
 from tools.result_api import result_api, Local
-from core import load_pdf
-from core import display_report
-from validator import AirshipValidator
+from internal import load_pdf
+from internal import display_report
+from internal.validator import AirshipValidator
 
 
 VERBOSITY_LEVELS = {
@@ -146,6 +146,7 @@ def parse_arguments():
                        ' or a list of csv lists of conf-file parameters: key=val; e.g. '
                        '[\'KUBE_CONFIG=/path/to/kubeconfig/file\','
                        '\'PDF_FILE=path/to/pdf/file\']')
+    group.add_argument('--test-suite', help='set of checks to perform. values: default, k8s')
 
     group = parser.add_argument_group('override conf-file options')
     group.add_argument('--pdf-file', help='Path to PDF file')

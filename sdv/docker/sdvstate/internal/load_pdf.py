@@ -17,9 +17,9 @@
 """
 
 import json
-import yaml
-import requests
 import os
+import requests
+import yaml
 
 from tools.conf import settings
 
@@ -28,14 +28,16 @@ def load_pdf():
     Updates settings with PDF data
     """
     path = settings.getValue('pdf_file')
-    data=""
+    data = ""
     if os.path.exists(path):
         with open(path) as handle:
             data = handle.read()
     else:
-        if (path.find("github.com") != -1):
+        if path.find("github.com") != -1:
             path = path.replace("github.com", "raw.githubusercontent.com")
             path = path.replace("/blob", "")
+            if path[:8] != "https://":
+                path = "https://" + path
         try:
             resp = requests.get(path)
             if resp.status_code == requests.codes.ok:

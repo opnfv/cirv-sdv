@@ -2,18 +2,17 @@ FROM python:3.8-slim-buster
 
 MAINTAINER Parth Yadav <parthyadav3105@gmail.com>
 
-WORKDIR /state/
+WORKDIR /sdv/
 
-COPY requirements.txt /state/requirements.txt
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 RUN rm requirements.txt
 
-COPY core/ /state/core/
-COPY settings/ /state/settings/
-COPY tools/ /state/tools/
-COPY validator/ /state/validator/
-COPY state /state/
-COPY server /state/
+COPY internal/ internal/
+COPY settings/ settings/
+COPY tools/ tools/
+COPY state .
+COPY server .
 
 ENV RESULTS_PATH /tmp/
 ENV RESULTS_FILENAME results.json
