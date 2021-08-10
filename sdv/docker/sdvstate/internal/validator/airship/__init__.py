@@ -21,6 +21,10 @@ Package for Airship
 ### Pod Health Checks
 from .pod_health_check import pod_health_check
 
+### Pod probe Checks
+from .probe_check import readiness_probe_check
+from .probe_check import liveness_probe_check
+
 ### Ceph Health Checks
 from .ceph_check import ceph_health_check
 
