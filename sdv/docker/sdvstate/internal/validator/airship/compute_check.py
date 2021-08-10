@@ -19,10 +19,11 @@ Compute Related Checks
 import configparser
 import json
 import re
+import logging
 
 from tools.kube_utils import kube_exec, get_pod_with_labels
 from tools.conf import settings
-from .store_result import store_result
+from internal import store_result
 
 
 ###########
@@ -33,6 +34,7 @@ def isolated_cores_check():
     """
     isolated_cores_check
     """
+    logger = logging.getLogger(__name__)
     traced_value = trace_isolated_cores()
     required_value = required_isolated_cores()
 
@@ -49,7 +51,7 @@ def isolated_cores_check():
         result['criteria'] = 'fail'
 
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -58,6 +60,7 @@ def reserved_vnf_cores_check():
     """
     reserved_vnf_cores_check
     """
+    logger = logging.getLogger(__name__)
     traced_value = trace_reserved_vnf_cores()
     required_value = required_reserved_vnf_cores()
 
@@ -74,7 +77,7 @@ def reserved_vnf_cores_check():
         result['criteria'] = 'fail'
 
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -83,6 +86,7 @@ def vswitch_pmd_cores_check():
     """
     vswitch_pmd_cores_check
     """
+    logger = logging.getLogger(__name__)
     traced_value = trace_vswitch_pmd_cores()
     required_value = required_vswitch_pmd_cores()
 
@@ -99,7 +103,7 @@ def vswitch_pmd_cores_check():
         result['criteria'] = 'fail'
 
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -108,6 +112,7 @@ def vswitch_dpdk_lcores_check():
     """
     vswitch_dpdk_lcores_check
     """
+    logger = logging.getLogger(__name__)
     traced_value = trace_vswitch_dpdk_lcores()
     required_value = required_vswitch_dpdk_lcores()
 
@@ -124,7 +129,7 @@ def vswitch_dpdk_lcores_check():
         result['criteria'] = 'fail'
 
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -133,6 +138,7 @@ def os_reserved_cores_check():
     """
     os_reserved_cores_check
     """
+    logger = logging.getLogger(__name__)
     traced_value = trace_os_reserved_cores()
     required_value = required_os_reserved_cores()
 
@@ -149,7 +155,7 @@ def os_reserved_cores_check():
         result['criteria'] = 'fail'
 
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -158,6 +164,7 @@ def nova_scheduler_filters_check():
     """
     nova_scheduler_filters_check
     """
+    logger = logging.getLogger(__name__)
     traced_value = trace_nova_scheduler_filters()
     required_value = required_nova_scheduler_filters()
 
@@ -173,7 +180,7 @@ def nova_scheduler_filters_check():
     else:
         result['criteria'] = 'fail'
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -182,6 +189,7 @@ def cpu_allocation_ratio_check():
     """
     cpu_allocation_ratio_check
     """
+    logger = logging.getLogger(__name__)
     traced_value = trace_cpu_allocation_ratio()
     required_value = required_cpu_allocation_ratio()
 
@@ -197,7 +205,7 @@ def cpu_allocation_ratio_check():
     else:
         result['criteria'] = 'fail'
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 

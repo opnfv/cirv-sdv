@@ -17,9 +17,10 @@ Ceph Related Checks
 """
 
 import ast
+import logging
 
 from tools.kube_utils import get_pod_with_labels, kube_exec
-from .store_result import store_result
+from internal import store_result
 
 
 
@@ -28,6 +29,7 @@ def ceph_health_check():
     """
     Check health of Ceph
     """
+    logger = logging.getLogger(__name__)
     pod = get_pod_with_labels('application=ceph,component=mon')
 
     cmd = ['ceph', 'health', '-f', 'json']
@@ -47,5 +49,5 @@ def ceph_health_check():
         result['criteria'] = 'fail'
         result['details'] = response
 
-    store_result(result)
+    store_result(logger, result)
     return result

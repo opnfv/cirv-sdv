@@ -17,16 +17,18 @@ Monitoring & Logging Agents Related Checks
 """
 
 import ast
+import logging
 
 from tools.kube_utils import kube_curl
 from tools.result_api import rfile
-from .store_result import store_result
+from internal import store_result
 
 
 def prometheus_check():
     """
     Check health of Prometheus
     """
+    logger = logging.getLogger(__name__)
     username = "prometheus"
     password = "password123"
     service = "prom-metrics"
@@ -53,7 +55,7 @@ def prometheus_check():
               'details': {'health': health, 'readiness': readiness}
              }
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -62,6 +64,7 @@ def grafana_check():
     """
     Check health of Grafana
     """
+    logger = logging.getLogger(__name__)
     username = "grafana"
     password = "password123"
     service = "grafana-dashboard"
@@ -80,7 +83,7 @@ def grafana_check():
               'criteria':  state
              }
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -88,6 +91,7 @@ def prometheus_alert_manager_check():
     """
     Check health of Alert Manager
     """
+    logger = logging.getLogger(__name__)
     service = "alerts-engine"
     namespace = "osh-infra"
 
@@ -113,7 +117,7 @@ def prometheus_alert_manager_check():
              }
 
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -121,6 +125,7 @@ def elasticsearch_check():
     """
     Check health of Elasticsearch cluster
     """
+    logger = logging.getLogger(__name__)
     username = "elasticsearch"
     password = "password123"
     service = "elasticsearch"
@@ -142,7 +147,7 @@ def elasticsearch_check():
               'details': res
              }
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -150,6 +155,7 @@ def kibana_check():
     """
     Check health of Kibana
     """
+    logger = logging.getLogger(__name__)
     username = "elasticsearch"
     password = "password123"
     service = "kibana-dash"
@@ -171,7 +177,7 @@ def kibana_check():
               'details': rfile(str(res))
              }
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -179,6 +185,7 @@ def nagios_check():
     """
     Check health of Nagios
     """
+    logger = logging.getLogger(__name__)
     username = "nagios"
     password = "password123"
     service = "nagios-metrics"
@@ -197,7 +204,7 @@ def nagios_check():
               'criteria':  state
              }
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -205,6 +212,7 @@ def elasticsearch_exporter_check():
     """
     Check health of Elasticsearch Exporter
     """
+    logger = logging.getLogger(__name__)
     service = "elasticsearch-exporter"
     namespace = "osh-infra"
 
@@ -218,7 +226,7 @@ def elasticsearch_exporter_check():
               'criteria':  state
              }
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 
@@ -226,6 +234,7 @@ def fluentd_exporter_check():
     """
     Check health of Fluentd Exporter
     """
+    logger = logging.getLogger(__name__)
     service = "fluentd-exporter"
     namespace = "osh-infra"
 
@@ -239,5 +248,5 @@ def fluentd_exporter_check():
               'criteria':  state
              }
 
-    store_result(result)
+    store_result(logger, result)
     return result
