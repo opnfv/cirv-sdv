@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "135c1132_c166d59b",
+        "filename": "sdv/docker/sdvstate/internal/validator/airship/probe_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-08-10T16:26:00Z",
+      "side": 1,
+      "message": "Can u please define here what these functions does. Usually documentations gets generated from code. Or below in each function(which will be even more better). As current comments are ambiguous to what we intend.\n\nExample: This check verifies whether readiness probe is defined for each container running on Kubernetes undercloud.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "8575d0e583f3392b5ab2f3e9b34fb2493682c2fb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cd6759d_81d8667b",
+        "filename": "sdv/docker/sdvstate/internal/validator/airship/probe_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-08-10T16:26:00Z",
+      "side": 1,
+      "message": "How we will know which probe is of which container? We need to store that information as well.",
+      "range": {
+        "startLine": 55,
+        "startChar": 20,
+        "endLine": 55,
+        "endChar": 82
+      },
+      "revId": "8575d0e583f3392b5ab2f3e9b34fb2493682c2fb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c72ab22_3c8fcace",
+        "filename": "sdv/docker/sdvstate/internal/validator/airship/probe_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-08-10T16:26:00Z",
+      "side": 1,
+      "message": "same as above.",
+      "range": {
+        "startLine": 89,
+        "startChar": 20,
+        "endLine": 89,
+        "endChar": 1
+      },
+      "revId": "8575d0e583f3392b5ab2f3e9b34fb2493682c2fb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
