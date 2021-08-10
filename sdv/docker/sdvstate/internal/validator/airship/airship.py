@@ -83,6 +83,9 @@ class AirshipValidator(Validator):
 
         # PLATFORM CHECKS
         self.update_report(pod_health_check())
+        self.update_report(readiness_probe_check())
+        self.update_report(liveness_probe_check())
+        self.update_report(startup_probe_check())
 
         # STORAGE CHECKS
         self.update_report(ceph_health_check())
