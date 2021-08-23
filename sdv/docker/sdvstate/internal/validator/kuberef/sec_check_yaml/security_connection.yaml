@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-conn-demo
+spec:
+  containers:
+    - name: sidecar
+      image: parthinam/alpine_conn:latest
+      ports:
+        - containerPort: 8081

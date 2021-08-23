@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-host-path-volume-demo
+spec:
+  containers:
+    - name: security-host-path-volume-demo
+      image: k8s.gcr.io/pause
+  volumes:
+  - name: test-vol
+    hostpath:
+      path: home
+      type: DIrectory

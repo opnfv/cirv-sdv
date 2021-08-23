@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-capability-demo
+spec:
+  containers:
+  - name: security-capability-demo
+    image: alpine:3.2
+    command:
+      - /bin/sh
+      - "-c"
+      - "sleep 60m"
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN", "NET_RAW"]
