@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-host-network-demo
+spec:
+  hostNetwork: true
+  containers:
+  - name: security-host-network-demo
+    image: alpine:3.2
+    command: 
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+  restartPolicy: Always

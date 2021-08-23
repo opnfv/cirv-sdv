@@ -461,7 +461,16 @@
         "key": "",
         "value": ""
       }
-    ]
+    ],
+    "cpu_manager":{
+      "policy_name":"",
+      "reconcile_period":"",
+      "full_pcpus":""
+  },
+  "topology_manager":{
+      "scope":"",
+      "policy_name":""
+  }
   },
   "undercloud_ooo": {
     "host_name": "",

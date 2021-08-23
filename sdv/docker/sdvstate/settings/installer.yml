@@ -27,3 +27,17 @@ airship_namespace_list:
   - osh-infra
   - tenant-ceph
   - openstack
+
+
+
+
+
+#####################
+## Kuberef
+######################
+
+# Default Kuberef namespace list
+# list all kubernetes namespace that have Kuberef components
+kuberef_namespace_list:
+  - monitoring
+  - kube-system

@@ -45,5 +45,3 @@ from .compute_check import vswitch_dpdk_lcores_check
 from .compute_check import os_reserved_cores_check
 from .compute_check import nova_scheduler_filters_check
 from .compute_check import cpu_allocation_ratio_check
-
-from .store_result import store_result

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-host-path-volume-demo
+spec:
+  containers:
+   - name: security-host-path-volume-demo
+     image: alpine:3.2
+     command:
+      - /bin/sh
+      - "-c"
+      - "sleep 60m"
+     volumeMounts:
+      - mountPath: /test-pd
+        name: test-volume
+  volumes:
+  - name: test-volume
+    hostPath:
+      path: home
+      type: Directory
+
