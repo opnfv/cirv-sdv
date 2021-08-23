@@ -34,6 +34,7 @@ from tools.result_api import result_api, Local
 from internal import load_pdf
 from internal import display_report
 from internal.validator import AirshipValidator
+from internal.validator import KuberefValidator
 
 
 VERBOSITY_LEVELS = {
@@ -233,6 +234,10 @@ def main():
         airship = AirshipValidator()
         airship.validate()
         report = airship.get_report()
+    if installer == 'kuberef':
+        kuberef = KuberefValidator()
+        kuberef.validate()
+        report = kuberef.get_report()
 
 
     # Displaying Report
