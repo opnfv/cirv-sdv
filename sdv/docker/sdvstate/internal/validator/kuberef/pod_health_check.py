@@ -17,6 +17,8 @@
 Pod Health Checks
 """
 
+
+
 import logging
 
 from internal import checks
@@ -25,14 +27,13 @@ from tools.kube_utils import kube_api
 from tools.conf import settings
 
 
-
 def pod_health_check():
     """
     Check health of all pods and get logs of failed pods
     """
     logger = logging.getLogger(__name__)
     api = kube_api()
-    namespace_list = settings.getValue('airship_namespace_list')
+    namespace_list = settings.getValue('kuberef_namespace_list')
 
     result = checks.pod_health_check(logger, api, namespace_list)
 

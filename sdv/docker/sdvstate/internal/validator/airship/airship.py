@@ -23,6 +23,7 @@ from datetime import datetime as dt
 from tools.conf import settings
 from tools.kube_utils import load_kube_api, delete_kube_curl_pod
 from internal.validator.validator import Validator
+from internal import store_result
 
 from . import *
 
@@ -67,10 +68,6 @@ class AirshipValidator(Validator):
             self._report['case_name'] = 'ook_airship'
             self.default_suite()
 
-        if test_suite == "k8s":
-            self._report['case_name'] = 'k8s_airship'
-            self.k8s_suite()
-
         delete_kube_curl_pod()
 
         self._report['stop_date'] = dt.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -113,39 +110,11 @@ class AirshipValidator(Validator):
         self.update_report(nova_scheduler_filters_check())
         self.update_report(cpu_allocation_ratio_check())
 
-    def k8s_suite(self):
-        """
-        Kubernetes Platform Test Suite
-        """
-
-
-    def update_report(self, result):
-        """
-        Updates report with new results
-        """
-        case_name = result['case_name']
-        criteria = result['criteria']
-
-        self._report['details']['total_checks'] += 1
-        if criteria == 'pass':
-            self._report['details']['pass'].append(case_name)
-        elif criteria == 'fail':
-            self._report['details']['fail'].append(case_name)
-            self._report['criteria'] = 'fail'
-
-
 
     def get_report(self):
         """
         Return final report as dict
         """
-        self._report["project_name"] = settings.getValue("project_name")
-        self._report["version"] = settings.getValue("project_version")
-        self._report["build_tag"] = "none"
-
-        pdf = settings.getValue('pdf_file')
-        self._report["pod_name"] = pdf['management_info']['resource_pool_name']
-
-        store_result(self._report)
-
+        self._report = super(AirshipValidator, self).get_report()
+        store_result(self._logger, self._report)
         return self._report

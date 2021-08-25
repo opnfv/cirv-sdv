@@ -16,19 +16,19 @@
 Network Related Checks
 """
 
-
+import logging
 import configparser
 
+from internal import store_result
 from tools.conf import settings
 from tools.kube_utils import kube_exec, get_pod_with_labels
-
-from .store_result import store_result
 
 
 def physical_network_check():
     """
     physical_network_check
     """
+    logger = logging.getLogger(__name__)
     ml2_config = neutron_ml2_config()
 
     physical_networks = settings.getValue('pdf_file')['physical_networks']
@@ -73,7 +73,7 @@ def physical_network_check():
         if res['criteria'] == 'fail':
             result['criteria'] = 'fail'
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 

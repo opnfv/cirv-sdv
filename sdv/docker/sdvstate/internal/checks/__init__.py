@@ -1,3 +1,4 @@
+
 # Copyright 2020 University Of Delhi.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +15,16 @@
 
 
 """
-Pod Health Checks
+Package for platform agnosit check functions
+
+This package holds common validation logic for
+various checks implemented in sdv framework. The functions
+defined in this package are agnostic to target cloud plaform.
+
+The functions are also agnostic to cloud platform specific settings
+variables.
 """
 
-import logging
 
-from internal import checks
-from internal import store_result
-from tools.kube_utils import kube_api
-from tools.conf import settings
-
-
-
-def pod_health_check():
-    """
-    Check health of all pods and get logs of failed pods
-    """
-    logger = logging.getLogger(__name__)
-    api = kube_api()
-    namespace_list = settings.getValue('airship_namespace_list')
-
-    result = checks.pod_health_check(logger, api, namespace_list)
-
-    store_result(logger, result)
-    return result
+### Pod Health Checks
+from .pod_health_check import pod_health_check
