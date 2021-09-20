@@ -1,0 +1,29 @@
+{
+  "_comment_head": "Maintainer - Sridhar Rao <sridhar.rao@spirent.com>",
+  "_comment_ex1": "C:City, A:Area, R:Room, N:Unique Number",
+  "_comment_ex2": "All are 2 characters. City-Capitals, Area-Small",
+  "extrapolation_info": {
+    "ilo_password": "CID-AID-RID-NID",
+    "ilo_user": "owner",
+    "ip_increment": ""
+  },
+  "_comment_servers1": "This will be auto generated",
+  "_comment_servers2": "This describes the entire cloud.",
+  "servers": [
+    {
+      "role_name": "",
+      "device_name": "",
+      "az_name": " ",
+      "ha_name": " ",
+      "rack": "",
+      "ilo_info": {
+        "ip": "",
+        "user": "",
+        "password": ""
+      },
+      "service_info": {
+        "service_ip": ""
+      }
+    }
+  ]
+}

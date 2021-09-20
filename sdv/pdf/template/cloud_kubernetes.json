@@ -1,0 +1,78 @@
+{
+  "_comment_head": "Maintainer - Sridhar Rao <sridhar.rao@spirent.com>",
+  "vim_info": {
+    "vim_name": " ",
+    "vim_id": " ",
+    "vendor": " ",
+    "version": " ",
+    "installer": "",
+    "deployment_style": "",
+    "container_orchestrator": "",
+    "storage_type": ""
+  },
+  "vim_functional": {
+    "kubevirt_support":"",
+    "ingress_approaches": "",
+    "egress_approaches": "",
+    "prev_mod_containers": "",
+    "hostdir_as_vols": "",
+    "host_ns_use": "",
+    "net_raw_admin_cap": "",
+    "_comment_cpu_manager": "Type could be none or static",
+    "cpu_manager_policy": {
+      "type": "",
+      "kube_reserved": "",
+      "system_reserved": "",
+      "reserved_cpus": "",
+      "full_pcpus_only": ""
+    },
+    "_comment_topo_manager": "Type could be none, best-effort, restricted single-numa-node",
+    "topo_manager_policy": {
+      "scope": "",
+      "type": ""
+    },
+    "use_of_service_mesh": "",
+    "k8s_api_access_from_pod": "",
+    "liveliness_probe": "",
+    "readiness_probe": "",
+    "cnis_supported": "",
+    "device_plugins_supported":"",
+    "scheduler_filters": "",
+    "cpu_allocation_ratio": "",
+    "legacy_helm_support":""
+  },
+  "jumphost_info": {
+    "ip": "",
+    "name": ""
+  },
+  "_comment_sw1": "Software Begins",
+  "kubernetes_sw_profiles": [
+    {
+      "profile_name": "",
+      "sw_list": [
+        {
+          "name": "",
+          "version": ""
+        }
+      ]
+    }
+  ],
+  "infra_sw_profiles": [
+    {
+      "profile_name": "",
+      "sw_list": [
+        {
+          "name": "",
+          "version": ""
+        }
+      ]
+    }
+  ],
+  "software_set": [
+    {
+      "set_name": "",
+      "infrasw_profile": "",
+      "kubernetes_profile": ""
+    }
+  ]
+}
