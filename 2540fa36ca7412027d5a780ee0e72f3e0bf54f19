@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5525417_ac1a63ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "This is a slightly big patch. Can we please add little more details.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b05fdf70_29762aeb",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/helm_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Can we please keep the function name same as check name?",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1843da7_c7303e0f",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/helm_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Can you please change category to \u0027platform\u0027?",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06a46534_f92fbb3a",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/helm_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Can you please use kube_api functions instead? So, that we do not need put dependency on users to install kubectl on the testing machine. We are using kubernetes api in rest of the framework.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "407dedca_07526572",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/helm_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "What if this is in different namespace? Usually people use kube-system namespace for Tiller. Bu they can use different namespace. There can be many tiller installed in same cluster.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b1cbd7_084ad7cd",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/kubevirt_health_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Can you please change category to \u0027platform\u0027?",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d68da5c_5fea997c",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/monitoring_agent_checker.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Can you please look at existing prometheus_check() implementation in Airship? Prometheus has endpoints /-/healthy and /-/ready to health check it.\n\nAlso, in Kuberef. I checked the prometheus pods and grafana also is running in it. Can we health check it also?\n\nAlso, collectd is also running. It collects metrics from node. We can have a check for it as well.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0832dddc_37a1b03f",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/monitoring_agent_checker.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Please remove this",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a45e4360_141282d0",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/node_exporter_checker.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Pods may not be healthy.\n\nAlso in this case, we have node_exporter running as daemonset. So, if even one pod is failing then it means we have an issue and the check should fail.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3d69aa7_2c66e38a",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/plugin_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Where is multi_interface_pod_enabled() check.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dd904ef_4d210bbd",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/plugin_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "We may not have ssh access to the target node. Also, there can be multiple nodes in the cluster. A better approach can be to run daemonset with hostpath mount and run commands in all these pods to do checks.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73054af5_7ecc54b3",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/plugin_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "why? please elaborate",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e4e643c_62c31243",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/policy_checks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "This is fine as the loop is small.\nSuggestion: But, \"for node in nodes:\" is more readable.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "777d729e_9b2fd0dc",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/sec_check_yaml/security_capability.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Can we create this with code instead? Like: https://github.com/opnfv/cirv-sdv/blob/43c4b47a9e0d64ffdaa77a743f0be388f49eb558/sdv/docker/sdvstate/tools/kube_utils.py#L100-L120\n\nSame for remaining 4 files.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05fd1e7d_b5706ddc",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/security_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "I think we should break and rename this to pod_net_admin_capability_check pod_net_raw_capability_check. Because this what we are doing.",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba0f3c07_6fccaf63",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/security_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "User can use any container runtime and this value will change. Either make pod definition to drop all other capabilities or else parse the actual values here itself from the response and then decode it and validate(It will be great if you can go with this second approach).",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "988ca9fe_ca7b8e5c",
+        "filename": "sdv/docker/sdvstate/internal/validator/kuberef/security_check.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7559
+      },
+      "writtenOn": "2021-09-23T07:36:22Z",
+      "side": 1,
+      "message": "Again, instead of static values, just read from output and store it",
+      "revId": "2540fa36ca7412027d5a780ee0e72f3e0bf54f19",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": true
+    }
+  ]
+}
