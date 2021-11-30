@@ -22,6 +22,14 @@ from datetime import datetime as dt
 
 from internal import store_result
 from internal.validator.validator import Validator
+from internal.validator.kuberef.policy_checks import topology_manager_policy_check, cpu_manager_policy_check
+from internal.validator.kuberef.security_check import capability_check, privilege_check, host_network_check
+from internal.validator.kuberef.security_check import host_path_vol_check, k8s_api_conn_check
+from internal.validator.kuberef.monitoring_agent_checker import collectd_check, monitoring_agent_check
+from internal.validator.kuberef.node_exporter_checker import node_exporter_check
+from internal.validator.kuberef.plugin_check import cni_plugin_check, multi_interface_cni_check
+from internal.validator.kuberef.helm_check import helmv2_disabled_check
+from internal.validator.kuberef.kubevirt_health_check import kubevirt_check
 from tools.conf import settings
 from tools.kube_utils import load_kube_api
 
@@ -82,8 +90,29 @@ class KuberefValidator(Validator):
 
         # PLATFORM CHECKS
         self.update_report(pod_health_check())
+        self.update_report(kubevirt_check())
+        self.update_report(helmv2_disabled_check())
+        self.update_report(capability_check())
+        self.update_report(privilege_check())
+        self.update_report(host_network_check())
+        self.update_report(host_path_vol_check())
+        self.update_report(k8s_api_conn_check())
+
+
+        # MONITORING & LOGGING AGENT CHECKS
+        self.update_report(monitoring_agent_check())
+        self.update_report(collectd_check())
+        self.update_report(node_exporter_check())
 
         # COMPUTE CHECKS
+        self.update_report(cpu_manager_policy_check())
+        self.update_report(topology_manager_policy_check())
+
+
+        # NETWORK CHECKS
+        self.update_report(cni_plugin_check())
+        self.update_report(multi_interface_cni_check())
+
 
 
     def get_report(self):

@@ -2,11 +2,12 @@
 SDVState User Guide
 ====================
 
-Currently, SDVState supports validation of Airship 1.7. Before running checks you need two files:
- - kubeconfig file which gives access to clusterAPI of Airship cluster.
- - PDF(Pod Descriptor File) of the current Airship deployment.
+Currently, SDVState supports validation of Airship 1.7 and Kuberef, a reference implementation according to the CNTT RA-2. Before running checks you need two files:
+ - kubeconfig file which gives access to clusterAPI of the cluster.
+ - PDF(Pod Descriptor File) of the current the deployment.
 
-Create a config file of SDVState using the above files as values. Look at example conf-file at sdv/docker/sdvstate/example/state.yml
+To choose between Airship and Kuberef, you need to specify the installer using "installer_used" field in the PDF of your deployment, it can either be "airship" or "kuberef".
+You also need to create a config file of SDVState using the above files as values. Look at example conf-file at sdv/docker/sdvstate/settings/state.yml
 
 To run checks use command:
 
