@@ -1,0 +1,650 @@
+{
+    "management_info": {
+      "owner": "",
+      "area_name": "",
+      "area_center_name": "",
+      "room_id": "",
+      "city": "",
+      "timezone": "",
+      "resource_pool_id": "",
+      "resource_pool_name": "",
+      "resource_pool_type": ""
+    },
+    "user_info": [
+      {
+        "_comment_users1": " Access Type: PIM, VIM, etc.",
+        "_comment_users2": " Endpoint: Server, Switch, VIM, etc.",
+        "access_type": "",
+        "endpoint": "",
+        "auth_type": "",
+        "username": "",
+        "password": "",
+        "pub_key": "",
+        "passphrase": "",
+        "tls_ca_cert": "",
+        "tls_cert": "",
+        "tls_key": "",
+        "email": ""
+      }
+    ],
+    "ntp_info": {
+      "primary_ip": "",
+      "primary_zone": "",
+      "secondary_ip": "",
+      "secondary_zone": ""
+    },
+    "syslog_info": {
+      "server_ip": "",
+      "transport": ""
+    },
+    "dns_info": [
+      {
+        "name": "",
+        "domain": "",
+        "servers": [
+          {
+            "ip": ""
+          }
+        ]
+      }
+    ],
+    "proxy_info": {
+      "address": "",
+      "port": "",
+      "user": "",
+      "password": ""
+    },
+    "ldap_info": {
+      "base_url": "",
+      "url": "",
+      "auth_path": "",
+      "common_name": "",
+      "subdomain": "",
+      "domain": ""
+    },
+    "vim_info": {
+      "vim_name": " ",
+      "vim_id": " ",
+      "vendor": " ",
+      "version": " ",
+      "installer": "",
+      "deployment_style": "",
+      "container_orchestrator": "",
+      "storage_type": ""
+    },
+    "_comment_deployment": " Type can be OOK or NOOK, block storage method is rbd or iscsi",
+    "deployment_info": {
+      "high_availability": "",
+      "introspection": "",
+      "deployment_type": "",
+      "installer_used": "KUBEREF",
+      "workload_vnf": "",
+      "workload_cnf": "",
+      "sdn_controller": "",
+      "sdn_controller_version": "",
+      "sdn_controller_nbapps": "",
+      "vnfm": "",
+      "vnfm_version": "",
+      "data_plane_used": "",
+      "ironic_deploy_interface": "",
+      "ip_type": "",
+      "external_storage_cluster": "",
+      "blk_str_connect_method": ""
+    },
+    "vim_functional": {
+      "kubevirt_support":"",
+      "ingress_approaches": "",
+      "egress_approaches": "",
+      "prev_mod_containers": "",
+      "hostdir_as_vols": "",
+      "host_ns_use": "",
+      "net_raw_admin_cap": "",
+      "_comment_cpu_manager": "Type could be none or static",
+      "cpu_manager_policy": {
+        "type": "",
+        "kube_reserved": "",
+        "system_reserved": "",
+        "reserved_cpus": "",
+        "full_pcpus_only": "",
+        "reconcile_period": ""
+      },
+      "_comment_topo_manager": "Type could be none, best-effort, restricted single-numa-node",
+      "topo_manager_policy": {
+        "scope": "",
+        "type": ""
+      },
+      "use_of_service_mesh": "",
+      "k8s_api_access_from_pod": "",
+      "liveliness_probe": "",
+      "readiness_probe": "",
+      "cnis_supported": [
+        "bandwidth",
+        "dhcp",
+        "flannel",
+        "host-local",
+        "host-device",
+        "ipvlan",
+        "loopback",
+        "multus",
+        "ptp",
+        "sriov",
+        "tuning",
+        "vrf",
+        "bridge",
+        "firewall",
+        "macvlan",
+        "portmap",
+        "sbr",
+        "static",
+        "vlan"
+       ],
+      "device_plugins_supported":"",
+      "scheduler_filters": "",
+      "cpu_allocation_ratio": "",
+      "legacy_helm_support":"YES"
+    },
+    "jumphost_info": {
+      "ip": "",
+      "name": ""
+    },
+    "rack_info": [
+      {
+        "rack_id": "",
+        "rack_details": {
+          "rack_name": "",
+          "rack_description": "",
+          "rack_az": "",
+          "rack_room": "",
+          "rack_raw": "",
+          "rack_number": ""
+        }
+      }
+    ],
+    "storage_cluster_info": {
+      "name": "",
+      "cluster_type": "",
+      "vendor": "",
+      "version": "",
+      "cluster_id": "",
+      "auth_type": "",
+      "username": "",
+      "password": "",
+      "certificate_location": "",
+      "client_key": "",
+      "mon_host_ips": [
+        {
+          "ip": ""
+        }
+      ],
+      "public_cidr": "",
+      "cluster_cidr": "",
+      "nodes": [
+        {
+          "name": "",
+          "id": ""
+        }
+      ],
+      "pools": [
+        {
+          "key": "",
+          "value": ""
+        }
+      ],
+      "max_quota_capacity": "",
+      "az_name": "",
+      "backup_policy": "",
+      "networks": [
+        {
+          "name": ""
+        }
+      ]
+    },
+    "_comment_info2": "End of Information - Except Software-INFO",
+    "bios_profiles": [
+      {
+        "profile_name": "",
+        "bios_info": {
+          "bios_version": "",
+          "bios_mode": "",
+          "bootstrap_proto": "",
+          "hyperthreading_enabled": "",
+          "_comment": "C4_C6_MLC-STR_MLC-SPA_DCU_DCA_RAS_TURBO",
+          "bios_setting": ""
+        }
+      }
+    ],
+    "bmc_profiles": [
+      {
+        "profile_name": "",
+        "bmc_info": {
+          "version": ""
+        }
+      }
+    ],
+    "processor_profiles": [
+      {
+        "profile_name": "",
+        "profile_info": {
+          "manufacturer": "",
+          "generation": "",
+          "speed": "",
+          "model": "",
+          "architecture": "",
+          "cpu_cflags": "",
+          "cache_size": "",
+          "numas": [
+            {
+              "node_id": "",
+              "cpu_set": ""
+            }
+          ]
+        }
+      }
+    ],
+    "disks_profiles": [
+      {
+        "profile_name": "",
+        "profile_info": [
+          {
+            "alias": "",
+            "vendor": "",
+            "address": "",
+            "size": "",
+            "model": "",
+            "dev_type": "",
+            "rotation": "",
+            "bus": "",
+            "logical_name": ""
+          }
+        ]
+      }
+    ],
+    "nic_profiles": [
+      {
+        "profile_name": "",
+        "profile_info": [
+          {
+            "alias": "",
+            "name": "",
+            "address": "",
+            "dev_type": "",
+            "bus": "",
+            "sriov_capable": "",
+            "numa_id": ""
+          }
+        ]
+      }
+    ],
+    "hardware_profiles": [
+      {
+        "profile_name": "",
+        "profile_id": "",
+        "profile_info": {
+          "manufacturer": "",
+          "sku": "",
+          "model": "",
+          "generation": "",
+          "bios_profile": "",
+          "bmc_profile": "",
+          "processor_profile": "",
+          "memory": "",
+          "disks_profile": "",
+          "nics_profile": ""
+        }
+      }
+    ],
+    "switch_profiles": [
+      {
+        "profile_name": "",
+        "profile_id": "",
+        "profile_info": {
+          "manufacturer": "",
+          "sku": "",
+          "model": "",
+          "generation": "",
+          "bios_profile": "",
+          "bmc_profile": "",
+          "nics_profile": ""
+        }
+      }
+    ],
+    "_comment_hw": " Hardware Information is complete",
+    "storage_profile": [
+      {
+        "name": "",
+        "bootdrive": "",
+        "bd_partitions": [
+          {
+            "name": "",
+            "size": "",
+            "bootable": "",
+            "filesystem": {
+              "mountpoint": "",
+              "fstype": "",
+              "mount_options": ""
+            }
+          }
+        ],
+        "data_devices": [
+          {
+            "name": "",
+            "partitions": [
+              {
+                "name": "ceph",
+                "size": "available",
+                "filesystem": {
+                  "mountpoint": "/var/lib/ceph",
+                  "fstype": "ext4",
+                  "mount_options": "defaults"
+                }
+              }
+            ]
+          }
+        ],
+        "journal_devices": [
+          {
+            "name": ""
+          }
+        ]
+      }
+    ],
+    "_comment_nw1": "Network Info, Please include IPMI & Physnets info too",
+    "networks": [
+      {
+        "name": "",
+        "vips": [
+          {
+            "name": "",
+            "ip": ""
+          }
+        ],
+        "tunnel_type": "",
+        "tunnel_id": "",
+        "tunnel_id_range": "",
+        "mtu": "",
+        "routedomain": "",
+        "cidr": "",
+        "dns": "",
+        "routes": [
+          {
+            "subnet": "",
+            "gateway": "",
+            "metric": "",
+            "routedomain": ""
+          }
+        ],
+        "allocation_pools": [
+          {
+            "type": "",
+            "start": "",
+            "end": ""
+          }
+        ],
+        "v6_cidr": "",
+        "v6_allocation_pools": [
+          {
+            "type": "",
+            "start": "",
+            "end": ""
+          }
+        ]
+      }
+    ],
+    "_comment_nw_2": "These are specific to Infrastructure manager",
+    "physical_networks": [
+      {
+        "name": "external",
+        "cidr": "",
+        "type": "flat"
+      }
+    ],
+    "_comment_nw3": " type: trunk (airship), bond, interface, bridge",
+    "network_link": [
+      {
+        "name": "",
+        "type": "",
+        "bonding_mode": "",
+        "mtu": "",
+        "linkspeed": "auto",
+        "trunking_mode": "",
+        "trunking_default_nw": "",
+        "metadata": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ],
+        "members": [
+          {
+            "name": "",
+            "type": ""
+          }
+        ],
+        "vid": "",
+        "vf_count": ""
+      }
+    ],
+    "_comment_nw4": "The link_name could be i/f, bond, bridges",
+    "_comment_nw5": "These profiles are mapped to roles",
+    "link_nw_mapping_profiles": [
+      {
+        "profile_name": "",
+        "profile_data": [
+          {
+            "link_name": "",
+            "link_type": "",
+            "networks": [
+              {
+                "name": ""
+              }
+            ],
+            "use_dhcp": ""
+          }
+        ]
+      }
+    ],
+    "platform_profiles": [
+      {
+        "profile_name": "",
+        "os": "",
+        "rt_kvm": "",
+        "kernel_version": "",
+        "kernel_parameters": "",
+        "isolated_cpus": "",
+        "vnf_cores": "",
+        "os_reserved_cores": " ",
+        "hugepage_count": "",
+        "hugepages": [
+          {
+            "hugepage_count": "",
+            "hugepage_size": ""
+          }
+        ],
+        "iommu": "",
+        "vswitch_daemon_cores": " ",
+        "vswitch_type": "",
+        "vswitch_uio_driver": "",
+        "vswitch_mem_channels": "",
+        "vswitch_socket_memory": "",
+        "vswitch_pmd_cores": "",
+        "vswitch_dpdk_lcores": "",
+        "vswitch_dpdk_rxqs": "",
+        "vswitch_options": ""
+      }
+    ],
+    "undercloud_ook": {
+      "dns": {
+        "cluster_domain": "",
+        "service_ip": ""
+      },
+      "etcd": {
+        "service_ip": "",
+        "container_port": "",
+        "haproxy_port": ""
+      },
+      "masters": [
+        {
+          "hostname": ""
+        }
+      ],
+      "networking": {
+        "type": "",
+        "interface_used": "",
+        "api_service_ip": "",
+        "etcd_service_ip": "",
+        "pod_cidr": "",
+        "service_cidr": "",
+        "apiserver_port": "",
+        "haproxy_port": "",
+        "servicenode_port_range": ""
+      },
+      "kvps": [
+        {
+          "key": "",
+          "value": ""
+        }
+      ]
+
+    },
+    "undercloud_ooo": {
+      "host_name": "",
+      "local_ip": "",
+      "public_host": "",
+      "admin_host": "",
+      "local_interface": "",
+      "inspection_interface": "",
+      "networking": {
+        "ctrlplane_cidr": "",
+        "ctrlplane_ip_start": "",
+        "ctrlplane_ip_end": "",
+        "inspection_range": "",
+        "gateway": ""
+      }
+    },
+    "switch_topology": [
+      {
+        "top_id": "",
+        "top_name": "",
+        "vertices": [
+          {
+            "vertex_id": "",
+            "node1_id": "",
+            "node1_port": "",
+            "node2_id": "",
+            "node2_port": "",
+            "vertex_type": ""
+          }
+        ]
+      }
+    ],
+    "_comment_sw1": "Software Begins",
+    "undercloud_sw_profiles": [
+      {
+        "profile_name": "",
+        "sw_list": [
+          {
+            "name": "",
+            "version": ""
+          }
+        ]
+      }
+    ],
+    "openstack_sw_profiles": [
+      {
+        "profile_name": "",
+        "sw_list": [
+          {
+            "name": "",
+            "version": ""
+          }
+        ]
+      }
+    ],
+    "infra_sw_profiles": [
+      {
+        "profile_name": "",
+        "sw_list": [
+          {
+            "name": "",
+            "version": ""
+          }
+        ]
+      }
+    ],
+    "software_set": [
+      {
+        "set_name": "",
+        "undercloud_profile": "",
+        "infrasw_profile": "",
+        "openstack_profile": ""
+      }
+    ],
+    "_comment_role1": "User has to configure this - What profile to use for a role",
+    "_comment_role2": "Based on this server_info will be autogenerated for all servers",
+    "roles": [
+      {
+        "name": "",
+        "hostname_prefix": "",
+        "hostname_suffix": "",
+        "hostname_number_start": "",
+        "count": "",
+        "hardware_profile": "",
+        "interface_mapping": "",
+        "storage_mapping": "",
+        "platform_profile": "",
+        "sw_set_name": "",
+        "metadata": [
+          {
+            "on_count_condition": "",
+            "count": "",
+            "key": "",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "_comment_ex1": "C:City, A:Area, R:Room, N:Unique Number",
+    "_comment_ex2": "All are 2 characters. City-Capitals, Area-Small",
+    "extrapolation_info": {
+      "ilo_password": "CID-AID-RID-NID",
+      "ilo_user": "owner",
+      "ip_increment": ""
+    },
+    "host_aggregates": [
+      {
+        "aggregate_name": "",
+        "properties": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ],
+        "servers": [
+          {
+            "identifier": "",
+            "ilo_ip": "",
+            "hostname": ""
+          }
+        ]
+      }
+    ],
+    "_comment_servers1": "This will be auto generated",
+    "_comment_servers2": "This describes the entire cloud.",
+    "servers": [
+      {
+        "role_name": "",
+        "device_name": "",
+        "az_name": " ",
+        "ha_name": " ",
+        "rack": "",
+        "ilo_info": {
+          "ip": "",
+          "user": "",
+          "password": ""
+        },
+        "service_info": {
+          "service_ip": ""
+        }
+      }
+    ]
+  }
