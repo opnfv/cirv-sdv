@@ -1,0 +1,20 @@
+# This is a comment
+
+# values are stored in key:value format
+## keys are case-insensitive
+## values can be int, float, string, dict, list, bool
+
+
+## Path to PDF file
+PDF_FILE: PDF_FILE.json
+
+#############
+# Airship arguments
+#############
+
+# Path to kube-config file
+KUBE_CONFIG : config
+
+
+MASTER_ROLE_NAME : masters
+WORKER_ROLE_NAME : workers
