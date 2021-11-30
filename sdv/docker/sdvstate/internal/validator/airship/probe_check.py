@@ -19,11 +19,11 @@ Probe Checks
 2. Liveness
 3. Startup
 """
-
+import logging
 from tools.kube_utils import kube_api
 from tools.conf import settings
 
-from .store_result import store_result
+from store_result import store_result
 
 
 def readiness_probe_check():
@@ -31,6 +31,7 @@ def readiness_probe_check():
     Checks whether the readiness probe is configured for all overcloud
     components deployed as pods on undercloud Kubernetes.
     """
+    logger = logging.getLogger(__name__)
     api = kube_api()
     namespace_list = settings.getValue('airship_namespace_list')
 
@@ -61,7 +62,7 @@ def readiness_probe_check():
                 pod_stats['containers'].append(container_stats)
             result['details'].append(pod_stats)
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 def liveness_probe_check():
@@ -69,6 +70,7 @@ def liveness_probe_check():
     Checks whether the liveness probe is configured for all overcloud
     components deployed as pods on undercloud Kubernetes.
     """
+    logger = logging.getLogger(__name__)
     api = kube_api()
     namespace_list = settings.getValue('airship_namespace_list')
 
@@ -99,7 +101,7 @@ def liveness_probe_check():
                 pod_stats['containers'].append(container_stats)
             result['details'].append(pod_stats)
 
-    store_result(result)
+    store_result(logger, result)
     return result
 
 def startup_probe_check():
@@ -107,6 +109,7 @@ def startup_probe_check():
     Checks whether the startup probe is configured for all overcloud
     components deployed as pods on undercloud Kubernetes.
     """
+    logger = logging.getLogger(__name__)
     api = kube_api()
     namespace_list = settings.getValue('airship_namespace_list')
 
@@ -137,5 +140,5 @@ def startup_probe_check():
                 pod_stats['containers'].append(container_stats)
             result['details'].append(pod_stats)
 
-    store_result(result)
+    store_result(logger, result)
     return result
