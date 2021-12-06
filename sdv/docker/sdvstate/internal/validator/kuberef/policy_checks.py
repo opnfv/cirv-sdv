@@ -19,7 +19,7 @@ def cpu_manager_policy_check():
     node_list = api.list_node()
     nodes = []
 
-    for node in node_list:
+    for node in node_list.items:
         nodes.append(node.metadata.name)
 
     result = {'category':  'compute',
@@ -78,7 +78,7 @@ def topology_manager_policy_check():
     node_list = api.list_node()
     nodes = []
 
-    for node in node_list:
+    for node in node_list.items:
         nodes.append(node.metadata.name)
 
 
@@ -102,7 +102,7 @@ def topology_manager_policy_check():
 
         flag = True
 
-        topology_manager = settings.getValue('pdf_file')['undercloud_ook']['topo_manager_policy']
+        topology_manager = settings.getValue('pdf_file')['vim_functional']['topo_manager_policy']
 
         if topology_manager['type'] == configz['kubeletconfig']['topologyManagerPolicy']:
             if topology_manager['scope'] == configz['kubeletconfig']['topologyManagerScope']:

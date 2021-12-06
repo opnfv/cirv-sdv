@@ -2,6 +2,8 @@
 Security Checks
 """
 
+#pylint: disable=broad-except
+
 import time
 import logging
 from tools.kube_utils import kube_api, kube_curl
@@ -62,6 +64,12 @@ def capability_check():
     except RuntimeError as error:
         status.append(error)
 
+    except Exception as error:
+        kube.delete_namespaced_pod(name=pod_cap.metadata.name, namespace='default')
+        result['criteria'] = 'fail'
+        status.append(error)
+
+
     result['details'].append(status)
     store_result(logger, result)
     return result
@@ -118,6 +126,11 @@ def privilege_check():
     except RuntimeError as error:
         status.append(error)
 
+    except Exception as error:
+        kube.delete_namespaced_pod(name=pod_priv.metadata.name, namespace='default')
+        result['criteria'] = 'fail'
+        status.append(error)
+
     result['details'].append(status)
 
     store_result(logger, result)
@@ -157,7 +170,7 @@ def host_network_check():
 
     try:
         pod_nw = kube.create_namespaced_pod(body=pod_manifest, namespace='default')
-        time.sleep(5)
+        time.sleep(6)
 
         kube.delete_namespaced_pod(name=pod_nw.metadata.name, namespace='default')
         result['criteria'] = 'fail'
@@ -167,6 +180,12 @@ def host_network_check():
 
     except RuntimeError as error:
         status.append(error)
+
+    except Exception as error:
+        kube.delete_namespaced_pod(name=pod_nw.metadata.name, namespace='default')
+        result['criteria'] = 'fail'
+        status.append(error)
+
 
     result['details'].append(status)
 
@@ -225,6 +244,11 @@ def host_path_vol_check():
         status.append(error)
 
     except RuntimeError as error:
+        status.append(error)
+
+    except Exception as error:
+        kube.delete_namespaced_pod(name=pod_vol.metadata.name, namespace='default')
+        result['criteria'] = 'fail'
         status.append(error)
 
     result['details'].append(status)

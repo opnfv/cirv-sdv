@@ -2,6 +2,8 @@
 CNI Plugin Check
 Multi-interface CNI Check
 """
+#pylint: disable=broad-except
+
 
 import time
 import logging
@@ -32,38 +34,38 @@ def create_daemonset(apps_instance):
                     'labels': {
                         'name': 'alpine'
                     }
-                }
-            },
-            'spec': {
-                'containers': [{
-                    'name': 'alpine',
-                    'image': 'alpine:3.2',
-                    'command': ["sh", "-c", "echo \"Hello K8s\" && sleep 3600"],
-                    'volumeMounts': [{
+                },
+                'spec': {
+                    'containers': [{
+                        'name': 'alpine',
+                        'image': 'alpine:3.2',
+                        'command': ["sh", "-c", "echo \"Hello K8s\" && sleep 3600"],
+                        'volumeMounts': [{
+                            'name': 'etccni',
+                            'mountPath': '/etc/cni'
+                        }, {
+                            'name': 'optcnibin',
+                            'mountPath': '/opt/cni/bin',
+                            'readOnly': True
+                        }]
+                    }],
+                    'volumes': [{
                         'name': 'etccni',
-                        'mountPath': '/etc/cni'
+                        'hostPath': {
+                            'path': '/etc/cni'
+                        }
                     }, {
                         'name': 'optcnibin',
-                        'mountPath': '/opt/cni/bin',
-                        'readOnly': True
+                        'hostPath': {
+                            'path': '/opt/cni/bin'
+                        }
+                    }],
+                    'tolerations': [{
+                        'effect': 'NoSchedule',
+                        'key': 'node-role.kubernetes.io/master',
+                        'operator': 'Exists'
                     }]
-                }],
-                'volumes': [{
-                    'name': 'etccni',
-                    'hostPath': {
-                        'path': '/etc/cni'
-                    }
-                }, {
-                    'name': 'optcnibin',
-                    'hostPath': {
-                        'path': '/opt/cni/bin'
-                    }
-                }],
-                'tolerations': [{
-                    'effect': 'NoSchedule',
-                    'key': 'node-role.kubernetes.io/master',
-                    'operator': 'Exists'
-                }]
+                }
             }
         }
     }
@@ -93,17 +95,28 @@ def multi_interface_cni_check():
 
     for pod in pods:
         if 'plugin-check-test-set' in pod.metadata.name:
-            list_of_plugin_conf = kube_exec(pod, cmd)
-            list_of_plugin_conf = list_of_plugin_conf.split("\n")
+            try:
+                list_of_plugin_conf = kube_exec(pod, cmd)
+                list_of_plugin_conf = list_of_plugin_conf.split("\n")
 
-            cmd3 = ['cat', list_of_plugin_conf[0]]
-            multi_interface_conf = kube_exec(pod, cmd3)
+                cmd3 = ['cat', "/etc/cni/net.d/"+list_of_plugin_conf[0]]
+                multi_interface_conf = kube_exec(pod, cmd3)
 
-            if 'multus' not in multi_interface_conf:
+                if 'multus' not in multi_interface_conf:
+                    result['criteria'] = 'fail'
+
+                status.append(list_of_plugin_conf)
+                status.append(multi_interface_conf)
+
+            except ConnectionError as error:
+                status.append(error)
+
+            except RuntimeError as error:
+                status.append(error)
+
+            except Exception as error:
                 result['criteria'] = 'fail'
-
-            status.append(list_of_plugin_conf)
-            status.append(multi_interface_conf)
+                status.append(error)
 
     apps_instance.delete_namespaced_daemon_set('plugin-check-test-set', 'default')
     result['details'].append(status)
@@ -135,14 +148,26 @@ def cni_plugin_check():
 
     for pod in pods:
         if 'plugin-check-test-set' in pod.metadata.name:
-            list_of_cni_from_dir = kube_exec(pod, cmd)
+            try:
+                list_of_cni_from_dir = kube_exec(pod, cmd)
 
-            for plugin in cni_plugins:
-                if plugin not in list_of_cni_from_dir:
-                    result['criteria'] = 'fail'
+                for plugin in cni_plugins:
+                    if plugin not in list_of_cni_from_dir:
+                        result['criteria'] = 'fail'
 
-            status.append(list_of_cni_from_dir)
-            daemon_pods.append(pod.metadata.name)
+                status.append(list_of_cni_from_dir)
+                daemon_pods.append(pod.metadata.name)
+
+            except ConnectionError as error:
+                status.append(error)
+
+            except RuntimeError as error:
+                status.append(error)
+
+            except Exception as error:
+                result['criteria'] = 'fail'
+                status.append(error)
+
 
     apps_instance.delete_namespaced_daemon_set('plugin-check-test-set', 'default')
 
