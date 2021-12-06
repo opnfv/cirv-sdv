@@ -32,6 +32,10 @@ def create_daemonset(apps_instance):
                     'labels': {
                         'name': 'alpine'
                     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9072738... Added Security, Policy, Observability & Plugin Checks
                 }
             },
             'spec': {
@@ -64,6 +68,43 @@ def create_daemonset(apps_instance):
                     'key': 'node-role.kubernetes.io/master',
                     'operator': 'Exists'
                 }]
+<<<<<<< HEAD
+=======
+=======
+                },
+                'spec': {
+                    'containers': [{
+                        'name': 'alpine',
+                        'image': 'alpine:3.2',
+                        'command': ["sh", "-c", "echo \"Hello K8s\" && sleep 3600"],
+                        'volumeMounts': [{
+                            'name': 'etccni',
+                            'mountPath': '/etc/cni'
+                        }, {
+                            'name': 'optcnibin',
+                            'mountPath': '/opt/cni/bin',
+                            'readOnly': True
+                        }]
+                    }],
+                    'volumes': [{
+                        'name': 'etccni',
+                        'hostPath': {
+                            'path': '/etc/cni'
+                        }
+                    }, {
+                        'name': 'optcnibin',
+                        'hostPath': {
+                            'path': '/opt/cni/bin'
+                        }
+                    }],
+                    'tolerations': [{
+                        'effect': 'NoSchedule',
+                        'key': 'node-role.kubernetes.io/master',
+                        'operator': 'Exists'
+                    }]
+                }
+>>>>>>> 389cbb9... Added Security, Policy, Observability & Plugin Checks
+>>>>>>> 9072738... Added Security, Policy, Observability & Plugin Checks
             }
         }
     }
@@ -96,7 +137,15 @@ def multi_interface_cni_check():
             list_of_plugin_conf = kube_exec(pod, cmd)
             list_of_plugin_conf = list_of_plugin_conf.split("\n")
 
+<<<<<<< HEAD
             cmd3 = ['cat', list_of_plugin_conf[0]]
+=======
+<<<<<<< HEAD
+            cmd3 = ['cat', list_of_plugin_conf[0]]
+=======
+            cmd3 = ['cat', "/etc/cni/net.d/"+list_of_plugin_conf[0]]
+>>>>>>> 389cbb9... Added Security, Policy, Observability & Plugin Checks
+>>>>>>> 9072738... Added Security, Policy, Observability & Plugin Checks
             multi_interface_conf = kube_exec(pod, cmd3)
 
             if 'multus' not in multi_interface_conf:

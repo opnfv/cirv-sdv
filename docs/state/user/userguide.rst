@@ -29,4 +29,5 @@ To view help and all available options with the SDVState tool check help command
     - cpu_manager_policy: It includes the details about the cpu manager policy and it is important for the policy_checks
     - topo_manager_policy: It includes the details about the topology manager policy and it is important for the policy_checks
     - cnis_supported:  It includes list of cnis supported by the cluster and it is important for the cni_plugin_check.
+    - legacy_helm_support: It includes if the cluster supports the helm version v2 or not. The value at the entry may be "YES" or "NO"
 

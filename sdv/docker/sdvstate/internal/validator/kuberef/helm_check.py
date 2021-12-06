@@ -24,7 +24,7 @@ def helmv2_disabled_check():
     pod_details = kube.list_pod_for_all_namespaces()
     pods = pod_details.items
     version_support = settings.getValue('pdf_file')['vim_functional']['legacy_helm_support']
-    if 'YES' in version_support:
+    if 'yes' in version_support.lower():
         for pod in pods:
             if 'tiller' in pod.metadata.name:
                 res = True
