@@ -32,38 +32,38 @@ def create_daemonset(apps_instance):
                     'labels': {
                         'name': 'alpine'
                     }
-                }
-            },
-            'spec': {
-                'containers': [{
-                    'name': 'alpine',
-                    'image': 'alpine:3.2',
-                    'command': ["sh", "-c", "echo \"Hello K8s\" && sleep 3600"],
-                    'volumeMounts': [{
+                },
+                'spec': {
+                    'containers': [{
+                        'name': 'alpine',
+                        'image': 'alpine:3.2',
+                        'command': ["sh", "-c", "echo \"Hello K8s\" && sleep 3600"],
+                        'volumeMounts': [{
+                            'name': 'etccni',
+                            'mountPath': '/etc/cni'
+                        }, {
+                            'name': 'optcnibin',
+                            'mountPath': '/opt/cni/bin',
+                            'readOnly': True
+                        }]
+                    }],
+                    'volumes': [{
                         'name': 'etccni',
-                        'mountPath': '/etc/cni'
+                        'hostPath': {
+                            'path': '/etc/cni'
+                        }
                     }, {
                         'name': 'optcnibin',
-                        'mountPath': '/opt/cni/bin',
-                        'readOnly': True
+                        'hostPath': {
+                            'path': '/opt/cni/bin'
+                        }
+                    }],
+                    'tolerations': [{
+                        'effect': 'NoSchedule',
+                        'key': 'node-role.kubernetes.io/master',
+                        'operator': 'Exists'
                     }]
-                }],
-                'volumes': [{
-                    'name': 'etccni',
-                    'hostPath': {
-                        'path': '/etc/cni'
-                    }
-                }, {
-                    'name': 'optcnibin',
-                    'hostPath': {
-                        'path': '/opt/cni/bin'
-                    }
-                }],
-                'tolerations': [{
-                    'effect': 'NoSchedule',
-                    'key': 'node-role.kubernetes.io/master',
-                    'operator': 'Exists'
-                }]
+                }
             }
         }
     }
@@ -96,7 +96,7 @@ def multi_interface_cni_check():
             list_of_plugin_conf = kube_exec(pod, cmd)
             list_of_plugin_conf = list_of_plugin_conf.split("\n")
 
-            cmd3 = ['cat', list_of_plugin_conf[0]]
+            cmd3 = ['cat', "/etc/cni/net.d/"+list_of_plugin_conf[0]]
             multi_interface_conf = kube_exec(pod, cmd3)
 
             if 'multus' not in multi_interface_conf:
