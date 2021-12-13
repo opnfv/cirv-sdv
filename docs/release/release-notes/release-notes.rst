@@ -2,6 +2,23 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) Anuket, Spirent Communications, University of Delhi and others. 
 
+Anuket CIRV-SDV Lakelse Release
+===============================
+
+Platform Definition file
+
+  * New PDF organization.
+      * Cloud-Common
+      * Cloud-Openstack
+      * Cloud-Kubernetes
+      * Cloud-Extrapolate
+
+Tools
+
+  * Updates to post-deployment state-checking tool.
+      * Support Kubernetes validation
+      * More checks added for Openstack validation
+
 Anuket CIRV-SDV Kali Release
 ============================
 

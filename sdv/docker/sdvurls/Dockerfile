@@ -3,7 +3,7 @@ FROM python:3.8-slim-buster
 WORKDIR /sdvurls/
 
 COPY requirements.txt /state/requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install -r /state/requirements.txt
 
 COPY server /sdvurls/
 
